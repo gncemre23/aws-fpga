@@ -57,6 +57,30 @@ module cl_hello_world
   logic [15:0] sh_cl_status_vdip_q2;
   logic [31:0] hello_world_q;
 
+
+
+
+
+
+  //-------------------------------------------------
+  // Reset Synchronization for oBTC
+  //------------------------- ------------------------
+  logic pre_sync_rst;
+
+  always_ff @(negedge rst_main_n or posedge clk_extra_a3)
+    if (!rst_main_n)
+    begin
+      pre_sync_rst  <= 1;
+      rst_oBTC_sync <= 1;
+    end
+    else
+    begin
+      pre_sync_rst  <= 0;
+      rst_oBTC_sync <= pre_sync_rst;
+    end
+
+
+
   //-------------------------------------------------
   // ID Values (cl_hello_world_defines.vh)
   //-------------------------------------------------
@@ -111,47 +135,50 @@ module cl_hello_world
   logic [ 1:0] ocl_sh_rresp_q;
   logic        sh_ocl_rready_q;
 
-  axi_register_slice_light AXIL_OCL_REG_SLC (
-                             .aclk          (clk_main_a0),
-                             .aresetn       (rst_main_n_sync),
-                             .s_axi_awaddr  (sh_ocl_awaddr),
-                             .s_axi_awprot   (2'h0),
-                             .s_axi_awvalid (sh_ocl_awvalid),
-                             .s_axi_awready (ocl_sh_awready),
-                             .s_axi_wdata   (sh_ocl_wdata),
-                             .s_axi_wstrb   (sh_ocl_wstrb),
-                             .s_axi_wvalid  (sh_ocl_wvalid),
-                             .s_axi_wready  (ocl_sh_wready),
-                             .s_axi_bresp   (ocl_sh_bresp),
-                             .s_axi_bvalid  (ocl_sh_bvalid),
-                             .s_axi_bready  (sh_ocl_bready),
-                             .s_axi_araddr  (sh_ocl_araddr),
-                             .s_axi_arvalid (sh_ocl_arvalid),
-                             .s_axi_arready (ocl_sh_arready),
-                             .s_axi_rdata   (ocl_sh_rdata),
-                             .s_axi_rresp   (ocl_sh_rresp),
-                             .s_axi_rvalid  (ocl_sh_rvalid),
-                             .s_axi_rready  (sh_ocl_rready),
-                             .m_axi_awaddr  (sh_ocl_awaddr_q),
-                             .m_axi_awprot  (),
-                             .m_axi_awvalid (sh_ocl_awvalid_q),
-                             .m_axi_awready (ocl_sh_awready_q),
-                             .m_axi_wdata   (sh_ocl_wdata_q),
-                             .m_axi_wstrb   (sh_ocl_wstrb_q),
-                             .m_axi_wvalid  (sh_ocl_wvalid_q),
-                             .m_axi_wready  (ocl_sh_wready_q),
-                             .m_axi_bresp   (ocl_sh_bresp_q),
-                             .m_axi_bvalid  (ocl_sh_bvalid_q),
-                             .m_axi_bready  (sh_ocl_bready_q),
-                             .m_axi_araddr  (sh_ocl_araddr_q),
-                             .m_axi_arvalid (sh_ocl_arvalid_q),
-                             .m_axi_arready (ocl_sh_arready_q),
-                             .m_axi_rdata   (ocl_sh_rdata_q),
-                             .m_axi_rresp   (ocl_sh_rresp_q),
-                             .m_axi_rvalid  (ocl_sh_rvalid_q),
-                             .m_axi_rready  (sh_ocl_rready_q)
-                           );
-   //oBTC_miner instance
+  axi_register_slice_light
+    AXIL_OCL_REG_SLC (
+      .aclk          (clk_main_a0),
+      .aresetn       (rst_main_n_sync),
+      .s_axi_awaddr  (sh_ocl_awaddr),
+      .s_axi_awprot   (2'h0),
+      .s_axi_awvalid (sh_ocl_awvalid),
+      .s_axi_awready (ocl_sh_awready),
+      .s_axi_wdata   (sh_ocl_wdata),
+      .s_axi_wstrb   (sh_ocl_wstrb),
+      .s_axi_wvalid  (sh_ocl_wvalid),
+      .s_axi_wready  (ocl_sh_wready),
+      .s_axi_bresp   (ocl_sh_bresp),
+      .s_axi_bvalid  (ocl_sh_bvalid),
+      .s_axi_bready  (sh_ocl_bready),
+      .s_axi_araddr  (sh_ocl_araddr),
+      .s_axi_arvalid (sh_ocl_arvalid),
+      .s_axi_arready (ocl_sh_arready),
+      .s_axi_rdata   (ocl_sh_rdata),
+      .s_axi_rresp   (ocl_sh_rresp),
+      .s_axi_rvalid  (ocl_sh_rvalid),
+      .s_axi_rready  (sh_ocl_rready),
+      .m_axi_awaddr  (sh_ocl_awaddr_q),
+      .m_axi_awprot  (),
+      .m_axi_awvalid (sh_ocl_awvalid_q),
+      .m_axi_awready (ocl_sh_awready_q),
+      .m_axi_wdata   (sh_ocl_wdata_q),
+      .m_axi_wstrb   (sh_ocl_wstrb_q),
+      .m_axi_wvalid  (sh_ocl_wvalid_q),
+      .m_axi_wready  (ocl_sh_wready_q),
+      .m_axi_bresp   (ocl_sh_bresp_q),
+      .m_axi_bvalid  (ocl_sh_bvalid_q),
+      .m_axi_bready  (sh_ocl_bready_q),
+      .m_axi_araddr  (sh_ocl_araddr_q),
+      .m_axi_arvalid (sh_ocl_arvalid_q),
+      .m_axi_arready (ocl_sh_arready_q),
+      .m_axi_rdata   (ocl_sh_rdata_q),
+      .m_axi_rresp   (ocl_sh_rresp_q),
+      .m_axi_rvalid  (ocl_sh_rvalid_q),
+      .m_axi_rready  (sh_ocl_rready_q)
+    );
+
+
+  //oBTC_miner instance
   top
     #(
       .WCOUNT(4 ),
@@ -160,7 +187,7 @@ module cl_hello_world
     top_dut (
       .clk_axi (clk_main_a0 ), //125MHz
       .clk_top (clk_extra_a3 ), //250MHz
-      .rst (rst ),
+      .rst (rst_oBTC_sync ),
       .block_header_we (block_header_we ),
       .matrix_fifo_we (matrix_fifo_we ),
       .target_we (target_we ),
@@ -173,6 +200,22 @@ module cl_hello_world
       .nonce (nonce ),
       .status  ( status)
     );
+
+  //-------------------------------------------------
+  // Wires for oBTCMiner_design
+  //-------------------------------------------------
+  logic rst_oBTC_sync;
+  logic block_header_we;
+  logic matrix_fifo_we;
+  logic target_we;
+  logic start;
+  logic stop;
+  logic [31:0] block_header;
+  logic [31:0] matrix_in;
+  logic [31:0] target;
+  logic [31:0] nonce_size;
+  logic [31:0] nonce;
+  logic [1:0] status;
 
 
   //--------------------------------------------------------------
@@ -283,8 +326,10 @@ module cl_hello_world
     else if (arvalid_q)
     begin
       rvalid <= 1;
-      rdata  <= (araddr_q == `HELLO_WORLD_REG_ADDR) ? hello_world_q_byte_swapped[31:0]:
-             (araddr_q == `VLED_REG_ADDR       ) ? {16'b0,vled_q[15:0]            }:
+      rdata  <= (araddr_q == `HELLO_WORLD_REG_ADDR  ) ? hello_world_q_byte_swapped[31:0]:
+             (araddr_q == `VLED_REG_ADDR         ) ? {16'b0,vled_q[15:0]            }:
+             (araddr_q == `STATUS_REG_ADDR  )      ? {30'b0,status[1:0]              }:
+             (araddr_q == `NONCE_REG_ADDR  )       ? nonce:
              `UNIMPLEMENTED_REG_VALUE        ;
       rresp  <= 0;
     end
@@ -310,6 +355,63 @@ module cl_hello_world
 
   assign hello_world_q_byte_swapped[31:0] = {hello_world_q[7:0],   hello_world_q[15:8],
          hello_world_q[23:16], hello_world_q[31:24]};
+
+
+  //-------------------------------------------------
+  // oBTC module write registers
+  //-------------------------------------------------
+
+  always_ff @(posedge clk_main_a0)
+    if (!rst_main_n_sync)
+    begin                    // Reset
+      block_header <= 32'h0000_0000;
+      matrix_in <= 32'h0000_0000;
+      target <= 32'h0000_0000;
+      nonce_size <= 32'h0000_0000;
+      start <= 1'b0;
+      stop <= 1'b0;
+      target_we <= 1'b0;
+    end
+    else if (wready & (wr_addr == `BLOCKHEADER_REG_ADDR))
+    begin
+      block_header <= wdata[31:0];
+      block_header_we <= 1'b1;
+    end
+    else if (wready & (wr_addr == `MATRIX_REG_ADDR))
+    begin
+      matrix_in <= wdata[31:0];
+      matrix_fifo_we <= 1'b1;
+    end
+    else if (wready & (wr_addr == `TARGET_REG_ADDR))
+    begin
+      target <= wdata[31:0];
+      target_we <= 1'b1;
+    end
+    else if (wready & (wr_addr == `NONCESIZE_REG_ADDR))
+    begin
+      nonce_size <= wdata[31:0];
+    end
+    else if (wready & (wr_addr == `START_REG_ADDR))
+    begin
+      start <= 1'b1;
+    end
+    else if (wready & (wr_addr == `STOP_REG_ADDR))
+    begin
+      stop <= 1'b1;
+    end
+    else
+    begin
+      block_header <= 32'd0;
+      target <= 32'd0;
+      matrix_in <= 32'd0;
+      nonce_size <= 32'd0;
+      start <= 1'b0;
+      stop <= 1'b0;
+    end
+
+
+
+
 
   //-------------------------------------------------
   // Virtual LED Register
