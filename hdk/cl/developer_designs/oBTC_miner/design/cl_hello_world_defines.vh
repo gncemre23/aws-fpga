@@ -23,6 +23,18 @@
 // FPGA flop init capability).  This will help with routing resources.
 `define FPGA_LESS_RST
 
+
+`define HEAVYHASH_REG_ADDR      32'h0000_0508
+`define STATUS_REG_ADDR         32'h0000_050C
+`define NONCE_REG_ADDR          32'h0000_0510
+`define BLOCKHEADER_REG_ADDR    32'h0000_0514
+`define MATRIX_REG_ADDR         32'h0000_0518
+`define TARGET_REG_ADDR         32'h0000_051C
+`define NONCESIZE_REG_ADDR      32'h0000_0520
+`define START_REG_ADDR          32'h0000_0524
+`define STOP_REG_ADDR           32'h0000_0528
+`define HEAVYHASH_SEL_REG_ADDR  32'h0000_052C
+
 // Uncomment to disable Virtual JTAG
 //`define DISABLE_VJTAG_DEBUG
 

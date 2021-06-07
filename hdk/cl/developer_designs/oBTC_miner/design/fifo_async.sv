@@ -3,7 +3,10 @@
 //! The number of inputs to be multiplied is determined by
 //!WCOUNT: word(4-bit) count
 `timescale  1ns / 1ps
-module fifo_async #(parameter DEPTH=64)
+module fifo_async 
+  #(parameter DEPTH = 64,
+    parameter WRITE_WIDTH = 32,
+    parameter READ_WIDTH = 32)
   (
     input logic wr_clk,
     input logic rd_clk,
@@ -27,13 +30,13 @@ xpm_fifo_async #(
       .PROG_EMPTY_THRESH(10),    // DECIMAL
       .PROG_FULL_THRESH(10),     // DECIMAL
       .RD_DATA_COUNT_WIDTH(1),   // DECIMAL
-      .READ_DATA_WIDTH(32),      // DECIMAL
+      .READ_DATA_WIDTH(READ_WIDTH),// DECIMAL
       .READ_MODE("fwft"),         // String
       .RELATED_CLOCKS(0),        // DECIMAL
       .SIM_ASSERT_CHK(0),        // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
       .USE_ADV_FEATURES("0707"), // String
       .WAKEUP_TIME(0),           // DECIMAL
-      .WRITE_DATA_WIDTH(32),     // DECIMAL
+      .WRITE_DATA_WIDTH(WRITE_WIDTH), // DECIMAL
       .WR_DATA_COUNT_WIDTH(1)    // DECIMAL
    )
    xpm_fifo_async_inst (

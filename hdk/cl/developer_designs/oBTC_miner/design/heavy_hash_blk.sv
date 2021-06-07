@@ -64,7 +64,11 @@ module heavy_hash_blk
      output logic stop_ack,
 
      //! status
-     output logic [1:0] status
+     output logic [1:0] status,
+
+     output logic [255:0] hash_out,
+     output logic hash_out_we
+
    );
 
 
@@ -82,12 +86,13 @@ module heavy_hash_blk
   logic stop_ack_nonce;
   logic [31:0] nonce_fifo_din;
   logic [255:0] zero_reg  = 256'd0;
-  logic [255:0] hash_out;
   logic heavy_hash_all_empty;
   logic [31:0] nonce_end;
 
 
   assign stop_ack = stop_ack_comp & stop_ack_nonce;
+
+  assign hash_out_we = hashout_fifo_re;
 
   always_comb begin : blockName
     if(result)
@@ -159,6 +164,8 @@ module heavy_hash_blk
       .hash_out_empty (hash_out_empty ),
       .result  ( result)
     );
+
+
 
 
 

@@ -45,6 +45,8 @@ module cl_hello_world
 `include "unused_sh_bar1_template.inc"
 `include "unused_apppf_irq_template.inc"
 
+
+parameter  BLK_CNT = 12 ;
   //-------------------------------------------------
   // Wires
   //-------------------------------------------------
@@ -182,7 +184,7 @@ module cl_hello_world
   top
     #(
       .WCOUNT(4 ),
-      .BLK_CNT ( 12 )
+      .BLK_CNT ( BLK_CNT )
     )
     top_dut (
       .clk_axi (clk_main_a0 ), //125MHz
@@ -198,7 +200,10 @@ module cl_hello_world
       .target (target ),
       .nonce_size (nonce_size ),
       .nonce (nonce ),
-      .status  ( status)
+      .status  ( status),
+      .heavyhash (heavyhash),
+      .hash_re (hash_re),
+      .hash_select (hash_select)
     );
 
   //-------------------------------------------------
@@ -216,6 +221,9 @@ module cl_hello_world
   logic [31:0] nonce_size;
   logic [31:0] nonce;
   logic [1:0] status;
+  logic [31:0] heavyhash;
+  logic hash_re; 
+  logic [$clog2(BLK_CNT)-1:0] hash_select;
 
 
   //--------------------------------------------------------------
@@ -316,12 +324,14 @@ module cl_hello_world
       rvalid <= 0;
       rdata  <= 0;
       rresp  <= 0;
+      hash_re <= 0;
     end
     else if (rvalid && rready)
     begin
       rvalid <= 0;
       rdata  <= 0;
       rresp  <= 0;
+      hash_re <= 0;
     end
     else if (arvalid_q)
     begin
@@ -330,9 +340,15 @@ module cl_hello_world
              (araddr_q == `VLED_REG_ADDR         ) ? {16'b0,vled_q[15:0]            }:
              (araddr_q == `STATUS_REG_ADDR  )      ? {30'b0,status[1:0]              }:
              (araddr_q == `NONCE_REG_ADDR  )       ? nonce:
+             (araddr_q == `HEAVYHASH_REG_ADDR  )   ? heavyhash:
              `UNIMPLEMENTED_REG_VALUE        ;
       rresp  <= 0;
+      if(araddr_q == `HEAVYHASH_REG_ADDR)
+        hash_re <= 1'b1;
+      else
+        hash_re <= 1'b0;
     end
+
 
   //-------------------------------------------------
   // Hello World Register
@@ -371,6 +387,7 @@ module cl_hello_world
       start <= 1'b0;
       stop <= 1'b0;
       target_we <= 1'b0;
+      hash_select <= 1'b0;
     end
     else if (wready & (wr_addr == `BLOCKHEADER_REG_ADDR))
     begin
@@ -399,12 +416,18 @@ module cl_hello_world
     begin
       stop <= 1'b1;
     end
+    else if (wready & (wr_addr == `HEAVYHASH_SEL_REG_ADDR))
+    begin
+      hash_select <= wdata[$clog2(BLK_CNT)-1:0];
+    end;
+    end
     else
     begin
       block_header <= 32'd0;
       target <= 32'd0;
       matrix_in <= 32'd0;
-      nonce_size <= 32'd0;
+      nonce_size <= nonce_size;
+      hash_select <= hash_select;
       start <= 1'b0;
       stop <= 1'b0;
     end
