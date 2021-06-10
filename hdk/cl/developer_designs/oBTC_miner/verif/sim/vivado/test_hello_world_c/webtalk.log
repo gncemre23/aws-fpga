@@ -1,0 +1,13 @@
+#-----------------------------------------------------------
+# Webtalk v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:47 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Thu Jun 10 08:03:42 2021
+# Process ID: 29811
+# Current directory: /home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/verif/sim/vivado/test_hello_world_c
+# Command line: wbtcv -mode batch -source /home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/verif/sim/vivado/test_hello_world_c/xsim.dir/tb/webtalk/xsim_webtalk.tcl -notrace
+# Log file: /home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/verif/sim/vivado/test_hello_world_c/webtalk.log
+# Journal file: /home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/verif/sim/vivado/test_hello_world_c/webtalk.jou
+#-----------------------------------------------------------
+source /home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/verif/sim/vivado/test_hello_world_c/xsim.dir/tb/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Thu Jun 10 08:03:42 2021...

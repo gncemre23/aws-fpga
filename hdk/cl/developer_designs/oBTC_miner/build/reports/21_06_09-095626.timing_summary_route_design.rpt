@@ -1,0 +1,1684 @@
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version      : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
+| Date              : Wed Jun  9 14:47:15 2021
+| Host              : ip-172-31-48-57.ec2.internal running 64-bit CentOS Linux release 7.9.2009 (Core)
+| Command           : report_timing_summary -cell WRAPPER_INST/CL -file /home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/reports/21_06_09-095626.timing_summary_route_design.rpt
+| Design            : top_sp
+| Device            : xcvu9p-flgb2104
+| Speed File        : -2  PRODUCTION 1.27 02-28-2020
+| Temperature Grade : I
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Summary Report
+
+------------------------------------------------------------------------------------------------
+| Timer Settings
+| --------------
+------------------------------------------------------------------------------------------------
+
+  Enable Multi Corner Analysis               :  Yes
+  Enable Pessimism Removal                   :  Yes
+  Pessimism Removal Resolution               :  Nearest Common Node
+  Enable Input Delay Default Clock           :  No
+  Enable Preset / Clear Arcs                 :  No
+  Disable Flight Delays                      :  No
+  Ignore I/O Paths                           :  No
+  Timing Early Launch at Borrowing Latches   :  No
+  Borrow Time for Max Delay Exceptions       :  Yes
+  Merge Timing Exceptions                    :  Yes
+
+  Corner  Analyze    Analyze    
+  Name    Max Paths  Min Paths  
+  ------  ---------  ---------  
+  Slow    Yes        Yes        
+  Fast    Yes        Yes        
+
+
+------------------------------------------------------------------------------------------------
+| Design Timing Summary
+| ---------------------
+------------------------------------------------------------------------------------------------
+
+    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+    -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+      0.019        0.000                      0               514985        0.008        0.000                      0               514877        1.458        0.000                       0                176915  
+
+
+All user specified timing constraints are met.
+
+
+------------------------------------------------------------------------------------------------
+| Clock Summary
+| -------------
+------------------------------------------------------------------------------------------------
+
+Clock                 Waveform(ns)           Period(ns)      Frequency(MHz)
+-----                 ------------           ----------      --------------
+refclk_100            {0.000 5.000}          10.000          100.000         
+  qpll1outclk_out[3]  {0.000 0.100}          0.200           5000.001        
+    txoutclk_out[15]  {0.000 1.000}          2.000           500.000         
+      clk_core        {0.000 2.000}          4.000           250.000         
+        clk_extra_a3  {0.000 2.000}          4.000           250.000         
+        clk_main_a0   {0.000 4.000}          8.000           125.000         
+        drck          {0.000 16.000}         32.000          31.250          
+        tck           {0.000 16.000}         32.000          31.250          
+
+
+------------------------------------------------------------------------------------------------
+| Intra Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+Clock                     WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+-----                     -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+        clk_extra_a3        0.019        0.000                      0               499045        0.010        0.000                      0               499045        1.458        0.000                       0                166743  
+        clk_main_a0         0.579        0.000                      0                14747        0.008        0.000                      0                14747        3.458        0.000                       0                  9793  
+        drck                4.405        0.000                      0                    2        3.870        0.000                      0                    2                                                                          
+        tck                29.714        0.000                      0                  721        0.014        0.000                      0                  721       15.468        0.000                       0                   379  
+
+
+------------------------------------------------------------------------------------------------
+| Inter Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints  
+----------    --------          -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------  
+clk_main_a0   clk_extra_a3        0.231        0.000                      0                  189        0.021        0.000                      0                  135  
+clk_extra_a3  clk_main_a0         0.023        0.000                      0                  215        0.030        0.000                      0                  161  
+
+
+------------------------------------------------------------------------------------------------
+| Other Path Groups Table
+| -----------------------
+------------------------------------------------------------------------------------------------
+
+Path Group         From Clock         To Clock               WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints  
+----------         ----------         --------               -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------  
+**async_default**  clk_main_a0        clk_extra_a3             0.359        0.000                      0                   11        0.070        0.000                      0                   11  
+**async_default**  clk_main_a0        clk_main_a0              6.590        0.000                      0                  124        0.115        0.000                      0                  124  
+**async_default**  tck                tck                     30.836        0.000                      0                   90        0.113        0.000                      0                   90  
+
+
+------------------------------------------------------------------------------------------------
+| Timing Details
+| --------------
+------------------------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------------------------
+From Clock:  clk_extra_a3
+  To Clock:  clk_extra_a3
+
+Setup :            0  Failing Endpoints,  Worst Slack        0.019ns,  Total Violation        0.000ns
+Hold  :            0  Failing Endpoints,  Worst Slack        0.010ns,  Total Violation        0.000ns
+PW    :            0  Failing Endpoints,  Worst Slack        1.458ns,  Total Violation        0.000ns
+---------------------------------------------------------------------------------------------------
+
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.019ns  (required time - arrival time)
+  Source:                 <hidden>
+                            (rising edge-triggered cell FDSE clocked by clk_extra_a3  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            <hidden>
+                            (rising edge-triggered cell FDRE clocked by clk_extra_a3  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_extra_a3
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_extra_a3 rise@4.000ns - clk_extra_a3 rise@0.000ns)
+  Data Path Delay:        3.536ns  (logic 0.287ns (8.117%)  route 3.249ns (91.884%))
+  Logic Levels:           5  (LUT2=1 LUT4=1 LUT6=3)
+  Clock Path Skew:        -0.133ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    6.038ns = ( 10.038 - 4.000 ) 
+    Source Clock Delay      (SCD):    5.787ns
+    Clock Pessimism Removal (CPR):    -0.384ns
+  Clock Uncertainty:      0.054ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.080ns
+    Phase Error              (PE):    0.000ns
+  Inter-SLR Compensation: 0.284ns  ((DCD - CCD) * PF)
+    Destination Clock Delay (DCD):    6.038ns
+    Common Clock Delay      (CCD):    4.145ns
+    Prorating Factor         (PF):    0.150
+  Clock Net Delay (Source):      2.813ns (routing 0.338ns, distribution 2.475ns)
+  Clock Net Delay (Destination): 2.613ns (routing 0.309ns, distribution 2.304ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock clk_extra_a3 rise edge)
+                                                      0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.085     0.085    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.130     0.215 r  static         <hidden>
+                         net (fo=149525, routed)      2.602     2.817    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT3)
+                                                     -0.127     2.690 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.256     2.946    reconfigurable <hidden>
+    BUFGCE_X1Y171        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.028     2.974 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=166743, routed)      2.813     5.787    boundary       <hidden>
+    SLICE_X61Y333        FDSE                                         r  reconfigurable <hidden>
+  -------------------------------------------------------------------    ----------------------------------
+    SLICE_X61Y333        FDSE (Prop_GFF_SLICEL_C_Q)
+                                                      0.079     5.866 f  reconfigurable <hidden>
+                         net (fo=2, routed)           0.049     5.915    reconfigurable <hidden>
+    SLICE_X61Y333        LUT2 (Prop_D6LUT_SLICEL_I0_O)
+                                                      0.050     5.965 f  reconfigurable <hidden>
+                         net (fo=1, routed)           1.214     7.179    reconfigurable <hidden>
+    SLR Crossing[1->0]   
+    SLICE_X63Y243        LUT6 (Prop_E6LUT_SLICEL_I5_O)
+                                                      0.051     7.230 f  reconfigurable <hidden>
+                         net (fo=1, routed)           0.943     8.173    reconfigurable <hidden>
+    SLR Crossing[0->1]   
+    SLICE_X63Y301        LUT6 (Prop_D6LUT_SLICEL_I5_O)
+                                                      0.036     8.209 f  reconfigurable <hidden>
+                         net (fo=2, routed)           0.894     9.103    reconfigurable <hidden>
+    SLR Crossing[1->0]   
+    SLICE_X61Y241        LUT6 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.035     9.138 f  reconfigurable <hidden>
+                         net (fo=2, routed)           0.100     9.238    reconfigurable <hidden>
+    SLICE_X61Y241        LUT4 (Prop_D6LUT_SLICEL_I2_O)
+                                                      0.036     9.274 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.049     9.323    reconfigurable <hidden>
+    SLICE_X61Y241        FDRE                                         r  reconfigurable <hidden>
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock clk_extra_a3 rise edge)
+                                                      4.000     4.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     4.000 r  static         <hidden>
+                         net (fo=8, routed)           0.078     4.078    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.114     4.192 r  static         <hidden>
+                         net (fo=149525, routed)      2.355     6.547    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT3)
+                                                      0.630     7.177 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.224     7.401    reconfigurable <hidden>
+    BUFGCE_X1Y171        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.024     7.425 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=166743, routed)      2.613    10.038    boundary       <hidden>
+    SLR Crossing[1->0]   
+    SLICE_X61Y241        FDRE                                         r  reconfigurable <hidden>
+                         clock pessimism             -0.384     9.654                     
+                         inter-SLR compensation      -0.284     9.370                     
+                         clock uncertainty           -0.054     9.317                     
+    SLICE_X61Y241        FDRE (Setup_DFF_SLICEL_C_D)
+                                                      0.025     9.342    reconfigurable   <hidden>
+  -------------------------------------------------------------------
+                         required time                          9.342                     
+                         arrival time                          -9.323                     
+  -------------------------------------------------------------------
+                         slack                                  0.019                     
+
+
+
+
+
+Min Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.010ns  (arrival time - required time)
+  Source:                 <hidden>
+                            (rising edge-triggered cell FDRE clocked by clk_extra_a3  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            WRAPPER_INST/CL/top_ins/genblk1[2].heavy_hash_blk_dut/heavy_hash_dut/Matrix_fifo_out/xpm_fifo_sync_inst/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_narrow.mem_reg/DINBDIN[16]
+                            (rising edge-triggered cell RAMB36E2 clocked by clk_extra_a3  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_extra_a3
+  Path Type:              Hold (Min at Slow Process Corner)
+  Requirement:            0.000ns  (clk_extra_a3 rise@0.000ns - clk_extra_a3 rise@0.000ns)
+  Data Path Delay:        0.248ns  (logic 0.057ns (22.984%)  route 0.191ns (77.016%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.266ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    5.879ns
+    Source Clock Delay      (SCD):    5.871ns
+    Clock Pessimism Removal (CPR):    -0.258ns
+  Clock Net Delay (Source):      2.446ns (routing 0.309ns, distribution 2.137ns)
+  Clock Net Delay (Destination): 2.905ns (routing 0.338ns, distribution 2.567ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock clk_extra_a3 rise edge)
+                                                      0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.078     0.078    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.114     0.192 r  static         <hidden>
+                         net (fo=149525, routed)      2.355     2.547    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT3)
+                                                      0.630     3.177 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.224     3.401    reconfigurable <hidden>
+    BUFGCE_X1Y171        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.024     3.425 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=166743, routed)      2.446     5.871    boundary       <hidden>
+    SLR Crossing[1->0]   
+    SLICE_X92Y94         FDRE                                         r  reconfigurable <hidden>
+  -------------------------------------------------------------------    ----------------------------------
+    SLICE_X92Y94         FDRE (Prop_FFF_SLICEM_C_Q)
+                                                      0.057     5.928 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.191     6.119    reconfigurable WRAPPER_INST/CL/top_ins/genblk1[2].heavy_hash_blk_dut/heavy_hash_dut/Matrix_fifo_out/xpm_fifo_sync_inst/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/dina[48]
+    RAMB36_X6Y19         RAMB36E2                                     r  reconfigurable WRAPPER_INST/CL/top_ins/genblk1[2].heavy_hash_blk_dut/heavy_hash_dut/Matrix_fifo_out/xpm_fifo_sync_inst/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_narrow.mem_reg/DINBDIN[16]
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock clk_extra_a3 rise edge)
+                                                      0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.085     0.085    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.130     0.215 r  static         <hidden>
+                         net (fo=149525, routed)      2.602     2.817    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT3)
+                                                     -0.127     2.690 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.256     2.946    reconfigurable <hidden>
+    BUFGCE_X1Y171        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.028     2.974 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=166743, routed)      2.905     5.879    boundary       WRAPPER_INST/CL/top_ins/genblk1[2].heavy_hash_blk_dut/heavy_hash_dut/Matrix_fifo_out/xpm_fifo_sync_inst/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/clka
+    SLR Crossing[1->0]   
+    RAMB36_X6Y19         RAMB36E2                                     r  reconfigurable WRAPPER_INST/CL/top_ins/genblk1[2].heavy_hash_blk_dut/heavy_hash_dut/Matrix_fifo_out/xpm_fifo_sync_inst/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_narrow.mem_reg/CLKBWRCLK
+                         clock pessimism              0.258     6.137                     
+    RAMB36_X6Y19         RAMB36E2 (Hold_RAMB36E2_RAMB36_CLKBWRCLK_DINBDIN[16])
+                                                     -0.028     6.109    reconfigurable   WRAPPER_INST/CL/top_ins/genblk1[2].heavy_hash_blk_dut/heavy_hash_dut/Matrix_fifo_out/xpm_fifo_sync_inst/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_narrow.mem_reg
+  -------------------------------------------------------------------
+                         required time                         -6.109                     
+                         arrival time                           6.119                     
+  -------------------------------------------------------------------
+                         slack                                  0.010                     
+
+
+
+
+
+Pulse Width Checks
+--------------------------------------------------------------------------------------
+Clock Name:         clk_extra_a3
+Waveform(ns):       { 0.000 2.000 }
+Period(ns):         4.000
+Sources:            { WRAPPER_INST/SH/kernel_clks_i/clkwiz_sys_clk/inst/CLK_CORE_DRP_I/clk_inst/mmcme3_adv_inst/CLKOUT3 }
+
+Check Type        Corner  Lib Pin             Reference Pin  Required(ns)  Actual(ns)  Slack(ns)  Location       Pin
+Min Period        n/a     RAMB18E2/CLKARDCLK  n/a            1.355         4.000       2.645      RAMB18_X5Y100  WRAPPER_INST/CL/top_ins/matrix_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_narrow.mem_reg/CLKARDCLK
+Low Pulse Width   Slow    RAMB36E2/CLKARDCLK  n/a            0.542         2.000       1.458      RAMB36_X2Y93   WRAPPER_INST/CL/top_ins/genblk1[10].heavy_hash_blk_dut/heavy_hash_dut/hashin_fifo_out/xpm_fifo_sync_inst/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_wide.mem_reg_bram_1/CLKARDCLK
+High Pulse Width  Slow    RAMB36E2/CLKBWRCLK  n/a            0.542         2.000       1.458      RAMB36_X2Y94   WRAPPER_INST/CL/top_ins/genblk1[10].heavy_hash_blk_dut/heavy_hash_dut/hashin_fifo_out/xpm_fifo_sync_inst/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_wide.mem_reg_bram_2/CLKBWRCLK
+
+
+
+---------------------------------------------------------------------------------------------------
+From Clock:  clk_main_a0
+  To Clock:  clk_main_a0
+
+Setup :            0  Failing Endpoints,  Worst Slack        0.579ns,  Total Violation        0.000ns
+Hold  :            0  Failing Endpoints,  Worst Slack        0.008ns,  Total Violation        0.000ns
+PW    :            0  Failing Endpoints,  Worst Slack        3.458ns,  Total Violation        0.000ns
+---------------------------------------------------------------------------------------------------
+
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.579ns  (required time - arrival time)
+  Source:                 <hidden>
+                            (rising edge-triggered cell FDCE clocked by clk_main_a0  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            <hidden>
+                            (rising edge-triggered cell FDRE clocked by clk_main_a0  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Path Group:             clk_main_a0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            8.000ns  (clk_main_a0 rise@8.000ns - clk_main_a0 rise@0.000ns)
+  Data Path Delay:        6.841ns  (logic 0.079ns (1.155%)  route 6.762ns (98.845%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.170ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    6.092ns = ( 14.092 - 8.000 ) 
+    Source Clock Delay      (SCD):    5.890ns
+    Clock Pessimism Removal (CPR):    -0.372ns
+  Clock Uncertainty:      0.058ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.092ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.000ns
+  Inter-SLR Compensation: 0.278ns  ((DCD - CCD) * PF)
+    Destination Clock Delay (DCD):    6.092ns
+    Common Clock Delay      (CCD):    4.239ns
+    Prorating Factor         (PF):    0.150
+  Clock Net Delay (Source):      2.927ns (routing 0.453ns, distribution 2.474ns)
+  Clock Net Delay (Destination): 2.676ns (routing 0.412ns, distribution 2.264ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock clk_main_a0 rise edge)
+                                                      0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.085     0.085    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.130     0.215 r  static         <hidden>
+                         net (fo=149525, routed)      2.602     2.817    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT0)
+                                                     -0.127     2.690 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.245     2.935    reconfigurable <hidden>
+    BUFGCE_X1Y181        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.028     2.963 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=31419, routed)       2.927     5.890    boundary       <hidden>
+    SLICE_X66Y313        FDCE                                         r  reconfigurable <hidden>
+  -------------------------------------------------------------------    ----------------------------------
+    SLICE_X66Y313        FDCE (Prop_EFF2_SLICEM_C_Q)
+                                                      0.079     5.969 f  reconfigurable <hidden>
+                         net (fo=350, routed)         6.762    12.731    reconfigurable <hidden>
+    SLR Crossing[1->0]   
+    SLICE_X85Y45         FDRE                                         r  reconfigurable <hidden>  (IS_INVERTED)
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock clk_main_a0 rise edge)
+                                                      8.000     8.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     8.000 r  static         <hidden>
+                         net (fo=8, routed)           0.078     8.078    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.114     8.192 r  static         <hidden>
+                         net (fo=149525, routed)      2.355    10.547    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT0)
+                                                      0.630    11.177 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.215    11.392    reconfigurable <hidden>
+    BUFGCE_X1Y181        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.024    11.416 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=31419, routed)       2.676    14.092    boundary       <hidden>
+    SLR Crossing[1->0]   
+    SLICE_X85Y45         FDRE                                         r  reconfigurable <hidden>
+                         clock pessimism             -0.372    13.720                     
+                         inter-SLR compensation      -0.278    13.442                     
+                         clock uncertainty           -0.058    13.384                     
+    SLICE_X85Y45         FDRE (Setup_EFF_SLICEL_C_R)
+                                                     -0.074    13.310    reconfigurable   <hidden>
+  -------------------------------------------------------------------
+                         required time                         13.310                     
+                         arrival time                         -12.731                     
+  -------------------------------------------------------------------
+                         slack                                  0.579                     
+
+
+
+
+
+Min Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.008ns  (arrival time - required time)
+  Source:                 WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/count_value_i_reg[8]/C
+                            (rising edge-triggered cell FDRE clocked by clk_main_a0  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_pf_ic_rc.gpe_ic.diff_pntr_pe_reg[8]/D
+                            (rising edge-triggered cell FDRE clocked by clk_main_a0  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Path Group:             clk_main_a0
+  Path Type:              Hold (Min at Slow Process Corner)
+  Requirement:            0.000ns  (clk_main_a0 rise@0.000ns - clk_main_a0 rise@0.000ns)
+  Data Path Delay:        0.220ns  (logic 0.124ns (56.364%)  route 0.096ns (43.636%))
+  Logic Levels:           2  (CARRY8=1 LUT2=1)
+  Clock Path Skew:        0.152ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    5.991ns
+    Source Clock Delay      (SCD):    6.092ns
+    Clock Pessimism Removal (CPR):    -0.253ns
+  Clock Net Delay (Source):      2.676ns (routing 0.412ns, distribution 2.264ns)
+  Clock Net Delay (Destination): 3.028ns (routing 0.453ns, distribution 2.575ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock clk_main_a0 rise edge)
+                                                      0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.078     0.078    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.114     0.192 r  static         <hidden>
+                         net (fo=149525, routed)      2.355     2.547    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT0)
+                                                      0.630     3.177 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.215     3.392    reconfigurable <hidden>
+    BUFGCE_X1Y181        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.024     3.416 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=31419, routed)       2.676     6.092    boundary       WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/rd_clk
+    SLICE_X55Y309        FDRE                                         r  reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/count_value_i_reg[8]/C
+  -------------------------------------------------------------------    ----------------------------------
+    SLICE_X55Y309        FDRE (Prop_BFF_SLICEL_C_Q)
+                                                      0.059     6.151 r  reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/count_value_i_reg[8]/Q
+                         net (fo=13, routed)          0.075     6.226    reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wpr_gray_reg/gen_pf_ic_rc.gpe_ic.diff_pntr_pe_reg[8][5]
+    SLICE_X56Y309        LUT2 (Prop_A6LUT_SLICEM_I1_O)
+                                                      0.036     6.262 r  reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wpr_gray_reg/gen_pf_ic_rc.gpe_ic.diff_pntr_pe[8]_i_2/O
+                         net (fo=1, routed)           0.012     6.274    reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wpr_gray_reg/gen_pf_ic_rc.gpe_ic.diff_pntr_pe[8]_i_2_n_0
+    SLICE_X56Y309        CARRY8 (Prop_CARRY8_SLICEM_S[0]_O[0])
+                                                      0.029     6.303 r  reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wpr_gray_reg/gen_pf_ic_rc.gpe_ic.diff_pntr_pe_reg[8]_i_1/O[0]
+                         net (fo=1, routed)           0.009     6.312    reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/diff_pntr_pe[8]
+    SLICE_X56Y309        FDRE                                         r  reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_pf_ic_rc.gpe_ic.diff_pntr_pe_reg[8]/D
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock clk_main_a0 rise edge)
+                                                      0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.085     0.085    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.130     0.215 r  static         <hidden>
+                         net (fo=149525, routed)      2.602     2.817    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT0)
+                                                     -0.127     2.690 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.245     2.935    reconfigurable <hidden>
+    BUFGCE_X1Y181        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.028     2.963 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=31419, routed)       3.028     5.991    boundary       WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rd_clk
+    SLICE_X56Y309        FDRE                                         r  reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_pf_ic_rc.gpe_ic.diff_pntr_pe_reg[8]/C
+                         clock pessimism              0.253     6.244                     
+    SLICE_X56Y309        FDRE (Hold_AFF_SLICEM_C_D)
+                                                      0.060     6.304    reconfigurable   WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_pf_ic_rc.gpe_ic.diff_pntr_pe_reg[8]
+  -------------------------------------------------------------------
+                         required time                         -6.304                     
+                         arrival time                           6.312                     
+  -------------------------------------------------------------------
+                         slack                                  0.008                     
+
+
+
+
+
+Pulse Width Checks
+--------------------------------------------------------------------------------------
+Clock Name:         clk_main_a0
+Waveform(ns):       { 0.000 4.000 }
+Period(ns):         8.000
+Sources:            { WRAPPER_INST/SH/kernel_clks_i/clkwiz_sys_clk/inst/CLK_CORE_DRP_I/clk_inst/mmcme3_adv_inst/CLKOUT0 }
+
+Check Type        Corner  Lib Pin             Reference Pin  Required(ns)  Actual(ns)  Slack(ns)  Location       Pin
+Min Period        n/a     RAMB36E2/CLKARDCLK  n/a            1.569         8.000       6.431      RAMB36_X7Y53   WRAPPER_INST/CL/CL_ILA_0/inst/ila_core_inst/ila_trace_memory_inst/SUBCORE_RAM_BLK_MEM_1.trace_block_memory/inst_blk_mem_gen/gnbram.gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/prim_noinit.ram/DEVICE_8SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram/CLKARDCLK
+Low Pulse Width   Fast    RAMB36E2/CLKARDCLK  n/a            0.542         4.000       3.458      RAMB36_X7Y54   WRAPPER_INST/CL/CL_ILA_0/inst/ila_core_inst/ila_trace_memory_inst/SUBCORE_RAM_BLK_MEM_1.trace_block_memory/inst_blk_mem_gen/gnbram.gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[1].ram.r/prim_noinit.ram/DEVICE_8SERIES.NO_BMM_INFO.SDP.SIMPLE_PRIM36.ram/CLKARDCLK
+High Pulse Width  Slow    RAMB18E2/CLKBWRCLK  n/a            0.542         4.000       3.458      RAMB18_X5Y100  WRAPPER_INST/CL/top_ins/matrix_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_narrow.mem_reg/CLKBWRCLK
+
+
+
+---------------------------------------------------------------------------------------------------
+From Clock:  drck
+  To Clock:  drck
+
+Setup :            0  Failing Endpoints,  Worst Slack        4.405ns,  Total Violation        0.000ns
+Hold  :            0  Failing Endpoints,  Worst Slack        3.870ns,  Total Violation        0.000ns
+PW    :           NA  Failing Endpoints,  Worst Slack           NA  ,  Total Violation           NA
+---------------------------------------------------------------------------------------------------
+
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             4.405ns  (required time - arrival time)
+  Source:                 static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/U_BASETAP/U_IR/REG_O_reg[1]/C
+                            (rising edge-triggered cell FDCE clocked by drck  {rise@0.000ns fall@16.000ns period=32.000ns})
+  Destination:            static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/U_BASETAP/TDO_O_reg/D
+                            (falling edge-triggered cell FDCE clocked by drck  {rise@0.000ns fall@16.000ns period=32.000ns})
+  Path Group:             drck
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            16.000ns  (drck fall@16.000ns - drck rise@0.000ns)
+  Data Path Delay:        11.170ns  (logic 0.928ns (8.308%)  route 10.242ns (91.692%))
+  Logic Levels:           8  (LUT1=1 LUT2=1 LUT3=2 LUT4=1 LUT5=1 LUT6=2)
+  Clock Path Skew:        -0.188ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    3.242ns = ( 19.242 - 16.000 ) 
+    Source Clock Delay      (SCD):    4.071ns
+    Clock Pessimism Removal (CPR):    0.641ns
+  Clock Uncertainty:      0.246ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE + DCD
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.060ns
+    Phase Error              (PE):    0.000ns
+    Duty Cycle Distortion   (DCD):    0.200ns
+  Inter-SLR Compensation: 0.016ns  ((DCD - CCD) * PF)
+    Destination Clock Delay (DCD):    3.242ns
+    Common Clock Delay      (CCD):    3.138ns
+    Prorating Factor         (PF):    0.150
+  Clock Net Delay (Source):      2.651ns (routing 0.780ns, distribution 1.871ns)
+  Clock Net Delay (Destination): 2.361ns (routing 0.704ns, distribution 1.657ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock drck rise edge)       0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.085     0.085    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.130     0.215 r  static         <hidden>
+    X5Y6 (CLOCK_ROOT)    net (fo=149525, routed)      2.651     2.866    static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/s_axi_aclk
+    SLICE_X142Y499       FDRE (Prop_HFF_SLICEM_C_Q)
+                                                      0.079     2.945 r  static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/tck_i_reg_replicated/Q
+                         net (fo=532, routed)         1.126     4.071    static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/U_BASETAP/U_IR/tck_i_reg
+    SLICE_X144Y424       FDCE                                         r  static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/U_BASETAP/U_IR/REG_O_reg[1]/C
+  -------------------------------------------------------------------    ----------------------------------
+    SLICE_X144Y424       FDCE (Prop_EFF2_SLICEM_C_Q)
+                                                      0.079     4.150 r  static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/U_BASETAP/U_IR/REG_O_reg[1]/Q
+                         net (fo=4, routed)           1.617     5.767    static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/instr_reg[1]
+    SLICE_X144Y424       LUT6 (Prop_F6LUT_SLICEM_I3_O)
+                                                      0.148     5.915 r  static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/user_code_sel_inferred__1/i_/O
+                         net (fo=19, routed)          0.413     6.328    static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/U_BASETAP/U_TAP/REG_O_reg[5]_0
+    SLICE_X145Y420       LUT2 (Prop_G6LUT_SLICEL_I0_O)
+                                                      0.089     6.417 r  static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/U_BASETAP/U_TAP/shift_INST_0/O
+                         net (fo=36, routed)          1.784     8.201    static         dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/s_bscan_shift
+    SLICE_X143Y359       LUT4 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     8.236 r  static         dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/m_bscan_bscanid_en[0]_INST_0/O
+                         net (fo=69, routed)          2.772    11.008    boundary       WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/bscanid_en
+    SLR Crossing[1->0]   
+    SLICE_X100Y265       LUT3 (Prop_B6LUT_SLICEM_I1_O)
+                                                      0.089    11.097 r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/tdo_INST_0/O
+                         net (fo=1, routed)           0.094    11.191    reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/lut_buffer/inst/tdo_i
+    SLICE_X101Y265       LUT1 (Prop_A6LUT_SLICEL_I0_O)
+                                                      0.124    11.315 r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/lut_buffer/inst/u_tdo/O
+                         net (fo=2, routed)           3.201    14.516    boundary       dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/m_bscan_tdo[0]
+    SLR Crossing[0->1]   
+    SLICE_X144Y418       LUT6 (Prop_G6LUT_SLICEM_I5_O)
+                                                      0.150    14.666 r  static         dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/s_bscan_tdo_INST_0/O
+                         net (fo=1, routed)           0.245    14.911    static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/U_BASETAP/tdo
+    SLICE_X144Y424       LUT5 (Prop_E6LUT_SLICEM_I1_O)
+                                                      0.148    15.059 r  static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/U_BASETAP/dr_tdo_inferred_i_1/O
+                         net (fo=1, routed)           0.086    15.145    static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/U_BASETAP/U_TAP/sh_reg_reg[0]
+    SLICE_X144Y423       LUT3 (Prop_D5LUT_SLICEM_I2_O)
+                                                      0.066    15.211 r  static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/U_BASETAP/U_TAP/tdo_rise_edge_inferred_i_1/O
+                         net (fo=1, routed)           0.030    15.241    static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/U_BASETAP/tdo_rise_edge
+    SLICE_X144Y423       FDCE                                         r  static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/U_BASETAP/TDO_O_reg/D
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock drck fall edge)      16.000    16.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000    16.000 r  static         <hidden>
+                         net (fo=8, routed)           0.078    16.078    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.114    16.192 r  static         <hidden>
+    X5Y6 (CLOCK_ROOT)    net (fo=149525, routed)      2.361    18.553    static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/s_axi_aclk
+    SLICE_X142Y499       FDRE (Prop_HFF_SLICEM_C_Q)
+                                                      0.058    18.611 f  static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/tck_i_reg_replicated/Q
+                         net (fo=532, routed)         0.631    19.242    static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/U_BASETAP/tck_i_reg
+    SLICE_X144Y423       FDCE                                         r  static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/U_BASETAP/TDO_O_reg/C  (IS_INVERTED)
+                         clock pessimism              0.641    19.883                     
+                         inter-SLR compensation      -0.016    19.867                     
+                         clock uncertainty           -0.246    19.621                     
+    SLICE_X144Y423       FDCE (Setup_DFF2_SLICEM_C_D)
+                                                      0.025    19.646    static           static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_BSCAN_TAP/U_BASETAP/TDO_O_reg
+  -------------------------------------------------------------------
+                         required time                         19.646                     
+                         arrival time                         -15.241                     
+  -------------------------------------------------------------------
+                         slack                                  4.405                     
+
+
+
+
+
+Min Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             3.870ns  (arrival time - required time)
+  Source:                 dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/state_reg[2]/C
+                            (rising edge-triggered cell FDRE clocked by drck  {rise@0.000ns fall@16.000ns period=32.000ns})
+  Destination:            dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/temp_curid_reg[31]/D
+                            (rising edge-triggered cell FDRE clocked by drck  {rise@0.000ns fall@16.000ns period=32.000ns})
+  Path Group:             drck
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (drck rise@0.000ns - drck rise@0.000ns)
+  Data Path Delay:        4.125ns  (logic 0.216ns (5.236%)  route 3.909ns (94.764%))
+  Logic Levels:           4  (LUT1=1 LUT3=2 LUT4=1)
+  Clock Path Skew:        0.155ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    2.591ns
+    Source Clock Delay      (SCD):    2.135ns
+    Clock Pessimism Removal (CPR):    0.301ns
+  Inter-SLR Compensation: 0.053ns  ((DCD - CCD) * DF)
+    Destination Clock Delay (DCD):    2.591ns
+    Common Clock Delay      (CCD):    2.236ns
+    Derating Factor          (DF):    0.150
+  Clock Net Delay (Source):      1.450ns (routing 0.429ns, distribution 1.021ns)
+  Clock Net Delay (Destination): 1.624ns (routing 0.484ns, distribution 1.140ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock drck rise edge)       0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.052     0.052    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.073     0.125 r  static         <hidden>
+    X5Y6 (CLOCK_ROOT)    net (fo=149525, routed)      1.450     1.575    static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/s_axi_aclk
+    SLICE_X142Y499       FDRE (Prop_HFF_SLICEM_C_Q)
+                                                      0.039     1.614 r  static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/tck_i_reg_replicated/Q
+                         net (fo=532, routed)         0.521     2.135    static         dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/s_bscan_tck
+    SLICE_X146Y420       FDRE                                         r  static         dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/state_reg[2]/C
+  -------------------------------------------------------------------    ----------------------------------
+    SLICE_X146Y420       FDRE (Prop_EFF2_SLICEM_C_Q)
+                                                      0.039     2.174 f  static         dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/state_reg[2]/Q
+                         net (fo=56, routed)          1.362     3.536    static         dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/state[2]
+    SLICE_X143Y359       LUT4 (Prop_E6LUT_SLICEL_I2_O)
+                                                      0.059     3.595 r  static         dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/m_bscan_bscanid_en[0]_INST_0/O
+                         net (fo=69, routed)          1.231     4.826    boundary       WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/bscanid_en
+    SLR Crossing[1->0]   
+    SLICE_X100Y265       LUT3 (Prop_B6LUT_SLICEM_I1_O)
+                                                      0.035     4.861 r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/tdo_INST_0/O
+                         net (fo=1, routed)           0.048     4.909    reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/lut_buffer/inst/tdo_i
+    SLICE_X101Y265       LUT1 (Prop_A6LUT_SLICEL_I0_O)
+                                                      0.050     4.959 r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/lut_buffer/inst/u_tdo/O
+                         net (fo=2, routed)           1.262     6.221    boundary       dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/m_bscan_tdo[0]
+    SLR Crossing[0->1]   
+    SLICE_X143Y388       LUT3 (Prop_D5LUT_SLICEL_I2_O)
+                                                      0.033     6.254 r  static         dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/temp_curid[31]_i_3/O
+                         net (fo=1, routed)           0.006     6.260    static         dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/temp_curid[31]_i_3_n_0
+    SLICE_X143Y388       FDRE                                         r  static         dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/temp_curid_reg[31]/D
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock drck rise edge)       0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.057     0.057    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.082     0.139 r  static         <hidden>
+    X5Y6 (CLOCK_ROOT)    net (fo=149525, routed)      1.624     1.763    static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/s_axi_aclk
+    SLICE_X142Y499       FDRE (Prop_HFF_SLICEM_C_Q)
+                                                      0.052     1.815 r  static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/tck_i_reg_replicated/Q
+                         net (fo=532, routed)         0.776     2.591    static         dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/s_bscan_tck
+    SLICE_X143Y388       FDRE                                         r  static         dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/temp_curid_reg[31]/C
+                         clock pessimism             -0.301     2.290                     
+                         inter-SLR compensation       0.053     2.343                     
+    SLICE_X143Y388       FDRE (Hold_DFF2_SLICEL_C_D)
+                                                      0.047     2.390    static           dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_EXT_BSCAN.bscan_switch/temp_curid_reg[31]
+  -------------------------------------------------------------------
+                         required time                         -2.390                     
+                         arrival time                           6.260                     
+  -------------------------------------------------------------------
+                         slack                                  3.870                     
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------
+From Clock:  tck
+  To Clock:  tck
+
+Setup :            0  Failing Endpoints,  Worst Slack       29.714ns,  Total Violation        0.000ns
+Hold  :            0  Failing Endpoints,  Worst Slack        0.014ns,  Total Violation        0.000ns
+PW    :            0  Failing Endpoints,  Worst Slack       15.468ns,  Total Violation        0.000ns
+---------------------------------------------------------------------------------------------------
+
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             29.714ns  (required time - arrival time)
+  Source:                 WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/icn_cmd_en_reg[4]/C
+                            (rising edge-triggered cell FDRE clocked by tck  {rise@0.000ns fall@16.000ns period=32.000ns})
+  Destination:            WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.U_ICON/iTDO_reg/D
+                            (rising edge-triggered cell FDRE clocked by tck  {rise@0.000ns fall@16.000ns period=32.000ns})
+  Path Group:             tck
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            32.000ns  (tck rise@32.000ns - tck rise@0.000ns)
+  Data Path Delay:        2.189ns  (logic 0.446ns (20.375%)  route 1.743ns (79.625%))
+  Logic Levels:           3  (LUT5=1 LUT6=2)
+  Clock Path Skew:        -0.075ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    5.791ns = ( 37.791 - 32.000 ) 
+    Source Clock Delay      (SCD):    6.557ns
+    Clock Pessimism Removal (CPR):    0.691ns
+  Clock Uncertainty:      0.046ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.060ns
+    Phase Error              (PE):    0.000ns
+  Clock Net Delay (Source):      2.802ns (routing 0.481ns, distribution 2.321ns)
+  Clock Net Delay (Destination): 2.543ns (routing 0.441ns, distribution 2.102ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock tck rise edge)        0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.085     0.085    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.130     0.215 r  static         <hidden>
+                         net (fo=149525, routed)      2.795     3.010    static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/s_axi_aclk
+    SLR Crossing[1->0]   
+    SLICE_X112Y296       FDRE (Prop_DFF2_SLICEL_C_Q)
+                                                      0.081     3.091 r  static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/tck_i_reg/Q
+                         net (fo=2, routed)           0.636     3.727    static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/tap_tck
+    BUFGCE_X1Y119        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.028     3.755 r  static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_TAP_TCKBUFG/O
+    X4Y4 (CLOCK_ROOT)    net (fo=379, routed)         2.802     6.557    boundary       WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/tck
+    SLICE_X100Y250       FDRE                                         r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/icn_cmd_en_reg[4]/C
+  -------------------------------------------------------------------    ----------------------------------
+    SLICE_X100Y250       FDRE (Prop_EFF_SLICEM_C_Q)
+                                                      0.076     6.633 r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/icn_cmd_en_reg[4]/Q
+                         net (fo=4, routed)           0.720     7.353    reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD4/icn_cmd_en_temp_reg_0
+    SLICE_X92Y237        LUT6 (Prop_H6LUT_SLICEM_I0_O)
+                                                      0.152     7.505 r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD4/iTDO_i_8/O
+                         net (fo=1, routed)           0.526     8.031    reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/iTDO_reg_4
+    SLICE_X97Y237        LUT6 (Prop_H6LUT_SLICEM_I5_O)
+                                                      0.152     8.183 r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/iTDO_i_4/O
+                         net (fo=1, routed)           0.482     8.665    reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/iTDO_i_4_n_0
+    SLICE_X98Y254        LUT5 (Prop_D5LUT_SLICEL_I2_O)
+                                                      0.066     8.731 r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/iTDO_i_1/O
+                         net (fo=1, routed)           0.015     8.746    reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.U_ICON/iTDO_next
+    SLICE_X98Y254        FDRE                                         r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.U_ICON/iTDO_reg/D
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock tck rise edge)       32.000    32.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000    32.000 r  static         <hidden>
+                         net (fo=8, routed)           0.078    32.078    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.114    32.192 r  static         <hidden>
+                         net (fo=149525, routed)      2.508    34.700    static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/s_axi_aclk
+    SLR Crossing[1->0]   
+    SLICE_X112Y296       FDRE (Prop_DFF2_SLICEL_C_Q)
+                                                      0.061    34.761 r  static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/tck_i_reg/Q
+                         net (fo=2, routed)           0.463    35.224    static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/tap_tck
+    BUFGCE_X1Y119        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.024    35.248 r  static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_TAP_TCKBUFG/O
+    X4Y4 (CLOCK_ROOT)    net (fo=379, routed)         2.543    37.791    boundary       WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.U_ICON/tck
+    SLICE_X98Y254        FDRE                                         r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.U_ICON/iTDO_reg/C
+                         clock pessimism              0.691    38.482                     
+                         clock uncertainty           -0.046    38.435                     
+    SLICE_X98Y254        FDRE (Setup_DFF2_SLICEL_C_D)
+                                                      0.025    38.460    reconfigurable   WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.U_ICON/iTDO_reg
+  -------------------------------------------------------------------
+                         required time                         38.460                     
+                         arrival time                          -8.746                     
+  -------------------------------------------------------------------
+                         slack                                 29.714                     
+
+
+
+
+
+Min Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.014ns  (arrival time - required time)
+  Source:                 WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD5/icn_cmd_en_temp_reg/C
+                            (rising edge-triggered cell FDRE clocked by tck  {rise@0.000ns fall@16.000ns period=32.000ns})
+  Destination:            WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD5/shift_reg_in_reg[10]/CE
+                            (rising edge-triggered cell FDRE clocked by tck  {rise@0.000ns fall@16.000ns period=32.000ns})
+  Path Group:             tck
+  Path Type:              Hold (Min at Slow Process Corner)
+  Requirement:            0.000ns  (tck rise@0.000ns - tck rise@0.000ns)
+  Data Path Delay:        0.223ns  (logic 0.058ns (26.009%)  route 0.165ns (73.991%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.222ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    6.592ns
+    Source Clock Delay      (SCD):    5.819ns
+    Clock Pessimism Removal (CPR):    0.551ns
+  Clock Net Delay (Source):      2.571ns (routing 0.441ns, distribution 2.130ns)
+  Clock Net Delay (Destination): 2.837ns (routing 0.481ns, distribution 2.356ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock tck rise edge)        0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.078     0.078    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.114     0.192 r  static         <hidden>
+                         net (fo=149525, routed)      2.508     2.700    static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/s_axi_aclk
+    SLR Crossing[1->0]   
+    SLICE_X112Y296       FDRE (Prop_DFF2_SLICEL_C_Q)
+                                                      0.061     2.761 r  static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/tck_i_reg/Q
+                         net (fo=2, routed)           0.463     3.224    static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/tap_tck
+    BUFGCE_X1Y119        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.024     3.248 r  static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_TAP_TCKBUFG/O
+    X4Y4 (CLOCK_ROOT)    net (fo=379, routed)         2.571     5.819    boundary       WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD5/tck
+    SLICE_X93Y239        FDRE                                         r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD5/icn_cmd_en_temp_reg/C
+  -------------------------------------------------------------------    ----------------------------------
+    SLICE_X93Y239        FDRE (Prop_AFF_SLICEM_C_Q)
+                                                      0.058     5.877 r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD5/icn_cmd_en_temp_reg/Q
+                         net (fo=19, routed)          0.165     6.042    reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD5/icn_cmd_en_temp
+    SLICE_X92Y240        FDRE                                         r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD5/shift_reg_in_reg[10]/CE
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock tck rise edge)        0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.085     0.085    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.130     0.215 r  static         <hidden>
+                         net (fo=149525, routed)      2.795     3.010    static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/s_axi_aclk
+    SLR Crossing[1->0]   
+    SLICE_X112Y296       FDRE (Prop_DFF2_SLICEL_C_Q)
+                                                      0.081     3.091 r  static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/tck_i_reg/Q
+                         net (fo=2, routed)           0.636     3.727    static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/tap_tck
+    BUFGCE_X1Y119        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.028     3.755 r  static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_TAP_TCKBUFG/O
+    X4Y4 (CLOCK_ROOT)    net (fo=379, routed)         2.837     6.592    boundary       WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD5/tck
+    SLICE_X92Y240        FDRE                                         r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD5/shift_reg_in_reg[10]/C
+                         clock pessimism             -0.551     6.041                     
+    SLICE_X92Y240        FDRE (Hold_AFF2_SLICEM_C_CE)
+                                                     -0.013     6.028    reconfigurable   WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD5/shift_reg_in_reg[10]
+  -------------------------------------------------------------------
+                         required time                         -6.028                     
+                         arrival time                           6.042                     
+  -------------------------------------------------------------------
+                         slack                                  0.014                     
+
+
+
+
+
+Pulse Width Checks
+--------------------------------------------------------------------------------------
+Clock Name:         tck
+Waveform(ns):       { 0.000 16.000 }
+Period(ns):         32.000
+Sources:            { static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/tck_i_reg/Q }
+
+Check Type        Corner  Lib Pin     Reference Pin  Required(ns)  Actual(ns)  Slack(ns)  Location        Pin
+Min Period        n/a     RAMD32/CLK  n/a            1.064         32.000      30.936     SLICE_X100Y229  WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM_reg_0_15_0_13/RAMA/CLK
+Low Pulse Width   Fast    RAMD32/CLK  n/a            0.532         16.000      15.468     SLICE_X100Y229  WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM_reg_0_15_0_13/RAMA/CLK
+High Pulse Width  Slow    RAMD32/CLK  n/a            0.532         16.000      15.468     SLICE_X100Y229  WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM_reg_0_15_0_13/RAMA/CLK
+
+
+
+---------------------------------------------------------------------------------------------------
+From Clock:  clk_main_a0
+  To Clock:  clk_extra_a3
+
+Setup :            0  Failing Endpoints,  Worst Slack        0.231ns,  Total Violation        0.000ns
+Hold  :            0  Failing Endpoints,  Worst Slack        0.021ns,  Total Violation        0.000ns
+---------------------------------------------------------------------------------------------------
+
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.231ns  (required time - arrival time)
+  Source:                 WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_wide.mem_reg_bram_2/CLKARDCLK
+                            (rising edge-triggered cell RAMB36E2 clocked by clk_main_a0  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            <hidden>
+                            (rising edge-triggered cell FDRE clocked by clk_extra_a3  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_extra_a3
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_extra_a3 rise@4.000ns - clk_main_a0 rise@0.000ns)
+  Data Path Delay:        2.654ns  (logic 0.215ns (8.101%)  route 2.439ns (91.899%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.543ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    5.977ns = ( 9.977 - 4.000 ) 
+    Source Clock Delay      (SCD):    6.033ns
+    Clock Pessimism Removal (CPR):    -0.487ns
+  Clock Uncertainty:      0.177ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.091ns
+    Phase Error              (PE):    0.120ns
+  Inter-SLR Compensation: 0.420ns  ((DCD - CCD) * PF)
+    Destination Clock Delay (DCD):    5.977ns
+    Common Clock Delay      (CCD):    3.177ns
+    Prorating Factor         (PF):    0.150
+  Clock Net Delay (Source):      3.070ns (routing 0.453ns, distribution 2.617ns)
+  Clock Net Delay (Destination): 2.552ns (routing 0.309ns, distribution 2.243ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock clk_main_a0 rise edge)
+                                                      0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.085     0.085    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.130     0.215 r  static         <hidden>
+                         net (fo=149525, routed)      2.602     2.817    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT0)
+                                                     -0.127     2.690 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.245     2.935    reconfigurable <hidden>
+    BUFGCE_X1Y181        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.028     2.963 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=31419, routed)       3.070     6.033    boundary       WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/clkb
+    RAMB36_X4Y64         RAMB36E2                                     r  reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_wide.mem_reg_bram_2/CLKARDCLK
+  -------------------------------------------------------------------    ----------------------------------
+    RAMB36_X4Y64         RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKARDCLK_DOUTADOUT[7])
+                                                      0.215     6.248 r  reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_wide.mem_reg_bram_2/DOUTADOUT[7]
+                         net (fo=1, routed)           2.439     8.687    reconfigurable <hidden>
+    SLR Crossing[1->0]   
+    SLICE_X63Y261        FDRE                                         r  reconfigurable <hidden>
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock clk_extra_a3 rise edge)
+                                                      4.000     4.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     4.000 r  static         <hidden>
+                         net (fo=8, routed)           0.078     4.078    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.114     4.192 r  static         <hidden>
+                         net (fo=149525, routed)      2.355     6.547    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT3)
+                                                      0.630     7.177 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.224     7.401    reconfigurable <hidden>
+    BUFGCE_X1Y171        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.024     7.425 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=166743, routed)      2.552     9.977    boundary       <hidden>
+    SLR Crossing[1->0]   
+    SLICE_X63Y261        FDRE                                         r  reconfigurable <hidden>
+                         clock pessimism             -0.487     9.490                     
+                         inter-SLR compensation      -0.420     9.070                     
+                         clock uncertainty           -0.177     8.893                     
+    SLICE_X63Y261        FDRE (Setup_FFF2_SLICEL_C_D)
+                                                      0.025     8.918    reconfigurable   <hidden>
+  -------------------------------------------------------------------
+                         required time                          8.918                     
+                         arrival time                          -8.687                     
+  -------------------------------------------------------------------
+                         slack                                  0.231                     
+
+
+
+
+
+Min Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.021ns  (arrival time - required time)
+  Source:                 WRAPPER_INST/CL/top_ins/block_header_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_narrow.mem_reg_0_63_21_27/RAMF/CLK
+                            (rising edge-triggered cell RAMD64E clocked by clk_main_a0  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            WRAPPER_INST/CL/top_ins/block_header_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_rd_b.doutb_reg_reg[26]/D
+                            (rising edge-triggered cell FDRE clocked by clk_extra_a3  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             clk_extra_a3
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk_extra_a3 rise@0.000ns - clk_main_a0 rise@0.000ns)
+  Data Path Delay:        0.358ns  (logic 0.111ns (31.006%)  route 0.247ns (68.994%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.114ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    3.360ns
+    Source Clock Delay      (SCD):    3.603ns
+    Clock Pessimism Removal (CPR):    -0.357ns
+  Clock Uncertainty:      0.177ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.091ns
+    Phase Error              (PE):    0.120ns
+  Clock Net Delay (Source):      1.661ns (routing 0.248ns, distribution 1.413ns)
+  Clock Net Delay (Destination): 1.746ns (routing 0.209ns, distribution 1.537ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock clk_main_a0 rise edge)
+                                                      0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.052     0.052    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.073     0.125 r  static         <hidden>
+                         net (fo=149525, routed)      1.424     1.549    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT0)
+                                                      0.230     1.779 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.146     1.925    reconfigurable <hidden>
+    BUFGCE_X1Y181        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.017     1.942 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=31419, routed)       1.661     3.603    boundary       WRAPPER_INST/CL/top_ins/block_header_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_narrow.mem_reg_0_63_21_27/WCLK
+    SLR Crossing[1->0]   
+    SLICE_X70Y226        RAMD64E                                      r  reconfigurable WRAPPER_INST/CL/top_ins/block_header_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_narrow.mem_reg_0_63_21_27/RAMF/CLK
+  -------------------------------------------------------------------    ----------------------------------
+    SLICE_X70Y226        RAMD64E (Prop_F6LUT_SLICEM_CLK_O)
+                                                      0.111     3.714 r  reconfigurable WRAPPER_INST/CL/top_ins/block_header_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_narrow.mem_reg_0_63_21_27/RAMF/O
+                         net (fo=1, routed)           0.247     3.961    reconfigurable WRAPPER_INST/CL/top_ins/block_header_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_rd_b.doutb_reg0[26]
+    SLICE_X72Y227        FDRE                                         r  reconfigurable WRAPPER_INST/CL/top_ins/block_header_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_rd_b.doutb_reg_reg[26]/D
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock clk_extra_a3 rise edge)
+                                                      0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.057     0.057    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.082     0.139 r  static         <hidden>
+                         net (fo=149525, routed)      1.578     1.717    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT3)
+                                                     -0.295     1.422 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.173     1.595    reconfigurable <hidden>
+    BUFGCE_X1Y171        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.019     1.614 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=166743, routed)      1.746     3.360    boundary       WRAPPER_INST/CL/top_ins/block_header_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/clkb
+    SLR Crossing[1->0]   
+    SLICE_X72Y227        FDRE                                         r  reconfigurable WRAPPER_INST/CL/top_ins/block_header_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_rd_b.doutb_reg_reg[26]/C
+                         clock pessimism              0.357     3.717                     
+                         clock uncertainty            0.177     3.894                     
+    SLICE_X72Y227        FDRE (Hold_FFF_SLICEM_C_D)
+                                                      0.046     3.940    reconfigurable   WRAPPER_INST/CL/top_ins/block_header_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_rd_b.doutb_reg_reg[26]
+  -------------------------------------------------------------------
+                         required time                         -3.940                     
+                         arrival time                           3.961                     
+  -------------------------------------------------------------------
+                         slack                                  0.021                     
+
+
+
+
+
+---------------------------------------------------------------------------------------------------
+From Clock:  clk_extra_a3
+  To Clock:  clk_main_a0
+
+Setup :            0  Failing Endpoints,  Worst Slack        0.023ns,  Total Violation        0.000ns
+Hold  :            0  Failing Endpoints,  Worst Slack        0.030ns,  Total Violation        0.000ns
+---------------------------------------------------------------------------------------------------
+
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.023ns  (required time - arrival time)
+  Source:                 <hidden>
+                            (rising edge-triggered cell FDRE clocked by clk_extra_a3  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_wide.mem_reg_bram_1/ENARDEN
+                            (rising edge-triggered cell RAMB36E2 clocked by clk_main_a0  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Path Group:             clk_main_a0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_main_a0 rise@8.000ns - clk_extra_a3 rise@4.000ns)
+  Data Path Delay:        2.803ns  (logic 0.169ns (6.029%)  route 2.634ns (93.971%))
+  Logic Levels:           1  (LUT6=1)
+  Clock Path Skew:        -0.214ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    6.114ns = ( 14.114 - 8.000 ) 
+    Source Clock Delay      (SCD):    5.841ns = ( 9.841 - 4.000 ) 
+    Clock Pessimism Removal (CPR):    -0.487ns
+  Clock Uncertainty:      0.177ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.091ns
+    Phase Error              (PE):    0.120ns
+    User Uncertainty         (UU):    0.000ns
+  Inter-SLR Compensation: 0.441ns  ((DCD - CCD) * PF)
+    Destination Clock Delay (DCD):    6.114ns
+    Common Clock Delay      (CCD):    3.177ns
+    Prorating Factor         (PF):    0.150
+  Clock Net Delay (Source):      2.867ns (routing 0.338ns, distribution 2.529ns)
+  Clock Net Delay (Destination): 2.698ns (routing 0.412ns, distribution 2.286ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock clk_extra_a3 rise edge)
+                                                      4.000     4.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     4.000 r  static         <hidden>
+                         net (fo=8, routed)           0.085     4.085    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.130     4.215 r  static         <hidden>
+                         net (fo=149525, routed)      2.602     6.817    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT3)
+                                                     -0.127     6.690 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.256     6.946    reconfigurable <hidden>
+    BUFGCE_X1Y171        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.028     6.974 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=166743, routed)      2.867     9.841    boundary       <hidden>
+    SLR Crossing[1->0]   
+    SLICE_X61Y249        FDRE                                         r  reconfigurable <hidden>
+  -------------------------------------------------------------------    ----------------------------------
+    SLICE_X61Y249        FDRE (Prop_EFF_SLICEL_C_Q)
+                                                      0.079     9.920 r  reconfigurable <hidden>
+                         net (fo=13, routed)          1.698    11.618    reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/rd_en
+    SLR Crossing[0->1]   
+    SLICE_X60Y306        LUT6 (Prop_A6LUT_SLICEM_I1_O)
+                                                      0.090    11.708 r  reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/gen_sdpram.xpm_memory_base_inst_i_2/O
+                         net (fo=23, routed)          0.936    12.644    reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/enb
+    RAMB36_X4Y63         RAMB36E2                                     r  reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_wide.mem_reg_bram_1/ENARDEN
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock clk_main_a0 rise edge)
+                                                      8.000     8.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     8.000 r  static         <hidden>
+                         net (fo=8, routed)           0.078     8.078    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.114     8.192 r  static         <hidden>
+                         net (fo=149525, routed)      2.355    10.547    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT0)
+                                                      0.630    11.177 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.215    11.392    reconfigurable <hidden>
+    BUFGCE_X1Y181        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.024    11.416 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=31419, routed)       2.698    14.114    boundary       WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/clkb
+    RAMB36_X4Y63         RAMB36E2                                     r  reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_wide.mem_reg_bram_1/CLKARDCLK
+                         clock pessimism             -0.487    13.627                     
+                         inter-SLR compensation      -0.441    13.186                     
+                         clock uncertainty           -0.177    13.009                     
+    RAMB36_X4Y63         RAMB36E2 (Setup_RAMB36E2_RAMB36_CLKARDCLK_ENARDEN)
+                                                     -0.342    12.667    reconfigurable   WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/gen_wr_a.gen_word_wide.mem_reg_bram_1
+  -------------------------------------------------------------------
+                         required time                         12.667                     
+                         arrival time                         -12.644                     
+  -------------------------------------------------------------------
+                         slack                                  0.023                     
+
+
+
+
+
+Min Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.030ns  (arrival time - required time)
+  Source:                 <hidden>
+                            (rising edge-triggered cell FDRE clocked by clk_extra_a3  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Destination:            WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/count_value_i_reg[6]/D
+                            (rising edge-triggered cell FDRE clocked by clk_main_a0  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Path Group:             clk_main_a0
+  Path Type:              Hold (Min at Slow Process Corner)
+  Requirement:            0.000ns  (clk_main_a0 rise@0.000ns - clk_extra_a3 rise@0.000ns)
+  Data Path Delay:        1.337ns  (logic 0.237ns (17.726%)  route 1.100ns (82.274%))
+  Logic Levels:           3  (LUT3=1 LUT6=2)
+  Clock Path Skew:        0.446ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    5.957ns
+    Source Clock Delay      (SCD):    5.998ns
+    Clock Pessimism Removal (CPR):    -0.487ns
+  Clock Uncertainty:      0.177ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.091ns
+    Phase Error              (PE):    0.120ns
+  Inter-SLR Compensation: 0.624ns  ((SCD + DPD - CCD) * PF)
+    Source Clock Delay      (SCD):    5.998ns
+    Data Path Delay         (DPD):    1.337ns
+    Common Clock Delay      (CCD):    3.177ns
+    Prorating Factor         (PF):    0.150
+  Clock Net Delay (Source):      2.573ns (routing 0.309ns, distribution 2.264ns)
+  Clock Net Delay (Destination): 2.994ns (routing 0.453ns, distribution 2.541ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock clk_extra_a3 rise edge)
+                                                      0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.078     0.078    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.114     0.192 r  static         <hidden>
+                         net (fo=149525, routed)      2.355     2.547    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT3)
+                                                      0.630     3.177 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.224     3.401    reconfigurable <hidden>
+    BUFGCE_X1Y171        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.024     3.425 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=166743, routed)      2.573     5.998    boundary       <hidden>
+    SLR Crossing[1->0]   
+    SLICE_X61Y249        FDRE                                         r  reconfigurable <hidden>
+  -------------------------------------------------------------------    ----------------------------------
+    SLICE_X61Y249        FDRE (Prop_EFF_SLICEL_C_Q)
+                                                      0.059     6.057 f  reconfigurable <hidden>
+                         net (fo=13, routed)          0.554     6.611    reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/rd_en
+    SLR Crossing[0->1]   
+    SLICE_X60Y306        LUT6 (Prop_G6LUT_SLICEM_I4_O)
+                                                      0.066     6.677 r  reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/count_value_i[4]_i_2/O
+                         net (fo=3, routed)           0.399     7.076    reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/gen_pf_ic_rc.ram_empty_i_reg
+    SLICE_X56Y309        LUT6 (Prop_D6LUT_SLICEM_I2_O)
+                                                      0.056     7.132 r  reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/count_value_i[9]_i_2/O
+                         net (fo=5, routed)           0.111     7.243    reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/count_value_i[9]_i_2_n_0
+    SLICE_X56Y310        LUT3 (Prop_D6LUT_SLICEM_I2_O)
+                                                      0.056     7.299 r  reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/count_value_i[6]_i_1__1/O
+                         net (fo=1, routed)           0.036     7.335    reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/count_value_i[6]_i_1__1_n_0
+    SLICE_X56Y310        FDRE                                         r  reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/count_value_i_reg[6]/D
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock clk_main_a0 rise edge)
+                                                      0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.085     0.085    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.130     0.215 r  static         <hidden>
+                         net (fo=149525, routed)      2.602     2.817    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT0)
+                                                     -0.127     2.690 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.245     2.935    reconfigurable <hidden>
+    BUFGCE_X1Y181        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.028     2.963 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=31419, routed)       2.994     5.957    boundary       WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/rd_clk
+    SLICE_X56Y310        FDRE                                         r  reconfigurable WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/count_value_i_reg[6]/C
+                         clock pessimism              0.487     6.444                     
+                         inter-SLR compensation       0.624     7.068                     
+                         clock uncertainty            0.177     7.245                     
+    SLICE_X56Y310        FDRE (Hold_DFF_SLICEM_C_D)
+                                                      0.060     7.305    reconfigurable   WRAPPER_INST/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/rdp_inst/count_value_i_reg[6]
+  -------------------------------------------------------------------
+                         required time                         -7.305                     
+                         arrival time                           7.335                     
+  -------------------------------------------------------------------
+                         slack                                  0.030                     
+
+
+
+
+
+---------------------------------------------------------------------------------------------------
+Path Group:  **async_default**
+From Clock:  clk_main_a0
+  To Clock:  clk_extra_a3
+
+Setup :            0  Failing Endpoints,  Worst Slack        0.359ns,  Total Violation        0.000ns
+Hold  :            0  Failing Endpoints,  Worst Slack        0.070ns,  Total Violation        0.000ns
+---------------------------------------------------------------------------------------------------
+
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.359ns  (required time - arrival time)
+  Source:                 <hidden>
+                            (rising edge-triggered cell FDRE clocked by clk_main_a0  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            <hidden>
+                            (recovery check against rising-edge clock clk_extra_a3  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             **async_default**
+  Path Type:              Recovery (Max at Slow Process Corner)
+  Requirement:            4.000ns  (clk_extra_a3 rise@4.000ns - clk_main_a0 rise@0.000ns)
+  Data Path Delay:        2.746ns  (logic 0.079ns (2.877%)  route 2.667ns (97.123%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.236ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    5.946ns = ( 9.946 - 4.000 ) 
+    Source Clock Delay      (SCD):    5.695ns
+    Clock Pessimism Removal (CPR):    -0.487ns
+  Clock Uncertainty:      0.177ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.091ns
+    Phase Error              (PE):    0.120ns
+  Inter-SLR Compensation: 0.415ns  ((DCD - CCD) * PF)
+    Destination Clock Delay (DCD):    5.946ns
+    Common Clock Delay      (CCD):    3.177ns
+    Prorating Factor         (PF):    0.150
+  Clock Net Delay (Source):      2.732ns (routing 0.453ns, distribution 2.279ns)
+  Clock Net Delay (Destination): 2.521ns (routing 0.309ns, distribution 2.212ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock clk_main_a0 rise edge)
+                                                      0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.085     0.085    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.130     0.215 r  static         <hidden>
+                         net (fo=149525, routed)      2.602     2.817    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT0)
+                                                     -0.127     2.690 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.245     2.935    reconfigurable <hidden>
+    BUFGCE_X1Y181        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.028     2.963 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=31419, routed)       2.732     5.695    boundary       <hidden>
+    SLICE_X111Y328       FDRE                                         r  static         <hidden>
+  -------------------------------------------------------------------    ----------------------------------
+    SLICE_X111Y328       FDRE (Prop_EFF_SLICEL_C_Q)
+                                                      0.079     5.774 r  static         <hidden>
+                         net (fo=13, routed)          2.667     8.441    boundary       <hidden>
+    SLR Crossing[1->0]   
+    SLICE_X77Y203        FDPE                                         f  reconfigurable <hidden>  (IS_INVERTED)
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock clk_extra_a3 rise edge)
+                                                      4.000     4.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     4.000 r  static         <hidden>
+                         net (fo=8, routed)           0.078     4.078    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.114     4.192 r  static         <hidden>
+                         net (fo=149525, routed)      2.355     6.547    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT3)
+                                                      0.630     7.177 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.224     7.401    reconfigurable <hidden>
+    BUFGCE_X1Y171        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.024     7.425 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=166743, routed)      2.521     9.946    boundary       <hidden>
+    SLR Crossing[1->0]   
+    SLICE_X77Y203        FDPE                                         r  reconfigurable <hidden>
+                         clock pessimism             -0.487     9.459                     
+                         inter-SLR compensation      -0.415     9.044                     
+                         clock uncertainty           -0.177     8.866                     
+    SLICE_X77Y203        FDPE (Recov_AFF_SLICEL_C_PRE)
+                                                     -0.066     8.800    reconfigurable   <hidden>
+  -------------------------------------------------------------------
+                         required time                          8.800                     
+                         arrival time                          -8.441                     
+  -------------------------------------------------------------------
+                         slack                                  0.359                     
+
+
+
+
+
+Min Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.070ns  (arrival time - required time)
+  Source:                 <hidden>
+                            (rising edge-triggered cell FDRE clocked by clk_main_a0  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            <hidden>
+                            (removal check against rising-edge clock clk_extra_a3  {rise@0.000ns fall@2.000ns period=4.000ns})
+  Path Group:             **async_default**
+  Path Type:              Removal (Min at Slow Process Corner)
+  Requirement:            0.000ns  (clk_extra_a3 rise@0.000ns - clk_main_a0 rise@0.000ns)
+  Data Path Delay:        1.169ns  (logic 0.059ns (5.047%)  route 1.110ns (94.953%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.375ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    5.754ns
+    Source Clock Delay      (SCD):    5.866ns
+    Clock Pessimism Removal (CPR):    -0.487ns
+  Clock Uncertainty:      0.177ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.091ns
+    Phase Error              (PE):    0.120ns
+  Inter-SLR Compensation: 0.579ns  ((SCD + DPD - CCD) * PF)
+    Source Clock Delay      (SCD):    5.866ns
+    Data Path Delay         (DPD):    1.169ns
+    Common Clock Delay      (CCD):    3.177ns
+    Prorating Factor         (PF):    0.150
+  Clock Net Delay (Source):      2.450ns (routing 0.412ns, distribution 2.038ns)
+  Clock Net Delay (Destination): 2.780ns (routing 0.338ns, distribution 2.442ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock clk_main_a0 rise edge)
+                                                      0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.078     0.078    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.114     0.192 r  static         <hidden>
+                         net (fo=149525, routed)      2.355     2.547    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT0)
+                                                      0.630     3.177 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.215     3.392    reconfigurable <hidden>
+    BUFGCE_X1Y181        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.024     3.416 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=31419, routed)       2.450     5.866    boundary       <hidden>
+    SLICE_X111Y328       FDRE                                         r  static         <hidden>
+  -------------------------------------------------------------------    ----------------------------------
+    SLICE_X111Y328       FDRE (Prop_EFF_SLICEL_C_Q)
+                                                      0.059     5.925 r  static         <hidden>
+                         net (fo=13, routed)          1.110     7.035    boundary       <hidden>
+    SLR Crossing[1->0]   
+    SLICE_X76Y258        FDPE                                         f  reconfigurable <hidden>  (IS_INVERTED)
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock clk_extra_a3 rise edge)
+                                                      0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.085     0.085    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.130     0.215 r  static         <hidden>
+                         net (fo=149525, routed)      2.602     2.817    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT3)
+                                                     -0.127     2.690 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.256     2.946    reconfigurable <hidden>
+    BUFGCE_X1Y171        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.028     2.974 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=166743, routed)      2.780     5.754    boundary       <hidden>
+    SLR Crossing[1->0]   
+    SLICE_X76Y258        FDPE                                         r  reconfigurable <hidden>
+                         clock pessimism              0.487     6.241                     
+                         inter-SLR compensation       0.579     6.820                     
+                         clock uncertainty            0.177     6.997                     
+    SLICE_X76Y258        FDPE (Remov_EFF2_SLICEM_C_PRE)
+                                                     -0.032     6.965    reconfigurable   <hidden>
+  -------------------------------------------------------------------
+                         required time                         -6.965                     
+                         arrival time                           7.035                     
+  -------------------------------------------------------------------
+                         slack                                  0.070                     
+
+
+
+
+
+---------------------------------------------------------------------------------------------------
+Path Group:  **async_default**
+From Clock:  clk_main_a0
+  To Clock:  clk_main_a0
+
+Setup :            0  Failing Endpoints,  Worst Slack        6.590ns,  Total Violation        0.000ns
+Hold  :            0  Failing Endpoints,  Worst Slack        0.115ns,  Total Violation        0.000ns
+---------------------------------------------------------------------------------------------------
+
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             6.590ns  (required time - arrival time)
+  Source:                 <hidden>
+                            (rising edge-triggered cell FDRE clocked by clk_main_a0  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            <hidden>
+                            (recovery check against rising-edge clock clk_main_a0  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Path Group:             **async_default**
+  Path Type:              Recovery (Max at Slow Process Corner)
+  Requirement:            8.000ns  (clk_main_a0 rise@8.000ns - clk_main_a0 rise@0.000ns)
+  Data Path Delay:        1.384ns  (logic 0.079ns (5.708%)  route 1.305ns (94.292%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.098ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    6.055ns = ( 14.055 - 8.000 ) 
+    Source Clock Delay      (SCD):    5.695ns
+    Clock Pessimism Removal (CPR):    -0.262ns
+  Clock Uncertainty:      0.058ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.092ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.000ns
+  Clock Net Delay (Source):      2.732ns (routing 0.453ns, distribution 2.279ns)
+  Clock Net Delay (Destination): 2.639ns (routing 0.412ns, distribution 2.227ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock clk_main_a0 rise edge)
+                                                      0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.085     0.085    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.130     0.215 r  static         <hidden>
+                         net (fo=149525, routed)      2.602     2.817    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT0)
+                                                     -0.127     2.690 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.245     2.935    reconfigurable <hidden>
+    BUFGCE_X1Y181        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.028     2.963 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=31419, routed)       2.732     5.695    boundary       <hidden>
+    SLICE_X111Y328       FDRE                                         r  static         <hidden>
+  -------------------------------------------------------------------    ----------------------------------
+    SLICE_X111Y328       FDRE (Prop_EFF_SLICEL_C_Q)
+                                                      0.079     5.774 r  static         <hidden>
+                         net (fo=13, routed)          1.305     7.079    boundary       <hidden>
+    SLICE_X66Y313        FDCE                                         f  reconfigurable <hidden>  (IS_INVERTED)
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock clk_main_a0 rise edge)
+                                                      8.000     8.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     8.000 r  static         <hidden>
+                         net (fo=8, routed)           0.078     8.078    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.114     8.192 r  static         <hidden>
+                         net (fo=149525, routed)      2.355    10.547    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT0)
+                                                      0.630    11.177 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.215    11.392    reconfigurable <hidden>
+    BUFGCE_X1Y181        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.024    11.416 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=31419, routed)       2.639    14.055    boundary       <hidden>
+    SLICE_X66Y313        FDCE                                         r  reconfigurable <hidden>
+                         clock pessimism             -0.262    13.793                     
+                         clock uncertainty           -0.058    13.735                     
+    SLICE_X66Y313        FDCE (Recov_EFF_SLICEM_C_CLR)
+                                                     -0.066    13.669    reconfigurable   <hidden>
+  -------------------------------------------------------------------
+                         required time                         13.669                     
+                         arrival time                          -7.079                     
+  -------------------------------------------------------------------
+                         slack                                  6.590                     
+
+
+
+
+
+Min Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.115ns  (arrival time - required time)
+  Source:                 WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.rd_rst_asreg_reg/C
+                            (rising edge-triggered cell FDPE clocked by clk_main_a0  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0]/PRE
+                            (removal check against rising-edge clock clk_main_a0  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Path Group:             **async_default**
+  Path Type:              Removal (Min at Slow Process Corner)
+  Requirement:            0.000ns  (clk_main_a0 rise@0.000ns - clk_main_a0 rise@0.000ns)
+  Data Path Delay:        0.305ns  (logic 0.096ns (31.475%)  route 0.209ns (68.525%))
+  Logic Levels:           1  (LUT2=1)
+  Clock Path Skew:        0.222ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    5.823ns
+    Source Clock Delay      (SCD):    5.952ns
+    Clock Pessimism Removal (CPR):    -0.351ns
+  Clock Net Delay (Source):      2.536ns (routing 0.412ns, distribution 2.124ns)
+  Clock Net Delay (Destination): 2.860ns (routing 0.453ns, distribution 2.407ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock clk_main_a0 rise edge)
+                                                      0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.078     0.078    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.114     0.192 r  static         <hidden>
+                         net (fo=149525, routed)      2.355     2.547    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT0)
+                                                      0.630     3.177 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.215     3.392    reconfigurable <hidden>
+    BUFGCE_X1Y181        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.024     3.416 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=31419, routed)       2.536     5.952    boundary       WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/rd_clk
+    SLR Crossing[1->0]   
+    SLICE_X103Y240       FDPE                                         r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.rd_rst_asreg_reg/C
+  -------------------------------------------------------------------    ----------------------------------
+    SLICE_X103Y240       FDPE (Prop_DFF2_SLICEL_C_Q)
+                                                      0.061     6.013 f  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.rd_rst_asreg_reg/Q
+                         net (fo=3, routed)           0.089     6.102    reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.gwrrd_rst_sync_stage[2].rrst_inst/in0[0]
+    SLICE_X103Y240       LUT2 (Prop_F6LUT_SLICEL_I0_O)
+                                                      0.035     6.137 f  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.gwrrd_rst_sync_stage[2].rrst_inst/ngwrdrst.grst.g7serrst.rd_rst_reg[2]_i_1/O
+                         net (fo=3, routed)           0.120     6.257    reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/rd_rst_comb
+    SLICE_X103Y238       FDPE                                         f  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0]/PRE
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock clk_main_a0 rise edge)
+                                                      0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.085     0.085    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.130     0.215 r  static         <hidden>
+                         net (fo=149525, routed)      2.602     2.817    boundary       <hidden>
+    MMCM_X1Y7            MMCME4_ADV (Prop_MMCM_CLKIN1_CLKOUT0)
+                                                     -0.127     2.690 r  reconfigurable <hidden>
+                         net (fo=1, routed)           0.245     2.935    reconfigurable <hidden>
+    BUFGCE_X1Y181        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.028     2.963 r  reconfigurable <hidden>
+    X4Y7 (CLOCK_ROOT)    net (fo=31419, routed)       2.860     5.823    boundary       WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/rd_clk
+    SLR Crossing[1->0]   
+    SLICE_X103Y238       FDPE                                         r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0]/C
+                         clock pessimism              0.351     6.174                     
+    SLICE_X103Y238       FDPE (Remov_AFF_SLICEL_C_PRE)
+                                                     -0.032     6.142    reconfigurable   WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0]
+  -------------------------------------------------------------------
+                         required time                         -6.142                     
+                         arrival time                           6.257                     
+  -------------------------------------------------------------------
+                         slack                                  0.115                     
+
+
+
+
+
+---------------------------------------------------------------------------------------------------
+Path Group:  **async_default**
+From Clock:  tck
+  To Clock:  tck
+
+Setup :            0  Failing Endpoints,  Worst Slack       30.836ns,  Total Violation        0.000ns
+Hold  :            0  Failing Endpoints,  Worst Slack        0.113ns,  Total Violation        0.000ns
+---------------------------------------------------------------------------------------------------
+
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             30.836ns  (required time - arrival time)
+  Source:                 WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/wrdata_rst_reg/C
+                            (rising edge-triggered cell FDRE clocked by tck  {rise@0.000ns fall@16.000ns period=32.000ns})
+  Destination:            WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/shift_reg_in_reg[15]/CLR
+                            (recovery check against rising-edge clock tck  {rise@0.000ns fall@16.000ns period=32.000ns})
+  Path Group:             **async_default**
+  Path Type:              Recovery (Max at Slow Process Corner)
+  Requirement:            32.000ns  (tck rise@32.000ns - tck rise@0.000ns)
+  Data Path Delay:        0.957ns  (logic 0.078ns (8.150%)  route 0.879ns (91.850%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.094ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    5.796ns = ( 37.796 - 32.000 ) 
+    Source Clock Delay      (SCD):    6.584ns
+    Clock Pessimism Removal (CPR):    0.694ns
+  Clock Uncertainty:      0.046ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.060ns
+    Phase Error              (PE):    0.000ns
+  Clock Net Delay (Source):      2.829ns (routing 0.481ns, distribution 2.348ns)
+  Clock Net Delay (Destination): 2.548ns (routing 0.441ns, distribution 2.107ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock tck rise edge)        0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.085     0.085    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.130     0.215 r  static         <hidden>
+                         net (fo=149525, routed)      2.795     3.010    static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/s_axi_aclk
+    SLR Crossing[1->0]   
+    SLICE_X112Y296       FDRE (Prop_DFF2_SLICEL_C_Q)
+                                                      0.081     3.091 r  static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/tck_i_reg/Q
+                         net (fo=2, routed)           0.636     3.727    static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/tap_tck
+    BUFGCE_X1Y119        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.028     3.755 r  static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_TAP_TCKBUFG/O
+    X4Y4 (CLOCK_ROOT)    net (fo=379, routed)         2.829     6.584    boundary       WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/tck
+    SLICE_X97Y238        FDRE                                         r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/wrdata_rst_reg/C
+  -------------------------------------------------------------------    ----------------------------------
+    SLICE_X97Y238        FDRE (Prop_DFF_SLICEM_C_Q)
+                                                      0.078     6.662 f  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/wrdata_rst_reg/Q
+                         net (fo=20, routed)          0.879     7.541    reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/RST_I
+    SLICE_X100Y230       FDCE                                         f  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/shift_reg_in_reg[15]/CLR
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock tck rise edge)       32.000    32.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000    32.000 r  static         <hidden>
+                         net (fo=8, routed)           0.078    32.078    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.114    32.192 r  static         <hidden>
+                         net (fo=149525, routed)      2.508    34.700    static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/s_axi_aclk
+    SLR Crossing[1->0]   
+    SLICE_X112Y296       FDRE (Prop_DFF2_SLICEL_C_Q)
+                                                      0.061    34.761 r  static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/tck_i_reg/Q
+                         net (fo=2, routed)           0.463    35.224    static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/tap_tck
+    BUFGCE_X1Y119        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.024    35.248 r  static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_TAP_TCKBUFG/O
+    X4Y4 (CLOCK_ROOT)    net (fo=379, routed)         2.548    37.796    boundary       WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/tck
+    SLICE_X100Y230       FDCE                                         r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/shift_reg_in_reg[15]/C
+                         clock pessimism              0.694    38.490                     
+                         clock uncertainty           -0.046    38.443                     
+    SLICE_X100Y230       FDCE (Recov_EFF_SLICEM_C_CLR)
+                                                     -0.066    38.377    reconfigurable   WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/shift_reg_in_reg[15]
+  -------------------------------------------------------------------
+                         required time                         38.377                     
+                         arrival time                          -7.541                     
+  -------------------------------------------------------------------
+                         slack                                 30.836                     
+
+
+
+
+
+Min Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.113ns  (arrival time - required time)
+  Source:                 WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0]/C
+                            (rising edge-triggered cell FDPE clocked by tck  {rise@0.000ns fall@16.000ns period=32.000ns})
+  Destination:            WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gcx.clkx/gnxpm_cdc.gsync_stage[1].wr_stg_inst/Q_reg_reg[0]/CLR
+                            (removal check against rising-edge clock tck  {rise@0.000ns fall@16.000ns period=32.000ns})
+  Path Group:             **async_default**
+  Path Type:              Removal (Min at Fast Process Corner)
+  Requirement:            0.000ns  (tck rise@0.000ns - tck rise@0.000ns)
+  Data Path Delay:        0.141ns  (logic 0.039ns (27.660%)  route 0.102ns (72.340%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.048ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    4.095ns
+    Source Clock Delay      (SCD):    3.612ns
+    Clock Pessimism Removal (CPR):    0.435ns
+  Clock Net Delay (Source):      1.547ns (routing 0.263ns, distribution 1.284ns)
+  Clock Net Delay (Destination): 1.715ns (routing 0.291ns, distribution 1.424ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Partition      Netlist Resource(s)
+  -------------------------------------------------------------------    ----------------------------------
+                         (clock tck rise edge)        0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.052     0.052    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.073     0.125 r  static         <hidden>
+                         net (fo=149525, routed)      1.537     1.662    static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/s_axi_aclk
+    SLR Crossing[1->0]   
+    SLICE_X112Y296       FDRE (Prop_DFF2_SLICEL_C_Q)
+                                                      0.041     1.703 r  static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/tck_i_reg/Q
+                         net (fo=2, routed)           0.345     2.048    static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/tap_tck
+    BUFGCE_X1Y119        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.017     2.065 r  static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_TAP_TCKBUFG/O
+    X4Y4 (CLOCK_ROOT)    net (fo=379, routed)         1.547     3.612    boundary       WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/wr_clk
+    SLICE_X103Y236       FDPE                                         r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0]/C
+  -------------------------------------------------------------------    ----------------------------------
+    SLICE_X103Y236       FDPE (Prop_AFF_SLICEL_C_Q)
+                                                      0.039     3.651 f  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0]/Q
+                         net (fo=18, routed)          0.102     3.753    reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gcx.clkx/gnxpm_cdc.gsync_stage[1].wr_stg_inst/AR[0]
+    SLICE_X101Y236       FDCE                                         f  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gcx.clkx/gnxpm_cdc.gsync_stage[1].wr_stg_inst/Q_reg_reg[0]/CLR
+  -------------------------------------------------------------------    ----------------------------------
+
+                         (clock tck rise edge)        0.000     0.000 r                 
+    GTYE4_CHANNEL_X1Y35  GTYE4_CHANNEL                0.000     0.000 r  static         <hidden>
+                         net (fo=8, routed)           0.057     0.057    static         <hidden>
+    BUFG_GT_X1Y212       BUFG_GT (Prop_BUFG_GT_I_O)
+                                                      0.082     0.139 r  static         <hidden>
+                         net (fo=149525, routed)      1.719     1.858    static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/s_axi_aclk
+    SLR Crossing[1->0]   
+    SLICE_X112Y296       FDRE (Prop_DFF2_SLICEL_C_Q)
+                                                      0.055     1.913 r  static         static_sh/SH_DEBUG_BRIDGE/inst/axi_jtag/inst/u_jtag_proc/tck_i_reg/Q
+                         net (fo=2, routed)           0.448     2.361    static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/tap_tck
+    BUFGCE_X1Y119        BUFGCE (Prop_BUFCE_BUFGCE_I_O)
+                                                      0.019     2.380 r  static         static_sh/SH_DEBUG_BRIDGE/inst/bsip/inst/USE_SOFTBSCAN.U_TAP_TCKBUFG/O
+    X4Y4 (CLOCK_ROOT)    net (fo=379, routed)         1.715     4.095    boundary       WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gcx.clkx/gnxpm_cdc.gsync_stage[1].wr_stg_inst/wr_clk
+    SLICE_X101Y236       FDCE                                         r  reconfigurable WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gcx.clkx/gnxpm_cdc.gsync_stage[1].wr_stg_inst/Q_reg_reg[0]/C
+                         clock pessimism             -0.435     3.660                     
+    SLICE_X101Y236       FDCE (Remov_DFF2_SLICEL_C_CLR)
+                                                     -0.020     3.640    reconfigurable   WRAPPER_INST/CL/CL_DEBUG_BRIDGE/inst/xsdbm/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gcx.clkx/gnxpm_cdc.gsync_stage[1].wr_stg_inst/Q_reg_reg[0]
+  -------------------------------------------------------------------
+                         required time                         -3.640                     
+                         arrival time                           3.753                     
+  -------------------------------------------------------------------
+                         slack                                  0.113                     
+
+
+
+
+

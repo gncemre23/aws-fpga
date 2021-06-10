@@ -13,8 +13,8 @@ module fifo_async
     input logic rst,
     input logic wr_en,
     input logic rd_en,
-    input logic [31 : 0] din,
-    output logic [31 : 0] dout,
+    input logic [WRITE_WIDTH - 1 : 0] din,
+    output logic [READ_WIDTH - 1 : 0] dout,
     output logic full,
     output logic empty
   );

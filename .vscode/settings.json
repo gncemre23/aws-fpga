@@ -1,0 +1,7 @@
+{
+    "git.ignoreLimitWarning": true,
+    "files.associations": {
+        "fpga_pci.h": "c",
+        "fpga_pci_sv.h": "c"
+    }
+}

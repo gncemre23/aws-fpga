@@ -1,0 +1,13 @@
+#-----------------------------------------------------------
+# xsim v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:47 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Thu Jun 10 20:00:02 2021
+# Process ID: 15812
+# Current directory: /home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/verif/sim/vivado/test_hello_world_c
+# Command line: xsim -log test_hello_world.log -mode tcl -source {xsim.dir/tb/xsim_script.tcl}
+# Log file: /home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/verif/sim/vivado/test_hello_world_c/test_hello_world.log
+# Journal file: /home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/verif/sim/vivado/test_hello_world_c/xsim.jou
+#-----------------------------------------------------------
+source xsim.dir/tb/xsim_script.tcl
+source /home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/verif/scripts/waves.tcl

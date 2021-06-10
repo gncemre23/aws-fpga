@@ -1,0 +1,130 @@
+Data_For_RDAFlowver5.0
+	top level™†
+xsdbm¤P
+synthFileNamesL
+10F/opt/Xilinx/Vivado/2020.2/data/vhdl/src/unimacro/BRAM_SINGLE_MACRO.vhdI
+11C/opt/Xilinx/Vivado/2020.2/data/vhdl/src/unimacro/BRAM_TDP_MACRO.vhdM
+12G/opt/Xilinx/Vivado/2020.2/data/vhdl/src/unimacro/COUNTER_LOAD_MACRO.vhdK
+13E/opt/Xilinx/Vivado/2020.2/data/vhdl/src/unimacro/COUNTER_TC_MACRO.vhdK
+14E/opt/Xilinx/Vivado/2020.2/data/vhdl/src/unimacro/EQ_COMPARE_MACRO.vhdH
+20B/opt/Xilinx/Vivado/2020.2/data/verilog/src/unimacro/ADDSUB_MACRO.vO
+15I/opt/Xilinx/Vivado/2020.2/data/vhdl/src/unimacro/FIFO_DUALCLOCK_MACRO.vhdJ
+21D/opt/Xilinx/Vivado/2020.2/data/verilog/src/unimacro/BRAM_SDP_MACRO.vJ
+16D/opt/Xilinx/Vivado/2020.2/data/vhdl/src/unimacro/FIFO_SYNC_MACRO.vhdM
+22G/opt/Xilinx/Vivado/2020.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.vE
+17?/opt/Xilinx/Vivado/2020.2/data/vhdl/src/unimacro/MACC_MACRO.vhdE
+18?/opt/Xilinx/Vivado/2020.2/data/vhdl/src/unimacro/MULT_MACRO.vhdJ
+23D/opt/Xilinx/Vivado/2020.2/data/verilog/src/unimacro/BRAM_TDP_MACRO.vI
+19C/opt/Xilinx/Vivado/2020.2/data/verilog/src/unimacro/ADDMACC_MACRO.vN
+24H/opt/Xilinx/Vivado/2020.2/data/verilog/src/unimacro/COUNTER_LOAD_MACRO.vL
+25F/opt/Xilinx/Vivado/2020.2/data/verilog/src/unimacro/COUNTER_TC_MACRO.vF
+30@/opt/Xilinx/Vivado/2020.2/data/verilog/src/unimacro/MULT_MACRO.v
+NumFileNames71L
+26F/opt/Xilinx/Vivado/2020.2/data/verilog/src/unimacro/EQ_COMPARE_MACRO.vL
+31F/opt/Xilinx/Vivado/2020.2/data/vhdl/src/unisims/retarget/MULT18X18.vhd?
+1:/opt/Xilinx/Vivado/2020.2/scripts/rt/data/unisim_VCOMP.vhdP
+27J/opt/Xilinx/Vivado/2020.2/data/verilog/src/unimacro/FIFO_DUALCLOCK_MACRO.vM
+32G/opt/Xilinx/Vivado/2020.2/data/vhdl/src/unisims/retarget/MULT18X18S.vhd>
+29/opt/Xilinx/Vivado/2020.2/scripts/rt/data/unisim_VPKG.vhdK
+28E/opt/Xilinx/Vivado/2020.2/data/verilog/src/unimacro/FIFO_SYNC_MACRO.vB
+33</opt/Xilinx/Vivado/2020.2/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv<
+37/opt/Xilinx/Vivado/2020.2/scripts/rt/data/unisim_comp.vF
+29@/opt/Xilinx/Vivado/2020.2/data/verilog/src/unimacro/MACC_MACRO.vH
+34B/opt/Xilinx/Vivado/2020.2/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv?
+4:/opt/Xilinx/Vivado/2020.2/scripts/rt/data/internal_cells.vÏ
+35È/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/xsdbm_v3_0_vl_rfs.vÞ
+40×/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/verilog/xsdbm_v3_0_0_bsid_ports.vh5
+50/opt/Xilinx/Vivado/2020.2/scripts/rt/data/BUFT.vÖ
+36Ï/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/verilog/xsdbm_v3_0_0_in.vhÖ
+41Ï/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/verilog/xsdbm_v3_0_0_bs.vhH
+6C/opt/Xilinx/Vivado/2020.2/data/vhdl/src/unimacro/unimacro_VCOMP.vhd×
+37Ð/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/verilog/xsdbm_v3_0_0_i2x.vhß
+42Ø/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/verilog/xsdbm_v3_0_0_bs_core_ext.vhG
+7B/opt/Xilinx/Vivado/2020.2/data/vhdl/src/unimacro/ADDMACC_MACRO.vhd×
+38Ð/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/verilog/xsdbm_v3_0_0_icn.vhÛ
+43Ô/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/verilog/xsdbm_v3_0_0_bs_core.vhF
+8A/opt/Xilinx/Vivado/2020.2/data/vhdl/src/unimacro/ADDSUB_MACRO.vhdÜ
+39Õ/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/verilog/xsdbm_v3_0_0_bs_ports.vhÚ
+44Ó/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/verilog/xsdbm_v3_0_0_bs_ext.vhÞ
+50×/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/verilog/xsdbm_v3_0_0_id_vec_map.vhH
+9C/opt/Xilinx/Vivado/2020.2/data/vhdl/src/unimacro/BRAM_SDP_MACRO.vhdâ
+45Û/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/verilog/xsdbm_v3_0_0_bsid_vec_ports.vhÏ
+51È/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/ltlib_v1_0_vl_rfs.vÚ
+46Ó/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/verilog/xsdbm_v3_0_0_bs_vec.vh×
+52Ð/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/verilog/ltlib_v1_0_0_ver.vhß
+47Ø/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/verilog/xsdbm_v3_0_0_bs_core_vec.vhÚ
+53Ó/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/verilog/ltlib_v1_0_0_lib_fn.vhÞ
+48×/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/verilog/xsdbm_v3_0_0_sl_prt_map.vhÅ
+54¾/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/synth/xsdbm.vÚ
+49Ó/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/verilog/xsdbm_v3_0_0_id_map.vhÚ
+60Ó/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.runs/xsdbm_synth_1/vhdl_packages/1993/src/numeric_std.vhdÚ
+55Ó/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhdÕ
+61Î/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.runs/xsdbm_synth_1/vhdl_packages/1993/src/textio.vhdÞ
+56×/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.gen/sources_1/ip/xsdbm/hdl/fifo_generator_v13_1_vhsyn_rfs.vhd×
+62Ð/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.runs/xsdbm_synth_1/vhdl_packages/1993/src/timing_p.vhd9
+573/opt/Xilinx/Vivado/2020.2/data/ip/xpm/xpm_VCOMP.vhd×
+63Ð/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.runs/xsdbm_synth_1/vhdl_packages/1993/src/timing_b.vhd×
+58Ð/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.runs/xsdbm_synth_1/vhdl_packages/1993/src/std_1164.vhd×
+64Ð/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.runs/xsdbm_synth_1/vhdl_packages/1993/src/prmtvs_p.vhd×
+59Ð/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.runs/xsdbm_synth_1/vhdl_packages/1993/src/standard.vhd×
+70Ð/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.runs/xsdbm_synth_1/vhdl_packages/1993/src/syn_attr.vhd×
+65Ð/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.runs/xsdbm_synth_1/vhdl_packages/1993/src/prmtvs_b.vhd×
+66Ð/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.runs/xsdbm_synth_1/vhdl_packages/1993/src/syn_arit.vhd×
+67Ð/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.runs/xsdbm_synth_1/vhdl_packages/1993/src/syn_unsi.vhd×
+68Ð/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.runs/xsdbm_synth_1/vhdl_packages/1993/src/syn_sign.vhd×
+69Ð/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-1667-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.runs/xsdbm_synth_1/vhdl_packages/1993/src/syn_misc.vhdY
+
+synthStatsK
+caseNotFullNoDefault
+
+L11993
+Mnullname
+F35
+O
+next_stateö0
+ElaboratedNamesForRQSÜ0
+DSP_RAM›
+34299906Ž { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_rdfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/rpntr/plusOp_i} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/rpntr/plusOp_i}  } P
+3878913E { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.U_ICON/U_CMD/COMMAND_SEL_i}  } w
+10227713k { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_STATIC_STATUS/stat_addr_bit_cnt0_i}  } l
+47640577` { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BURST_WD_LEN_CONTROLLER/burst_wd0_i}  } Q
+11280385E { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.U_ICON/U_STAT/iSTAT_CNT0_i}  } i
+50913281] { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_MSTR2SL_PORT_IFACE/drdy_or_i}  } n
+6819841c { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/shift_bit_count0_i}  } ›
+33366018Ž { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_rdfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/wpntr/plusOp_i} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/wpntr/plusOp_i}  } Ç
+9691137» { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_ICON_INTERFACE_SEL_MASK/SL_DEN_MASK_O0_i} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_ICON_INTERFACE_SEL_MASK/SL_DEN_MASK_O0_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_ICON_INTERFACE_SEL_MASK/SL_DEN_MASK_O0_i__1} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_ICON_INTERFACE_SEL_MASK/SL_DEN_MASK_O0_i__2}  } n
+47644673b { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BURST_WD_LEN_CONTROLLER/wdc_eq_zero_i}  } q
+47611905e { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BURST_WD_LEN_CONTROLLER/wdc_eq_zero_i__2}  } n
+7303169c { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/shift_bit_count0_i}  } P
+11571201D { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.U_ICON/U_SYNC/iGOT_SYNC_i}  } i
+6840321^ { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/cnt_is_zero_i}  } i
+50221057] { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/U_TIMER/timeout_i}  } h
+50216961\ { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/U_TIMER/count0_i}  } £
+21991426– { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_rdfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM_reg} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm_gen.dm/RAM_reg}  } ¿
+50810881² { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_MSTR2SL_PORT_IFACE/fn_mult_drdy_return1_i} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_MSTR2SL_PORT_IFACE/fn_mult_drdy_return3_i} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_MSTR2SL_PORT_IFACE/fn_mult_drdy_return5_i}  } P
+3760129E { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.U_ICON/U_CMD/CORE_ID_SEL_i}  } ß
+49123329Ò { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/active_sl_den_mask_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/auto_sl_drdy_i} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/auto_sl_drdy_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/clr_abort_rd_i} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/clr_abort_rd_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/clr_rd_req_i} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/clr_rd_req_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/dec_wdc_r_i} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/dec_wdc_r_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/in_idle_mode_i} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/in_idle_mode_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/in_normal_mode_i} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/in_normal_mode_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/in_read_mode_i} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/in_read_mode_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/in_write_mode_i} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/in_write_mode_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/inc_addr_r_i} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/inc_addr_r_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/ma_err_r_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/ma_rd_flush_r_i} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/ma_rd_flush_r_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/ma_wr_pop_r_i} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/ma_wr_pop_r_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/sl_berr_r_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/sl_den_r_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/sl_dwe_r_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/sl_rdmux_sel_r_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/sl_rst_r_i__0} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/timer_rst_i} {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_BUS_CONTROLLER/timer_rst_i__0}  } c
+47276033W { {inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_XSDB_ADDRESS_CONTROLLER/addr0_i}  } 
+blackBoxInfo„
+synth_design
+Cputime3
+blackBoxPerc-nan
+	directive 
+isIncremental0
+Runtime3
+Threads used4X
+argsP-verilog_define default::[not_specified] -top  xsdbm -part  xcvu9p-flgb2104-2-i 
+resynthPerc0.00œ
+synth_design_metrics
+bigRAMs-1
+NetsWithMixedFanouts-1
+DSPsWithKeep0$
+mismatchedAddSubOperatorWidths-1
+lowMaxFanout-1
+NumUnregisteredPorts0
+caseNotFullNoDefault1
+	smallSrls-1
+srlsWithResetLogic-1
+shallowRAMWithAttribute-1
+hierMFO0
+RQS_Results

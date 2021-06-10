@@ -46,7 +46,7 @@ module cl_hello_world
 `include "unused_apppf_irq_template.inc"
 
 
-parameter  BLK_CNT = 12 ;
+parameter  BLK_CNT = 4 ;
   //-------------------------------------------------
   // Wires
   //-------------------------------------------------
@@ -64,22 +64,7 @@ parameter  BLK_CNT = 12 ;
 
 
 
-  //-------------------------------------------------
-  // Reset Synchronization for oBTC
-  //------------------------- ------------------------
-  logic pre_sync_rst;
-
-  always_ff @(negedge rst_main_n or posedge clk_extra_a3)
-    if (!rst_main_n)
-    begin
-      pre_sync_rst  <= 1;
-      rst_oBTC_sync <= 1;
-    end
-    else
-    begin
-      pre_sync_rst  <= 0;
-      rst_oBTC_sync <= pre_sync_rst;
-    end
+  
 
 
 
@@ -178,6 +163,42 @@ parameter  BLK_CNT = 12 ;
       .m_axi_rvalid  (ocl_sh_rvalid_q),
       .m_axi_rready  (sh_ocl_rready_q)
     );
+    
+  //-------------------------------------------------
+  // Wires for oBTCMiner_design
+  //-------------------------------------------------
+  logic rst_oBTC_sync;
+  logic block_header_we;
+  logic matrix_fifo_we;
+  logic target_we;
+  logic start;
+  logic stop;
+  logic [31:0] block_header;
+  logic [31:0] matrix_in;
+  logic [31:0] target;
+  logic [31:0] nonce_size;
+  logic [31:0] nonce;
+  logic [1:0] status;
+  logic [31:0] heavyhash;
+  logic hash_re; 
+  logic [$clog2(BLK_CNT)-1:0] hash_select;
+
+  //-------------------------------------------------
+  // Reset Synchronization for oBTC
+  //------------------------- ------------------------
+  logic pre_sync_rst;
+
+  always_ff @(negedge rst_main_n or posedge clk_extra_a3)
+    if (!rst_main_n)
+    begin
+      pre_sync_rst  <= 1;
+      rst_oBTC_sync <= 1;
+    end
+    else
+    begin
+      pre_sync_rst  <= 0;
+      rst_oBTC_sync <= pre_sync_rst;
+    end
 
 
   //oBTC_miner instance
@@ -186,7 +207,7 @@ parameter  BLK_CNT = 12 ;
       .WCOUNT(4 ),
       .BLK_CNT ( BLK_CNT )
     )
-    top_dut (
+    top_ins (
       .clk_axi (clk_main_a0 ), //125MHz
       .clk_top (clk_extra_a3 ), //250MHz
       .rst (rst_oBTC_sync ),
@@ -206,24 +227,7 @@ parameter  BLK_CNT = 12 ;
       .hash_select (hash_select)
     );
 
-  //-------------------------------------------------
-  // Wires for oBTCMiner_design
-  //-------------------------------------------------
-  logic rst_oBTC_sync;
-  logic block_header_we;
-  logic matrix_fifo_we;
-  logic target_we;
-  logic start;
-  logic stop;
-  logic [31:0] block_header;
-  logic [31:0] matrix_in;
-  logic [31:0] target;
-  logic [31:0] nonce_size;
-  logic [31:0] nonce;
-  logic [1:0] status;
-  logic [31:0] heavyhash;
-  logic hash_re; 
-  logic [$clog2(BLK_CNT)-1:0] hash_select;
+  
 
 
   //--------------------------------------------------------------
@@ -388,6 +392,8 @@ parameter  BLK_CNT = 12 ;
       stop <= 1'b0;
       target_we <= 1'b0;
       hash_select <= 1'b0;
+      block_header_we <= 1'b0;
+      matrix_fifo_we <= 1'b0;
     end
     else if (wready & (wr_addr == `BLOCKHEADER_REG_ADDR))
     begin
@@ -419,10 +425,12 @@ parameter  BLK_CNT = 12 ;
     else if (wready & (wr_addr == `HEAVYHASH_SEL_REG_ADDR))
     begin
       hash_select <= wdata[$clog2(BLK_CNT)-1:0];
-    end;
     end
     else
     begin
+      target_we <= 1'b0;
+      block_header_we <= 1'b0;
+      matrix_fifo_we <= 1'b0;
       block_header <= 32'd0;
       target <= 32'd0;
       matrix_in <= 32'd0;

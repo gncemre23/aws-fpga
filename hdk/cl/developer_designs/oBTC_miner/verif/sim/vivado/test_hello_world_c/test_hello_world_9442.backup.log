@@ -1,0 +1,1577 @@
+#-----------------------------------------------------------
+# xsim v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:47 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Thu Jun 10 19:37:09 2021
+# Process ID: 9442
+# Current directory: /home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/verif/sim/vivado/test_hello_world_c
+# Command line: xsim -log test_hello_world.log -mode tcl -source {xsim.dir/tb/xsim_script.tcl}
+# Log file: /home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/verif/sim/vivado/test_hello_world_c/test_hello_world.log
+# Journal file: /home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/verif/sim/vivado/test_hello_world_c/xsim.jou
+#-----------------------------------------------------------
+source xsim.dir/tb/xsim_script.tcl
+# xsim {tb} -autoloadwcfg -tclbatch {/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/verif/scripts/waves.tcl} -runall
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+WARNING: [Simtcl 6-25] Warning: Both '-runall' and '-tclbatch' were specified. The '-runall' was ignored
+source /home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/verif/scripts/waves.tcl
+## set curr_wave [current_wave_config]
+## if { [string length $curr_wave] == 0 } {
+##   if { [llength [get_objects]] > 0} {
+##     add_wave /
+##     set_property needs_save false [current_wave_config]
+##   } else {
+##      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+##   }
+## }
+WARNING: Simulation object /tb/sv_host_memory was not traceable in the design for the following reason:
+Vivado Simulator does not support tracing of System Verilog Dynamic Type object.
+## run 200 us 
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[0].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[0].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[1].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[1].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[2].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[2].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[3].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[3].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[4].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[4].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[5].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[5].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[6].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[6].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[7].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[7].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[8].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[8].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[9].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[9].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[10].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[10].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[11].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[11].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[12].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[12].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[13].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[13].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[14].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[14].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[15].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[15].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[16].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[16].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[17].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_A.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[17].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[0].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[0].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[1].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[1].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[2].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[2].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[3].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[3].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[4].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[4].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[5].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[5].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[6].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[6].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[7].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[7].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[8].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[8].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[9].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[9].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[10].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[10].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[11].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[11].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[12].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[12].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[13].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[13].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[14].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[14].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[15].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[15].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[16].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[16].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[17].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_B.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[17].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[0].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[0].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[1].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[1].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[2].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[2].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[3].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[3].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[4].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[4].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[5].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[5].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[6].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[6].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[7].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[7].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[8].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[8].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[9].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[9].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[10].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[10].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[11].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[11].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[12].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[12].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[13].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[13].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[14].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[14].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[15].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[15].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[16].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[16].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[17].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[17].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[0].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[0].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[1].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[1].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[2].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[2].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[3].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[3].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[4].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[4].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[5].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[5].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[6].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[6].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[7].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[7].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[8].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[8].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[9].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[9].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[10].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[10].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[11].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[11].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[12].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[12].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[13].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[13].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[14].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[14].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[15].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[15].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[16].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[16].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+Loading timesets for 'tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[17].micron_mem_model.u_ddr4_model .LoadTiming' @0
+	Loaded timeset:TS_1875
+	Loaded timeset:TS_1500
+	Loaded timeset:TS_1250
+	Loaded timeset:TS_1072
+	Loaded timeset:TS_938
+	Loaded timeset:TS_833
+	Loaded timeset:TS_750
+	Loaded timeset:TS_682
+	Loaded timeset:TS_625
+Model based on DDR4 DDS version 0.999 6/06/2014 (build data 5/06/2016)
+tb.card.u_ddr4_rdimm_D.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[17].micron_mem_model.u_ddr4_model :Configured as x4 8G stack:1
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+Value is 
+Info: [XPM_MEMORY 20-1] MEMORY_PRIMITIVE (0) instructs Vivado Synthesis to choose the memory primitive type. Depending on their values, other XPM_MEMORY parameters may preclude the choice of certain memory primitive types. Review XPM_MEMORY documentation and parameter values to understand any limitations, or set MEMORY_PRIMITIVE to a different value. tb.card.fpga.CL.top_ins.heavyhash_fifo.xpm_fifo_async_inst.\gnuram_async_fifo.xpm_fifo_base_inst .\gen_sdpram.xpm_memory_base_inst .config_drc
+Time: 1 ps  Iteration: 0  Process: /tb/card/fpga/CL/top_ins/heavyhash_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/Initial294_19826  Scope: tb.card.fpga.CL.top_ins.heavyhash_fifo.xpm_fifo_async_inst.\gnuram_async_fifo.xpm_fifo_base_inst .\gen_sdpram.xpm_memory_base_inst .config_drc  File: /wrk/ci/prod/2020.2/sw/continuous/733/packages/customer/vivado/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv Line: 488
+Info: [XPM_MEMORY 20-1] MEMORY_PRIMITIVE (0) instructs Vivado Synthesis to choose the memory primitive type. Depending on their values, other XPM_MEMORY parameters may preclude the choice of certain memory primitive types. Review XPM_MEMORY documentation and parameter values to understand any limitations, or set MEMORY_PRIMITIVE to a different value. tb.card.fpga.CL.top_ins.block_header_fifo.xpm_fifo_async_inst.\gnuram_async_fifo.xpm_fifo_base_inst .\gen_sdpram.xpm_memory_base_inst .config_drc
+Time: 1 ps  Iteration: 0  Process: /tb/card/fpga/CL/top_ins/block_header_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/Initial294_19951  Scope: tb.card.fpga.CL.top_ins.block_header_fifo.xpm_fifo_async_inst.\gnuram_async_fifo.xpm_fifo_base_inst .\gen_sdpram.xpm_memory_base_inst .config_drc  File: /wrk/ci/prod/2020.2/sw/continuous/733/packages/customer/vivado/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv Line: 488
+Info: [XPM_MEMORY 20-1] MEMORY_PRIMITIVE (0) instructs Vivado Synthesis to choose the memory primitive type. Depending on their values, other XPM_MEMORY parameters may preclude the choice of certain memory primitive types. Review XPM_MEMORY documentation and parameter values to understand any limitations, or set MEMORY_PRIMITIVE to a different value. tb.card.fpga.CL.top_ins.matrix_fifo.xpm_fifo_async_inst.\gnuram_async_fifo.xpm_fifo_base_inst .\gen_sdpram.xpm_memory_base_inst .config_drc
+Time: 1 ps  Iteration: 0  Process: /tb/card/fpga/CL/top_ins/matrix_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/Initial294_20070  Scope: tb.card.fpga.CL.top_ins.matrix_fifo.xpm_fifo_async_inst.\gnuram_async_fifo.xpm_fifo_base_inst .\gen_sdpram.xpm_memory_base_inst .config_drc  File: /wrk/ci/prod/2020.2/sw/continuous/733/packages/customer/vivado/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv Line: 488
+Info: [XPM_MEMORY 20-1] MEMORY_PRIMITIVE (0) instructs Vivado Synthesis to choose the memory primitive type. Depending on their values, other XPM_MEMORY parameters may preclude the choice of certain memory primitive types. Review XPM_MEMORY documentation and parameter values to understand any limitations, or set MEMORY_PRIMITIVE to a different value. tb.card.fpga.CL.top_ins.target_fifo.xpm_fifo_async_inst.\gnuram_async_fifo.xpm_fifo_base_inst .\gen_sdpram.xpm_memory_base_inst .config_drc
+Time: 1 ps  Iteration: 0  Process: /tb/card/fpga/CL/top_ins/target_fifo/xpm_fifo_async_inst/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/Initial294_20189  Scope: tb.card.fpga.CL.top_ins.target_fifo.xpm_fifo_async_inst.\gnuram_async_fifo.xpm_fifo_base_inst .\gen_sdpram.xpm_memory_base_inst .config_drc  File: /wrk/ci/prod/2020.2/sw/continuous/733/packages/customer/vivado/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv Line: 488
+Info: [Unisim HPIO_VREF-1] Fabric Tune Value changed to 0011101. Instance: tb.card.fpga.sh.DDR4_3.inst.u_ddr4_mem_intfc.u_mig_ddr4_phy.inst.u_ddr_iob.\genByte[3].u_ddr_iob_byte .\genblk1.genVref.u_hpio_vref 
+Info: [Unisim HPIO_VREF-1] Fabric Tune Value changed to 0011101. Instance: tb.card.fpga.sh.DDR4_3.inst.u_ddr4_mem_intfc.u_mig_ddr4_phy.inst.u_ddr_iob.\genByte[4].u_ddr_iob_byte .\genblk1.genVref.u_hpio_vref 
+Info: [Unisim HPIO_VREF-1] Fabric Tune Value changed to 0011101. Instance: tb.card.fpga.sh.DDR4_3.inst.u_ddr4_mem_intfc.u_mig_ddr4_phy.inst.u_ddr_iob.\genByte[5].u_ddr_iob_byte .\genblk1.genVref.u_hpio_vref 
+Info: [Unisim HPIO_VREF-1] Fabric Tune Value changed to 0011101. Instance: tb.card.fpga.sh.DDR4_3.inst.u_ddr4_mem_intfc.u_mig_ddr4_phy.inst.u_ddr_iob.\genByte[6].u_ddr_iob_byte .\genblk1.genVref.u_hpio_vref 
+Info: [Unisim HPIO_VREF-1] Fabric Tune Value changed to 0011101. Instance: tb.card.fpga.sh.DDR4_3.inst.u_ddr4_mem_intfc.u_mig_ddr4_phy.inst.u_ddr_iob.\genByte[7].u_ddr_iob_byte .\genblk1.genVref.u_hpio_vref 
+Info: [Unisim HPIO_VREF-1] Fabric Tune Value changed to 0011101. Instance: tb.card.fpga.sh.DDR4_3.inst.u_ddr4_mem_intfc.u_mig_ddr4_phy.inst.u_ddr_iob.\genByte[8].u_ddr_iob_byte .\genblk1.genVref.u_hpio_vref 
+Info: [Unisim HPIO_VREF-1] Fabric Tune Value changed to 0011101. Instance: tb.card.fpga.sh.DDR4_3.inst.u_ddr4_mem_intfc.u_mig_ddr4_phy.inst.u_ddr_iob.\genByte[9].u_ddr_iob_byte .\genblk1.genVref.u_hpio_vref 
+Info: [Unisim HPIO_VREF-1] Fabric Tune Value changed to 0011101. Instance: tb.card.fpga.sh.DDR4_3.inst.u_ddr4_mem_intfc.u_mig_ddr4_phy.inst.u_ddr_iob.\genByte[10].u_ddr_iob_byte .\genblk1.genVref.u_hpio_vref 
+Info: [Unisim HPIO_VREF-1] Fabric Tune Value changed to 0011101. Instance: tb.card.fpga.sh.DDR4_3.inst.u_ddr4_mem_intfc.u_mig_ddr4_phy.inst.u_ddr_iob.\genByte[11].u_ddr_iob_byte .\genblk1.genVref.u_hpio_vref 
+===== Starting with peek_poke_example =====
+Writing 0xefbeadde to HELLO_WORLD register (0x0000000000000500)
+=====  Entering peek_poke_example =====
+register: 0xdeadbeef
+TEST PASSEDResulting value matched expected value 0xdeadbeef. It worked!
+=====  Entering peek_poke_example =====
+register: 0xb000000
+Developers are encouraged to modify the Virtual DIP Switch by calling the linux shell command to demonstrate how AWS FPGA Virtual DIP switches can be used to change a CustomLogic functionality:
+$ fpga-set-virtual-dip-switch -S (slot-id) -D (16 digit setting)
+
+In this example, setting a virtual DIP switch to zero clears the corresponding LED, even if the peek-poke example would set it to 1.
+For instance:
+# sudo fpga-set-virtual-dip-switch -S 0 -D 1111111111111111
+# sudo fpga-get-virtual-led  -S 0
+FPGA slot id 0 have the following Virtual LED:
+1010-1101-1101-1110
+# sudo fpga-set-virtual-dip-switch -S 0 -D 0000000000000000
+# sudo fpga-get-virtual-led  -S 0
+FPGA slot id 0 have the following Virtual LED:
+0000-0000-0000-0000
+000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000
+-------work--------
+00000020
+0c221d3d
+c065da14
+a1a6b687
+1eb489fb
+e9459105
+3792425f
+3f170f00
+00000000
+a1fccbee
+670ba770
+ccced5fa
+1bb8014f
+d671d4dc
+fce1b7dd
+79bd633d
+244df90f
+870aba60
+d3ed131b
+00000000
+
+last_nonce = 9
+first_nonce = 0
+matrix = 7matrix = dmatrix = 7matrix = 4matrix = bmatrix = 3matrix = 1matrix = ematrix = 7matrix = 8matrix = 5matrix = 3matrix = 4matrix = bmatrix = 3matrix = bmatrix = amatrix = amatrix = dmatrix = fmatrix = 7matrix = ematrix = ematrix = 1matrix = cmatrix = 6matrix = 3matrix = amatrix = 6matrix = amatrix = bmatrix = 6matrix = 8matrix = ematrix = bmatrix = bmatrix = 5matrix = 7matrix = 1matrix = 3matrix = 8matrix = bmatrix = ematrix = 7matrix = 3matrix = cmatrix = ematrix = 3matrix = 0matrix = 2matrix = 3matrix = 4matrix = bmatrix = 2matrix = dmatrix = amatrix = fmatrix = amatrix = bmatrix = ematrix = 4matrix = 1matrix = 0matrix = 2
+matrix = 4matrix = dmatrix = dmatrix = 0matrix = 6matrix = bmatrix = fmatrix = cmatrix = 2matrix = 4matrix = 5matrix = 4matrix = bmatrix = amatrix = 3matrix = 6matrix = 3matrix = 7matrix = 4matrix = 2matrix = ematrix = cmatrix = 3matrix = bmatrix = 8matrix = 9matrix = dmatrix = 7matrix = 9matrix = ematrix = 1matrix = cmatrix = 7matrix = 2matrix = 5matrix = fmatrix = 5matrix = 9matrix = fmatrix = 4matrix = 1matrix = cmatrix = 0matrix = ematrix = 9matrix = 5matrix = 3matrix = 3matrix = 5matrix = fmatrix = amatrix = 9matrix = 8matrix = 3matrix = 6matrix = 8matrix = bmatrix = 2matrix = bmatrix = 1matrix = cmatrix = 8matrix = 0matrix = b
+matrix = cmatrix = 8matrix = 7matrix = dmatrix = 1matrix = 4matrix = 0matrix = bmatrix = 0matrix = bmatrix = 0matrix = 6matrix = 8matrix = 0matrix = cmatrix = 9matrix = amatrix = fmatrix = cmatrix = amatrix = 9matrix = amatrix = cmatrix = 1matrix = bmatrix = cmatrix = 2matrix = 0matrix = 4matrix = dmatrix = bmatrix = bmatrix = 1matrix = 7matrix = fmatrix = 9matrix = amatrix = fmatrix = 2matrix = 1matrix = 0matrix = 4matrix = 2matrix = 4matrix = 3matrix = 7matrix = 1matrix = 7matrix = 0matrix = fmatrix = 3matrix = amatrix = 0matrix = 9matrix = fmatrix = 5matrix = 6matrix = 0matrix = dmatrix = 4matrix = 9matrix = fmatrix = 9matrix = d
+matrix = 1matrix = 5matrix = amatrix = 3matrix = 9matrix = 4matrix = ematrix = dmatrix = 1matrix = 2matrix = bmatrix = 9matrix = 9matrix = dmatrix = 1matrix = 7matrix = 4matrix = dmatrix = 8matrix = 5matrix = 5matrix = 0matrix = ematrix = 0matrix = 4matrix = 2matrix = 6matrix = 2matrix = dmatrix = 8matrix = 4matrix = cmatrix = 5matrix = bmatrix = 1matrix = 7matrix = 5matrix = 8matrix = fmatrix = cmatrix = ematrix = 7matrix = ematrix = 4matrix = 6matrix = 0matrix = cmatrix = ematrix = 5matrix = ematrix = 7matrix = 2matrix = 9matrix = 0matrix = amatrix = cmatrix = 0matrix = dmatrix = 1matrix = 7matrix = 1matrix = cmatrix = 4matrix = d
+matrix = 4matrix = 9matrix = ematrix = 7matrix = 6matrix = 2matrix = 4matrix = 3matrix = 3matrix = amatrix = 7matrix = 1matrix = 6matrix = 6matrix = 7matrix = cmatrix = 6matrix = 0matrix = 4matrix = 5matrix = 4matrix = 3matrix = 0matrix = cmatrix = 3matrix = 5matrix = bmatrix = amatrix = amatrix = 1matrix = cmatrix = 2matrix = 3matrix = ematrix = 1matrix = 3matrix = dmatrix = cmatrix = fmatrix = dmatrix = 0matrix = 8matrix = 4matrix = 7matrix = 5matrix = 4matrix = amatrix = 0matrix = 4matrix = 1matrix = 3matrix = bmatrix = 1matrix = 8matrix = ematrix = 4matrix = ematrix = 3matrix = 4matrix = dmatrix = 1matrix = 3matrix = bmatrix = 8
+matrix = 8matrix = cmatrix = dmatrix = 8matrix = 8matrix = 1matrix = 4matrix = 9matrix = 8matrix = bmatrix = cmatrix = 3matrix = 4matrix = ematrix = 3matrix = ematrix = 3matrix = dmatrix = cmatrix = 6matrix = bmatrix = amatrix = 6matrix = 6matrix = 9matrix = bmatrix = 1matrix = 1matrix = 9matrix = 3matrix = 6matrix = 5matrix = ematrix = 5matrix = fmatrix = 3matrix = 0matrix = 6matrix = 2matrix = 5matrix = 6matrix = 1matrix = 6matrix = dmatrix = 3matrix = 8matrix = 5matrix = bmatrix = 0matrix = 6matrix = 2matrix = amatrix = 9matrix = 2matrix = ematrix = cmatrix = bmatrix = dmatrix = bmatrix = 2matrix = 4matrix = ematrix = 9matrix = b
+matrix = 3matrix = cmatrix = bmatrix = ematrix = 7matrix = cmatrix = 5matrix = amatrix = fmatrix = bmatrix = 9matrix = 1matrix = 9matrix = 7matrix = fmatrix = ematrix = fmatrix = bmatrix = dmatrix = ematrix = 6matrix = 7matrix = amatrix = cmatrix = 5matrix = cmatrix = 2matrix = 9matrix = 9matrix = 3matrix = cmatrix = 5matrix = 9matrix = amatrix = dmatrix = dmatrix = 3matrix = bmatrix = 3matrix = 5matrix = dmatrix = fmatrix = 9matrix = 5matrix = ematrix = 9matrix = 2matrix = 5matrix = amatrix = 4matrix = 2matrix = 4matrix = cmatrix = cmatrix = bmatrix = 0matrix = 5matrix = 7matrix = 3matrix = 5matrix = bmatrix = fmatrix = 9matrix = 3
+matrix = bmatrix = bmatrix = 9matrix = 1matrix = bmatrix = bmatrix = 7matrix = ematrix = 7matrix = 6matrix = 1matrix = amatrix = 6matrix = 0matrix = 3matrix = 3matrix = ematrix = 3matrix = 3matrix = 6matrix = bmatrix = 7matrix = 2matrix = 9matrix = 7matrix = 8matrix = 4matrix = 2matrix = 5matrix = 1matrix = 4matrix = 6matrix = 5matrix = 8matrix = 8matrix = cmatrix = 1matrix = amatrix = 3matrix = 9matrix = 2matrix = ematrix = 9matrix = 7matrix = amatrix = 9matrix = 2matrix = fmatrix = 0matrix = 5matrix = amatrix = 7matrix = fmatrix = 9matrix = 1matrix = 1matrix = fmatrix = bmatrix = 8matrix = 4matrix = 3matrix = 4matrix = 5matrix = f
+matrix = 9matrix = 4matrix = 7matrix = 8matrix = bmatrix = ematrix = 2matrix = fmatrix = 5matrix = 7matrix = dmatrix = 0matrix = 0matrix = 1matrix = ematrix = 4matrix = 4matrix = 2matrix = 7matrix = bmatrix = 9matrix = ematrix = 6matrix = 6matrix = ematrix = 7matrix = 6matrix = ematrix = 8matrix = bmatrix = amatrix = fmatrix = 6matrix = dmatrix = 7matrix = bmatrix = bmatrix = 7matrix = amatrix = 9matrix = ematrix = bmatrix = fmatrix = 9matrix = 6matrix = 1matrix = ematrix = cmatrix = 3matrix = 0matrix = bmatrix = 0matrix = fmatrix = 7matrix = 8matrix = 5matrix = 2matrix = 9matrix = dmatrix = ematrix = 8matrix = 3matrix = bmatrix = 8
+matrix = 9matrix = 0matrix = 1matrix = 7matrix = bmatrix = 5matrix = dmatrix = 0matrix = fmatrix = 8matrix = 4matrix = dmatrix = 1matrix = ematrix = 7matrix = dmatrix = 0matrix = 5matrix = 4matrix = 0matrix = 7matrix = 6matrix = ematrix = 8matrix = amatrix = 8matrix = fmatrix = dmatrix = 0matrix = 8matrix = 4matrix = 9matrix = amatrix = 6matrix = 7matrix = 3matrix = ematrix = dmatrix = 2matrix = 4matrix = ematrix = 4matrix = 2matrix = 7matrix = 4matrix = 6matrix = bmatrix = ematrix = 7matrix = 4matrix = amatrix = 2matrix = 1matrix = ematrix = 2matrix = 5matrix = 9matrix = 8matrix = 3matrix = 6matrix = cmatrix = 4matrix = 2matrix = 4
+matrix = bmatrix = amatrix = 2matrix = dmatrix = 3matrix = dmatrix = cmatrix = 5matrix = bmatrix = 4matrix = 5matrix = bmatrix = dmatrix = dmatrix = 2matrix = 5matrix = 3matrix = 8matrix = fmatrix = fmatrix = 7matrix = 3matrix = 9matrix = cmatrix = 0matrix = fmatrix = ematrix = 7matrix = 6matrix = ematrix = fmatrix = 2matrix = 4matrix = 2matrix = bmatrix = 8matrix = 2matrix = 1matrix = 2matrix = 6matrix = 6matrix = fmatrix = 9matrix = 5matrix = bmatrix = 2matrix = 2matrix = 4matrix = 5matrix = fmatrix = cmatrix = 0matrix = 2matrix = 4matrix = 5matrix = 4matrix = ematrix = 2matrix = 7matrix = 0matrix = bmatrix = 7matrix = 6matrix = 2
+matrix = bmatrix = amatrix = cmatrix = 1matrix = 0matrix = 1matrix = 2matrix = 3matrix = amatrix = 9matrix = ematrix = 1matrix = 4matrix = dmatrix = amatrix = bmatrix = fmatrix = 4matrix = 0matrix = 5matrix = fmatrix = 2matrix = 0matrix = 6matrix = 2matrix = 4matrix = 2matrix = 7matrix = 3matrix = 0matrix = 6matrix = 2matrix = 5matrix = fmatrix = 5matrix = 3matrix = cmatrix = 5matrix = 4matrix = 5matrix = ematrix = 2matrix = 5matrix = cmatrix = fmatrix = 3matrix = amatrix = bmatrix = 0matrix = cmatrix = 6matrix = 0matrix = amatrix = 9matrix = 0matrix = ematrix = 5matrix = amatrix = 5matrix = amatrix = 2matrix = 2matrix = 2matrix = f
+matrix = bmatrix = 8matrix = fmatrix = cmatrix = 3matrix = dmatrix = dmatrix = 7matrix = bmatrix = fmatrix = 0matrix = 7matrix = 6matrix = ematrix = 7matrix = 4matrix = 5matrix = bmatrix = 7matrix = dmatrix = 6matrix = amatrix = 1matrix = 4matrix = 0matrix = bmatrix = bmatrix = 4matrix = 0matrix = 9matrix = bmatrix = amatrix = cmatrix = 5matrix = 8matrix = 1matrix = 7matrix = 5matrix = 3matrix = 1matrix = 5matrix = fmatrix = bmatrix = bmatrix = fmatrix = 9matrix = fmatrix = cmatrix = 7matrix = fmatrix = dmatrix = cmatrix = fmatrix = 9matrix = 3matrix = amatrix = 5matrix = 4matrix = bmatrix = 1matrix = 3matrix = 3matrix = 4matrix = 2
+matrix = 1matrix = 8matrix = cmatrix = ematrix = 7matrix = 2matrix = bmatrix = 9matrix = dmatrix = 0matrix = 3matrix = 7matrix = cmatrix = bmatrix = 0matrix = 6matrix = cmatrix = 1matrix = 3matrix = amatrix = 5matrix = 6matrix = cmatrix = 5matrix = 8matrix = 7matrix = bmatrix = fmatrix = 4matrix = 4matrix = 4matrix = 1matrix = 5matrix = 5matrix = 7matrix = 7matrix = cmatrix = 0matrix = 9matrix = cmatrix = 0matrix = fmatrix = dmatrix = 8matrix = fmatrix = dmatrix = 3matrix = 3matrix = 6matrix = 0matrix = bmatrix = 4matrix = 8matrix = 2matrix = 1matrix = dmatrix = 7matrix = 3matrix = 0matrix = ematrix = 1matrix = 8matrix = ematrix = 7
+matrix = cmatrix = 3matrix = 7matrix = 2matrix = 7matrix = cmatrix = 3matrix = cmatrix = fmatrix = fmatrix = bmatrix = 3matrix = bmatrix = cmatrix = cmatrix = dmatrix = ematrix = 9matrix = 2matrix = 1matrix = 5matrix = 2matrix = 4matrix = amatrix = ematrix = amatrix = 4matrix = 8matrix = 6matrix = 8matrix = 0matrix = 4matrix = 1matrix = amatrix = dmatrix = 5matrix = 8matrix = 6matrix = fmatrix = 4matrix = 6matrix = dmatrix = 1matrix = bmatrix = 3matrix = amatrix = 5matrix = 8matrix = bmatrix = cmatrix = bmatrix = 7matrix = 9matrix = fmatrix = dmatrix = 9matrix = ematrix = ematrix = 4matrix = cmatrix = 9matrix = 8matrix = 7matrix = 5
+matrix = 2matrix = 6matrix = 1matrix = 7matrix = dmatrix = ematrix = ematrix = 3matrix = 7matrix = 3matrix = 6matrix = 7matrix = dmatrix = 7matrix = fmatrix = dmatrix = 4matrix = 4matrix = 8matrix = 2matrix = fmatrix = 1matrix = 7matrix = 1matrix = bmatrix = amatrix = 3matrix = fmatrix = 2matrix = 2matrix = 7matrix = fmatrix = 5matrix = 1matrix = 9matrix = 5matrix = cmatrix = 7matrix = 3matrix = 5matrix = cmatrix = 6matrix = cmatrix = 3matrix = 1matrix = ematrix = 9matrix = ematrix = 1matrix = 4matrix = 5matrix = 2matrix = 6matrix = 0matrix = amatrix = 2matrix = 8matrix = 4matrix = 5matrix = cmatrix = amatrix = dmatrix = 2matrix = 7
+matrix = 4matrix = cmatrix = fmatrix = 6matrix = bmatrix = 1matrix = ematrix = 6matrix = 3matrix = 4matrix = 1matrix = 4matrix = 3matrix = fmatrix = fmatrix = amatrix = 1matrix = dmatrix = 2matrix = amatrix = cmatrix = cmatrix = 7matrix = 8matrix = 0matrix = bmatrix = fmatrix = 9matrix = 4matrix = 9matrix = 2matrix = fmatrix = 9matrix = 1matrix = 8matrix = 6matrix = 6matrix = 2matrix = 8matrix = cmatrix = 8matrix = cmatrix = 2matrix = 5matrix = 4matrix = amatrix = 2matrix = 7matrix = fmatrix = cmatrix = cmatrix = 2matrix = fmatrix = bmatrix = fmatrix = 5matrix = 5matrix = 6matrix = 1matrix = 0matrix = 1matrix = amatrix = fmatrix = 6
+matrix = 4matrix = 7matrix = 8matrix = bmatrix = bmatrix = 5matrix = 7matrix = 6matrix = 9matrix = 3matrix = dmatrix = 6matrix = 8matrix = 5matrix = 8matrix = 1matrix = 2matrix = 4matrix = bmatrix = amatrix = bmatrix = 1matrix = 5matrix = dmatrix = amatrix = amatrix = 7matrix = 5matrix = 8matrix = 4matrix = 0matrix = cmatrix = 9matrix = fmatrix = dmatrix = 2matrix = 8matrix = ematrix = 6matrix = amatrix = 3matrix = 2matrix = cmatrix = 4matrix = fmatrix = 0matrix = 2matrix = ematrix = bmatrix = 3matrix = 8matrix = 7matrix = 7matrix = 1matrix = 8matrix = 7matrix = dmatrix = 4matrix = 1matrix = 2matrix = fmatrix = ematrix = 6matrix = e
+matrix = 0matrix = fmatrix = 1matrix = 0matrix = bmatrix = dmatrix = 6matrix = 2matrix = 2matrix = 7matrix = amatrix = 9matrix = 7matrix = 5matrix = 4matrix = 6matrix = 4matrix = 6matrix = 4matrix = 6matrix = 0matrix = 6matrix = 2matrix = 2matrix = 8matrix = 4matrix = 8matrix = 0matrix = 2matrix = 2matrix = 1matrix = 3matrix = 8matrix = 2matrix = 5matrix = 8matrix = 0matrix = 4matrix = 9matrix = bmatrix = 3matrix = 0matrix = fmatrix = 1matrix = ematrix = 4matrix = cmatrix = 9matrix = 2matrix = 7matrix = 2matrix = 6matrix = cmatrix = 4matrix = 4matrix = bmatrix = 7matrix = 5matrix = 3matrix = cmatrix = 7matrix = bmatrix = ematrix = 0
+matrix = bmatrix = bmatrix = amatrix = amatrix = 3matrix = 2matrix = 7matrix = 3matrix = 3matrix = amatrix = ematrix = 5matrix = 4matrix = 5matrix = 7matrix = amatrix = 2matrix = amatrix = cmatrix = 8matrix = amatrix = 0matrix = 5matrix = 0matrix = 3matrix = fmatrix = 6matrix = 0matrix = 0matrix = bmatrix = 0matrix = 5matrix = 5matrix = 0matrix = 6matrix = 6matrix = bmatrix = 9matrix = 9matrix = 0matrix = bmatrix = 6matrix = cmatrix = fmatrix = 8matrix = 7matrix = fmatrix = fmatrix = ematrix = 2matrix = amatrix = 2matrix = 7matrix = cmatrix = 5matrix = 6matrix = 3matrix = 6matrix = ematrix = 7matrix = 3matrix = 3matrix = fmatrix = a
+matrix = ematrix = 3matrix = fmatrix = 9matrix = 9matrix = 5matrix = 2matrix = 5matrix = fmatrix = 2matrix = 5matrix = 8matrix = bmatrix = 1matrix = 1matrix = 8matrix = bmatrix = 8matrix = 4matrix = 4matrix = 7matrix = 2matrix = 7matrix = bmatrix = amatrix = dmatrix = dmatrix = fmatrix = 7matrix = bmatrix = 6matrix = 9matrix = 1matrix = dmatrix = 0matrix = 6matrix = 3matrix = 1matrix = 3matrix = 2matrix = 3matrix = 5matrix = cmatrix = 3matrix = dmatrix = 3matrix = cmatrix = 9matrix = dmatrix = 8matrix = 0matrix = cmatrix = amatrix = fmatrix = 1matrix = cmatrix = bmatrix = dmatrix = fmatrix = 3matrix = 2matrix = ematrix = cmatrix = f
+matrix = bmatrix = amatrix = 3matrix = 7matrix = 2matrix = dmatrix = 1matrix = cmatrix = 7matrix = 6matrix = 4matrix = ematrix = 5matrix = 7matrix = cmatrix = bmatrix = 0matrix = 3matrix = 9matrix = 8matrix = dmatrix = 5matrix = 5matrix = 0matrix = ematrix = 0matrix = 3matrix = 0matrix = 4matrix = 0matrix = 3matrix = 4matrix = 1matrix = fmatrix = amatrix = 2matrix = 3matrix = cmatrix = 4matrix = 0matrix = 6matrix = amatrix = 2matrix = 4matrix = 8matrix = 0matrix = dmatrix = 6matrix = 7matrix = 6matrix = 8matrix = 2matrix = dmatrix = 9matrix = ematrix = 1matrix = 5matrix = 4matrix = bmatrix = 0matrix = 9matrix = dmatrix = 0matrix = 1
+matrix = 1matrix = bmatrix = dmatrix = amatrix = 3matrix = bmatrix = 8matrix = amatrix = 5matrix = 5matrix = dmatrix = cmatrix = 1matrix = 9matrix = 3matrix = 5matrix = 7matrix = 9matrix = 6matrix = 8matrix = 0matrix = 5matrix = 3matrix = ematrix = 9matrix = 3matrix = 8matrix = dmatrix = 2matrix = 0matrix = 8matrix = 1matrix = fmatrix = 6matrix = 4matrix = 6matrix = 7matrix = bmatrix = 3matrix = amatrix = 9matrix = 7matrix = ematrix = 1matrix = 5matrix = 3matrix = 3matrix = ematrix = cmatrix = 2matrix = 9matrix = 8matrix = amatrix = 6matrix = 1matrix = amatrix = fmatrix = 5matrix = ematrix = 8matrix = 7matrix = 6matrix = 1matrix = 6
+matrix = 7matrix = 9matrix = cmatrix = 0matrix = ematrix = 9matrix = 9matrix = amatrix = 2matrix = 1matrix = 7matrix = 7matrix = dmatrix = cmatrix = 0matrix = 7matrix = 0matrix = cmatrix = bmatrix = fmatrix = 1matrix = 3matrix = 6matrix = 1matrix = amatrix = 0matrix = 5matrix = 6matrix = 6matrix = 5matrix = ematrix = 1matrix = 7matrix = dmatrix = 7matrix = 5matrix = 4matrix = bmatrix = 4matrix = 7matrix = ematrix = dmatrix = 0matrix = 4matrix = 4matrix = dmatrix = amatrix = 9matrix = cmatrix = ematrix = cmatrix = 7matrix = 4matrix = bmatrix = amatrix = bmatrix = 4matrix = dmatrix = 8matrix = ematrix = 3matrix = 6matrix = amatrix = 4
+matrix = 5matrix = 3matrix = 7matrix = 9matrix = cmatrix = cmatrix = cmatrix = 2matrix = 8matrix = 1matrix = dmatrix = fmatrix = bmatrix = 7matrix = 0matrix = ematrix = 4matrix = bmatrix = dmatrix = cmatrix = 6matrix = bmatrix = 7matrix = 0matrix = bmatrix = 6matrix = fmatrix = 3matrix = 0matrix = 7matrix = bmatrix = amatrix = 0matrix = 1matrix = 7matrix = bmatrix = dmatrix = 5matrix = 3matrix = amatrix = 9matrix = bmatrix = cmatrix = 9matrix = 2matrix = 8matrix = 1matrix = fmatrix = 4matrix = 4matrix = dmatrix = 3matrix = 9matrix = ematrix = 4matrix = 0matrix = 6matrix = 2matrix = dmatrix = cmatrix = 9matrix = cmatrix = fmatrix = f
+matrix = dmatrix = fmatrix = 3matrix = 5matrix = ematrix = 8matrix = 1matrix = 7matrix = ematrix = 7matrix = 7matrix = 0matrix = 6matrix = dmatrix = 0matrix = 0matrix = 5matrix = 4matrix = bmatrix = 0matrix = 3matrix = 3matrix = dmatrix = 0matrix = 8matrix = dmatrix = 4matrix = 0matrix = 5matrix = 2matrix = 6matrix = dmatrix = 8matrix = 2matrix = 5matrix = ematrix = bmatrix = fmatrix = amatrix = 6matrix = 6matrix = 1matrix = 3matrix = cmatrix = amatrix = 8matrix = 8matrix = 4matrix = 8matrix = 1matrix = 7matrix = 3matrix = bmatrix = 2matrix = dmatrix = dmatrix = dmatrix = 7matrix = 5matrix = 7matrix = ematrix = 9matrix = bmatrix = 1
+matrix = cmatrix = amatrix = 1matrix = 6matrix = dmatrix = 1matrix = 5matrix = amatrix = 0matrix = 3matrix = dmatrix = amatrix = 5matrix = 2matrix = 4matrix = 9matrix = 9matrix = 4matrix = dmatrix = 7matrix = 4matrix = 1matrix = bmatrix = fmatrix = dmatrix = 0matrix = dmatrix = 5matrix = 9matrix = 5matrix = bmatrix = amatrix = 0matrix = amatrix = 6matrix = 6matrix = 7matrix = 7matrix = 1matrix = 5matrix = 4matrix = fmatrix = 7matrix = 9matrix = 4matrix = 0matrix = cmatrix = 7matrix = 8matrix = fmatrix = 2matrix = 3matrix = 8matrix = dmatrix = fmatrix = 6matrix = 7matrix = amatrix = bmatrix = 4matrix = 5matrix = 5matrix = 0matrix = 9
+matrix = cmatrix = 7matrix = 9matrix = amatrix = ematrix = 2matrix = 6matrix = 0matrix = ematrix = ematrix = bmatrix = ematrix = 3matrix = amatrix = cmatrix = 1matrix = 8matrix = 3matrix = dmatrix = fmatrix = ematrix = 2matrix = amatrix = 2matrix = 4matrix = cmatrix = 0matrix = 7matrix = 4matrix = 2matrix = amatrix = 6matrix = dmatrix = fmatrix = fmatrix = 2matrix = amatrix = 3matrix = 5matrix = 0matrix = 2matrix = ematrix = 3matrix = fmatrix = ematrix = 1matrix = dmatrix = fmatrix = dmatrix = bmatrix = amatrix = bmatrix = 8matrix = amatrix = 1matrix = 4matrix = 1matrix = fmatrix = amatrix = ematrix = fmatrix = 8matrix = 7matrix = f
+matrix = 3matrix = bmatrix = cmatrix = 2matrix = ematrix = fmatrix = 2matrix = 2matrix = cmatrix = 1matrix = cmatrix = cmatrix = 4matrix = 1matrix = 7matrix = 5matrix = 5matrix = 0matrix = 4matrix = amatrix = 6matrix = 8matrix = 6matrix = 8matrix = fmatrix = 1matrix = dmatrix = 0matrix = 8matrix = 2matrix = cmatrix = 7matrix = 6matrix = 3matrix = 1matrix = 5matrix = cmatrix = fmatrix = fmatrix = 3matrix = fmatrix = 9matrix = 0matrix = amatrix = amatrix = 6matrix = ematrix = 2matrix = 1matrix = fmatrix = 4matrix = 9matrix = cmatrix = amatrix = 6matrix = 9matrix = 9matrix = 5matrix = ematrix = 8matrix = 5matrix = 1matrix = bmatrix = 0
+matrix = 5matrix = dmatrix = amatrix = fmatrix = 0matrix = amatrix = bmatrix = 3matrix = 5matrix = 8matrix = bmatrix = 2matrix = 7matrix = 8matrix = 7matrix = fmatrix = cmatrix = 3matrix = dmatrix = dmatrix = amatrix = 0matrix = 6matrix = amatrix = 8matrix = 0matrix = 2matrix = cmatrix = ematrix = 6matrix = amatrix = cmatrix = 2matrix = 2matrix = fmatrix = 2matrix = 1matrix = 9matrix = bmatrix = 0matrix = ematrix = 7matrix = 3matrix = ematrix = 5matrix = 2matrix = 5matrix = 1matrix = cmatrix = 3matrix = bmatrix = bmatrix = ematrix = dmatrix = ematrix = 3matrix = dmatrix = 5matrix = bmatrix = ematrix = 7matrix = 0matrix = dmatrix = 2
+matrix = 0matrix = 4matrix = 7matrix = bmatrix = fmatrix = 6matrix = bmatrix = 4matrix = bmatrix = 1matrix = 4matrix = 2matrix = amatrix = 8matrix = fmatrix = cmatrix = dmatrix = dmatrix = 4matrix = bmatrix = fmatrix = 0matrix = 9matrix = amatrix = 1matrix = 9matrix = bmatrix = 0matrix = amatrix = 2matrix = cmatrix = 0matrix = 2matrix = dmatrix = 4matrix = 1matrix = 7matrix = 8matrix = 6matrix = 6matrix = 2matrix = dmatrix = fmatrix = 6matrix = 4matrix = 5matrix = amatrix = cmatrix = cmatrix = bmatrix = bmatrix = ematrix = bmatrix = bmatrix = amatrix = 8matrix = 4matrix = fmatrix = 4matrix = dmatrix = fmatrix = 5matrix = 7matrix = 0
+matrix = 9matrix = 3matrix = 9matrix = 3matrix = 7matrix = 3matrix = dmatrix = 9matrix = 0matrix = 3matrix = 7matrix = amatrix = bmatrix = amatrix = 1matrix = cmatrix = 1matrix = 1matrix = 8matrix = 9matrix = amatrix = dmatrix = dmatrix = cmatrix = bmatrix = 2matrix = 1matrix = 5matrix = bmatrix = 5matrix = 8matrix = 0matrix = fmatrix = 2matrix = amatrix = amatrix = 0matrix = 5matrix = 1matrix = bmatrix = 2matrix = 5matrix = fmatrix = 2matrix = 5matrix = amatrix = 6matrix = cmatrix = 5matrix = 2matrix = bmatrix = dmatrix = 5matrix = bmatrix = 8matrix = 9matrix = 6matrix = 7matrix = 1matrix = amatrix = 5matrix = ematrix = dmatrix = 7
+matrix = 9matrix = 5matrix = 6matrix = 1matrix = ematrix = dmatrix = bmatrix = fmatrix = 0matrix = dmatrix = 6matrix = ematrix = cmatrix = 8matrix = 5matrix = 5matrix = 2matrix = bmatrix = 4matrix = cmatrix = cmatrix = cmatrix = 4matrix = 0matrix = cmatrix = 2matrix = fmatrix = 3matrix = ematrix = fmatrix = 7matrix = 1matrix = ematrix = 8matrix = 8matrix = 8matrix = cmatrix = amatrix = 4matrix = 6matrix = dmatrix = 7matrix = amatrix = cmatrix = 7matrix = 5matrix = 8matrix = 4matrix = 3matrix = 1matrix = ematrix = 9matrix = 1matrix = 1matrix = 2matrix = 9matrix = 1matrix = ematrix = amatrix = 1matrix = 1matrix = 8matrix = 7matrix = 1
+matrix = 9matrix = 1matrix = 2matrix = dmatrix = 0matrix = 1matrix = 6matrix = 0matrix = 6matrix = amatrix = amatrix = 8matrix = 7matrix = 5matrix = 0matrix = 0matrix = 5matrix = bmatrix = fmatrix = 3matrix = 3matrix = cmatrix = amatrix = 8matrix = 5matrix = 9matrix = 0matrix = cmatrix = cmatrix = 8matrix = 4matrix = 0matrix = dmatrix = cmatrix = 9matrix = amatrix = 6matrix = 3matrix = 9matrix = 6matrix = fmatrix = fmatrix = amatrix = 6matrix = dmatrix = bmatrix = 6matrix = 6matrix = 2matrix = 7matrix = 4matrix = 5matrix = 6matrix = ematrix = fmatrix = 2matrix = ematrix = 2matrix = 8matrix = amatrix = cmatrix = ematrix = 4matrix = 9
+matrix = 7matrix = dmatrix = 2matrix = 2matrix = 2matrix = 9matrix = 6matrix = 6matrix = 0matrix = 8matrix = fmatrix = fmatrix = fmatrix = 2matrix = ematrix = bmatrix = 7matrix = bmatrix = 9matrix = 4matrix = 6matrix = bmatrix = fmatrix = 6matrix = 6matrix = bmatrix = 4matrix = 5matrix = 4matrix = 5matrix = 2matrix = fmatrix = fmatrix = 5matrix = ematrix = 4matrix = 1matrix = 2matrix = dmatrix = amatrix = 8matrix = 8matrix = 0matrix = 7matrix = 1matrix = ematrix = 9matrix = 6matrix = 0matrix = 4matrix = 8matrix = 5matrix = 9matrix = 1matrix = 9matrix = 1matrix = bmatrix = 8matrix = cmatrix = amatrix = cmatrix = 3matrix = dmatrix = 3
+matrix = 4matrix = ematrix = 9matrix = 4matrix = 4matrix = dmatrix = 5matrix = 5matrix = 9matrix = 8matrix = 1matrix = 5matrix = 1matrix = ematrix = fmatrix = 5matrix = 1matrix = fmatrix = cmatrix = ematrix = amatrix = dmatrix = 6matrix = 5matrix = dmatrix = 8matrix = 9matrix = bmatrix = 2matrix = cmatrix = dmatrix = 2matrix = 1matrix = ematrix = 9matrix = 7matrix = fmatrix = ematrix = cmatrix = cmatrix = dmatrix = 7matrix = cmatrix = 6matrix = amatrix = 6matrix = amatrix = 1matrix = 4matrix = amatrix = cmatrix = fmatrix = fmatrix = 7matrix = 9matrix = 5matrix = 4matrix = 6matrix = dmatrix = 2matrix = 4matrix = 6matrix = 0matrix = b
+matrix = dmatrix = dmatrix = 4matrix = bmatrix = 2matrix = 7matrix = 0matrix = 3matrix = 0matrix = 0matrix = fmatrix = 9matrix = 9matrix = 7matrix = 4matrix = 7matrix = bmatrix = 1matrix = 9matrix = 3matrix = dmatrix = cmatrix = 4matrix = 7matrix = ematrix = cmatrix = 2matrix = dmatrix = 3matrix = 8matrix = 9matrix = cmatrix = 6matrix = 1matrix = 3matrix = 3matrix = amatrix = 7matrix = 8matrix = 6matrix = 9matrix = 3matrix = dmatrix = 9matrix = cmatrix = 4matrix = ematrix = 9matrix = 5matrix = 1matrix = 0matrix = 1matrix = amatrix = dmatrix = 4matrix = 5matrix = 0matrix = bmatrix = 6matrix = 8matrix = 1matrix = amatrix = 8matrix = 7
+matrix = 2matrix = 6matrix = dmatrix = 5matrix = 0matrix = ematrix = fmatrix = 4matrix = amatrix = 1matrix = 0matrix = 5matrix = fmatrix = 5matrix = ematrix = 0matrix = 5matrix = 1matrix = 0matrix = fmatrix = 0matrix = 2matrix = cmatrix = bmatrix = 0matrix = amatrix = 6matrix = 0matrix = cmatrix = 9matrix = dmatrix = fmatrix = bmatrix = 6matrix = 1matrix = 0matrix = 1matrix = dmatrix = 7matrix = ematrix = 6matrix = amatrix = bmatrix = 0matrix = bmatrix = 9matrix = 7matrix = 1matrix = 0matrix = 3matrix = 3matrix = 8matrix = fmatrix = 3matrix = 4matrix = 1matrix = 3matrix = amatrix = amatrix = fmatrix = 3matrix = amatrix = fmatrix = 8
+matrix = 0matrix = 1matrix = fmatrix = 1matrix = 2matrix = 0matrix = dmatrix = 5matrix = 3matrix = 7matrix = 4matrix = fmatrix = 8matrix = bmatrix = fmatrix = 9matrix = 6matrix = ematrix = 0matrix = 5matrix = 2matrix = 3matrix = ematrix = cmatrix = 3matrix = dmatrix = bmatrix = 2matrix = amatrix = 3matrix = 1matrix = 8matrix = 4matrix = 0matrix = 9matrix = 4matrix = 2matrix = 1matrix = 3matrix = cmatrix = 3matrix = 1matrix = 2matrix = 7matrix = 2matrix = cmatrix = amatrix = bmatrix = 2matrix = 8matrix = 0matrix = 5matrix = ematrix = bmatrix = 3matrix = amatrix = ematrix = 0matrix = cmatrix = 3matrix = 2matrix = 1matrix = 5matrix = 2
+matrix = cmatrix = 0matrix = fmatrix = 0matrix = amatrix = 2matrix = amatrix = bmatrix = 1matrix = fmatrix = 1matrix = bmatrix = 4matrix = ematrix = cmatrix = fmatrix = 4matrix = cmatrix = 1matrix = 5matrix = 6matrix = fmatrix = 9matrix = 6matrix = 5matrix = 4matrix = 7matrix = 5matrix = 8matrix = cmatrix = 7matrix = amatrix = 0matrix = 9matrix = 1matrix = 4matrix = 2matrix = fmatrix = 3matrix = bmatrix = 3matrix = cmatrix = 3matrix = amatrix = bmatrix = cmatrix = 1matrix = 2matrix = 5matrix = 5matrix = 2matrix = 6matrix = bmatrix = amatrix = 8matrix = 1matrix = 4matrix = 6matrix = 8matrix = amatrix = 9matrix = bmatrix = dmatrix = b
+matrix = ematrix = cmatrix = 4matrix = 0matrix = 1matrix = 5matrix = dmatrix = 0matrix = bmatrix = bmatrix = 8matrix = dmatrix = cmatrix = 1matrix = 7matrix = fmatrix = dmatrix = 0matrix = 4matrix = dmatrix = 4matrix = dmatrix = 6matrix = 1matrix = 4matrix = fmatrix = fmatrix = dmatrix = 8matrix = 8matrix = 0matrix = 0matrix = bmatrix = 2matrix = 9matrix = 1matrix = 2matrix = 8matrix = 9matrix = 5matrix = 8matrix = dmatrix = bmatrix = bmatrix = fmatrix = 0matrix = dmatrix = 6matrix = 9matrix = 9matrix = bmatrix = 0matrix = 0matrix = 6matrix = 4matrix = 5matrix = fmatrix = amatrix = 9matrix = 7matrix = fmatrix = dmatrix = 7matrix = 9
+matrix = cmatrix = 1matrix = 3matrix = 1matrix = 5matrix = 5matrix = ematrix = dmatrix = 4matrix = 0matrix = fmatrix = ematrix = 0matrix = cmatrix = 9matrix = 7matrix = dmatrix = ematrix = 7matrix = 0matrix = 0matrix = 1matrix = 6matrix = 0matrix = 2matrix = 9matrix = 7matrix = ematrix = 5matrix = dmatrix = 5matrix = cmatrix = 6matrix = 7matrix = ematrix = 1matrix = 5matrix = cmatrix = 1matrix = 7matrix = amatrix = 2matrix = 8matrix = 5matrix = 8matrix = 6matrix = 6matrix = 5matrix = 2matrix = 9matrix = fmatrix = amatrix = fmatrix = 0matrix = 7matrix = dmatrix = 6matrix = 6matrix = 8matrix = amatrix = 8matrix = 5matrix = 3matrix = 0
+matrix = cmatrix = dmatrix = fmatrix = dmatrix = 6matrix = fmatrix = cmatrix = 4matrix = 2matrix = cmatrix = 7matrix = 0matrix = cmatrix = 6matrix = 4matrix = 6matrix = cmatrix = ematrix = 3matrix = ematrix = 6matrix = 7matrix = bmatrix = cmatrix = 7matrix = fmatrix = 5matrix = 8matrix = fmatrix = 2matrix = dmatrix = 4matrix = 6matrix = cmatrix = bmatrix = dmatrix = 0matrix = cmatrix = 9matrix = bmatrix = 5matrix = 8matrix = bmatrix = 4matrix = fmatrix = 7matrix = 7matrix = amatrix = 1matrix = 2matrix = 2matrix = amatrix = dmatrix = 5matrix = 5matrix = 8matrix = 7matrix = 4matrix = 7matrix = 7matrix = amatrix = 6matrix = cmatrix = 8
+matrix = ematrix = 5matrix = 9matrix = 8matrix = 2matrix = 8matrix = fmatrix = 3matrix = 0matrix = bmatrix = 7matrix = 7matrix = 5matrix = 2matrix = cmatrix = ematrix = cmatrix = 3matrix = 0matrix = cmatrix = cmatrix = 5matrix = dmatrix = 9matrix = 5matrix = 5matrix = 8matrix = dmatrix = 0matrix = 4matrix = ematrix = 7matrix = 5matrix = ematrix = 9matrix = 1matrix = amatrix = dmatrix = amatrix = 0matrix = 4matrix = 4matrix = 4matrix = 4matrix = dmatrix = amatrix = 9matrix = 4matrix = 9matrix = dmatrix = 7matrix = 8matrix = 4matrix = bmatrix = 7matrix = 2matrix = bmatrix = 3matrix = 1matrix = cmatrix = 2matrix = 3matrix = fmatrix = d
+matrix = 6matrix = 7matrix = 7matrix = 8matrix = 4matrix = 5matrix = dmatrix = 8matrix = 3matrix = 9matrix = amatrix = 9matrix = 7matrix = 5matrix = 2matrix = 9matrix = 3matrix = 4matrix = 0matrix = ematrix = 6matrix = ematrix = 7matrix = 7matrix = bmatrix = amatrix = 9matrix = 9matrix = 5matrix = dmatrix = 1matrix = 2matrix = 0matrix = 5matrix = 1matrix = dmatrix = dmatrix = 2matrix = 8matrix = cmatrix = amatrix = amatrix = 0matrix = 3matrix = 2matrix = 1matrix = 1matrix = 5matrix = 2matrix = 6matrix = dmatrix = 7matrix = 0matrix = amatrix = 2matrix = dmatrix = 8matrix = 7matrix = dmatrix = bmatrix = 3matrix = dmatrix = bmatrix = d
+matrix = 2matrix = 6matrix = amatrix = 8matrix = amatrix = 8matrix = dmatrix = 3matrix = 2matrix = fmatrix = 0matrix = 5matrix = cmatrix = 1matrix = fmatrix = 3matrix = 2matrix = 1matrix = cmatrix = 8matrix = 7matrix = 8matrix = 6matrix = 9matrix = 9matrix = dmatrix = ematrix = 1matrix = 1matrix = cmatrix = 3matrix = ematrix = cmatrix = dmatrix = fmatrix = amatrix = 4matrix = 0matrix = amatrix = 5matrix = bmatrix = ematrix = fmatrix = 3matrix = amatrix = fmatrix = fmatrix = dmatrix = bmatrix = 7matrix = 9matrix = 5matrix = cmatrix = cmatrix = ematrix = 8matrix = 4matrix = bmatrix = 4matrix = 9matrix = 9matrix = 4matrix = bmatrix = 4
+matrix = 4matrix = fmatrix = 5matrix = ematrix = 3matrix = bmatrix = 3matrix = cmatrix = 0matrix = 6matrix = 9matrix = 5matrix = 4matrix = amatrix = bmatrix = 3matrix = dmatrix = 1matrix = dmatrix = 6matrix = 7matrix = 3matrix = cmatrix = 6matrix = fmatrix = amatrix = 9matrix = 4matrix = ematrix = dmatrix = 0matrix = amatrix = ematrix = 3matrix = 5matrix = 0matrix = 6matrix = 2matrix = 8matrix = 1matrix = cmatrix = bmatrix = 9matrix = 2matrix = 1matrix = ematrix = 9matrix = dmatrix = dmatrix = amatrix = 7matrix = 2matrix = 4matrix = 6matrix = 8matrix = ematrix = 0matrix = 5matrix = 1matrix = fmatrix = 1matrix = 3matrix = dmatrix = e
+matrix = 8matrix = 1matrix = 0matrix = fmatrix = 2matrix = 1matrix = amatrix = 8matrix = bmatrix = 9matrix = dmatrix = bmatrix = amatrix = 3matrix = bmatrix = 6matrix = 9matrix = bmatrix = fmatrix = 9matrix = 4matrix = fmatrix = ematrix = bmatrix = fmatrix = 9matrix = 2matrix = 7matrix = 9matrix = 4matrix = dmatrix = fmatrix = cmatrix = amatrix = 4matrix = fmatrix = 8matrix = 9matrix = 1matrix = 7matrix = 5matrix = 5matrix = 0matrix = cmatrix = 3matrix = 6matrix = 3matrix = 3matrix = 4matrix = 0matrix = dmatrix = dmatrix = 2matrix = 5matrix = bmatrix = cmatrix = 0matrix = 6matrix = 3matrix = 1matrix = 5matrix = bmatrix = 3matrix = 3
+matrix = bmatrix = 6matrix = 6matrix = 1matrix = 6matrix = 5matrix = 3matrix = ematrix = 2matrix = 5matrix = bmatrix = dmatrix = ematrix = dmatrix = 0matrix = 1matrix = cmatrix = fmatrix = 0matrix = 0matrix = 7matrix = dmatrix = 9matrix = ematrix = 4matrix = cmatrix = 7matrix = 2matrix = fmatrix = 2matrix = dmatrix = dmatrix = 9matrix = 4matrix = amatrix = 3matrix = 8matrix = dmatrix = ematrix = bmatrix = 8matrix = 9matrix = bmatrix = fmatrix = ematrix = 7matrix = 5matrix = 5matrix = fmatrix = 1matrix = fmatrix = 4matrix = 8matrix = 5matrix = 0matrix = bmatrix = dmatrix = 8matrix = 8matrix = 3matrix = dmatrix = fmatrix = 7matrix = 1
+matrix = cmatrix = 0matrix = dmatrix = 9matrix = 0matrix = dmatrix = 3matrix = 1matrix = 1matrix = 8matrix = bmatrix = 3matrix = 9matrix = 6matrix = dmatrix = ematrix = 1matrix = 2matrix = amatrix = dmatrix = 2matrix = cmatrix = bmatrix = 5matrix = ematrix = 9matrix = 0matrix = 0matrix = 6matrix = cmatrix = 9matrix = 7matrix = 9matrix = cmatrix = 2matrix = 7matrix = bmatrix = fmatrix = 3matrix = 8matrix = bmatrix = 9matrix = 2matrix = 3matrix = ematrix = dmatrix = 1matrix = 6matrix = bmatrix = 9matrix = 9matrix = fmatrix = fmatrix = 3matrix = fmatrix = 5matrix = amatrix = 0matrix = 0matrix = 3matrix = 2matrix = dmatrix = 0matrix = 7
+matrix = dmatrix = amatrix = 2matrix = 7matrix = ematrix = 4matrix = 0matrix = 6matrix = 2matrix = 0matrix = bmatrix = 4matrix = ematrix = 1matrix = 4matrix = ematrix = 0matrix = dmatrix = 8matrix = 9matrix = 3matrix = 5matrix = 6matrix = dmatrix = 3matrix = dmatrix = dmatrix = 0matrix = 5matrix = cmatrix = cmatrix = 0matrix = 1matrix = 1matrix = fmatrix = 2matrix = 4matrix = bmatrix = 0matrix = amatrix = cmatrix = 7matrix = ematrix = 4matrix = bmatrix = fmatrix = 6matrix = 4matrix = bmatrix = 7matrix = 3matrix = cmatrix = 7matrix = 9matrix = 2matrix = fmatrix = cmatrix = 4matrix = cmatrix = bmatrix = 4matrix = 3matrix = dmatrix = f
+matrix = 9matrix = 1matrix = fmatrix = dmatrix = fmatrix = 4matrix = 5matrix = 3matrix = 7matrix = fmatrix = 3matrix = cmatrix = ematrix = dmatrix = 6matrix = 9matrix = 1matrix = 0matrix = 7matrix = 1matrix = dmatrix = 7matrix = 5matrix = 8matrix = 4matrix = 4matrix = 4matrix = 8matrix = 5matrix = 8matrix = 1matrix = ematrix = 0matrix = fmatrix = 5matrix = 9matrix = amatrix = fmatrix = ematrix = 3matrix = dmatrix = 7matrix = dmatrix = 4matrix = cmatrix = 1matrix = 6matrix = cmatrix = 2matrix = 8matrix = 0matrix = 5matrix = dmatrix = dmatrix = 5matrix = 6matrix = 6matrix = 0matrix = 1matrix = 6matrix = fmatrix = 0matrix = 7matrix = e
+matrix = bmatrix = dmatrix = 5matrix = 9matrix = 0matrix = dmatrix = 1matrix = cmatrix = 4matrix = 0matrix = 7matrix = 6matrix = fmatrix = cmatrix = 0matrix = 5matrix = 6matrix = amatrix = 1matrix = 5matrix = 1matrix = bmatrix = 6matrix = 0matrix = 0matrix = dmatrix = 4matrix = ematrix = 5matrix = 5matrix = 9matrix = 5matrix = fmatrix = ematrix = fmatrix = dmatrix = 4matrix = dmatrix = 9matrix = dmatrix = bmatrix = amatrix = 8matrix = 8matrix = 7matrix = 6matrix = 9matrix = 8matrix = 2matrix = 6matrix = cmatrix = 1matrix = 9matrix = 5matrix = bmatrix = 5matrix = dmatrix = 7matrix = 5matrix = cmatrix = 1matrix = 1matrix = 6matrix = 4
+matrix = cmatrix = 2matrix = 3matrix = 4matrix = bmatrix = 6matrix = 4matrix = bmatrix = bmatrix = 2matrix = 2matrix = 1matrix = fmatrix = cmatrix = 6matrix = 7matrix = 4matrix = 6matrix = 6matrix = 7matrix = 6matrix = 3matrix = 6matrix = amatrix = bmatrix = dmatrix = 0matrix = ematrix = 5matrix = cmatrix = 1matrix = 9matrix = 1matrix = 3matrix = 9matrix = 9matrix = 9matrix = 3matrix = 6matrix = bmatrix = 8matrix = fmatrix = 7matrix = 3matrix = amatrix = 5matrix = 8matrix = 0matrix = 2matrix = 0matrix = amatrix = 5matrix = bmatrix = 3matrix = ematrix = ematrix = 9matrix = 8matrix = 4matrix = ematrix = 0matrix = 4matrix = cmatrix = b
+matrix = dmatrix = 4matrix = 6matrix = ematrix = 2matrix = 2matrix = 9matrix = 9matrix = 8matrix = 0matrix = 8matrix = 6matrix = 7matrix = 6matrix = ematrix = 5matrix = 5matrix = fmatrix = 5matrix = 4matrix = 4matrix = 7matrix = 6matrix = dmatrix = dmatrix = bmatrix = dmatrix = dmatrix = 1matrix = 0matrix = 1matrix = 5matrix = amatrix = 9matrix = 1matrix = cmatrix = 4matrix = fmatrix = 6matrix = 8matrix = 3matrix = amatrix = 2matrix = bmatrix = cmatrix = 8matrix = cmatrix = ematrix = 0matrix = fmatrix = 5matrix = 3matrix = 5matrix = 0matrix = ematrix = 7matrix = 0matrix = cmatrix = 5matrix = cmatrix = bmatrix = 5matrix = ematrix = 6
+matrix = 3matrix = 7matrix = 8matrix = cmatrix = ematrix = amatrix = 2matrix = 9matrix = 4matrix = dmatrix = bmatrix = dmatrix = 7matrix = 7matrix = 2matrix = amatrix = 9matrix = dmatrix = 0matrix = 0matrix = dmatrix = fmatrix = 3matrix = amatrix = 6matrix = 7matrix = 3matrix = amatrix = 1matrix = amatrix = fmatrix = 8matrix = 8matrix = 2matrix = amatrix = bmatrix = 1matrix = ematrix = ematrix = 7matrix = 5matrix = 8matrix = 2matrix = 7matrix = ematrix = 0matrix = bmatrix = bmatrix = 8matrix = bmatrix = ematrix = 7matrix = 3matrix = bmatrix = bmatrix = 8matrix = fmatrix = fmatrix = 2matrix = dmatrix = amatrix = 0matrix = fmatrix = 4
+matrix = 2matrix = 8matrix = 8matrix = 4matrix = 4matrix = 4matrix = 5matrix = fmatrix = 4matrix = fmatrix = dmatrix = 8matrix = cmatrix = fmatrix = 5matrix = 9matrix = bmatrix = 4matrix = 0matrix = 9matrix = 3matrix = 6matrix = bmatrix = bmatrix = fmatrix = amatrix = 4matrix = fmatrix = 1matrix = 6matrix = amatrix = 3matrix = 1matrix = bmatrix = 0matrix = cmatrix = dmatrix = 5matrix = cmatrix = fmatrix = 0matrix = cmatrix = fmatrix = 5matrix = 3matrix = 9matrix = 0matrix = 3matrix = fmatrix = 4matrix = 9matrix = 3matrix = 0matrix = ematrix = 6matrix = 4matrix = 6matrix = 0matrix = amatrix = 0matrix = 2matrix = ematrix = 5matrix = d
+matrix = 1matrix = dmatrix = amatrix = amatrix = 6matrix = 4matrix = 8matrix = cmatrix = fmatrix = 6matrix = 4matrix = 3matrix = cmatrix = dmatrix = amatrix = 0matrix = fmatrix = 3matrix = fmatrix = 2matrix = 3matrix = 1matrix = cmatrix = ematrix = 7matrix = dmatrix = 0matrix = 7matrix = 0matrix = 8matrix = bmatrix = bmatrix = 5matrix = 9matrix = 3matrix = 2matrix = 4matrix = cmatrix = fmatrix = bmatrix = 4matrix = 0matrix = 0matrix = 7matrix = ematrix = 6matrix = 5matrix = 3matrix = 9matrix = 2matrix = amatrix = 8matrix = bmatrix = 8matrix = 4matrix = 5matrix = bmatrix = 4matrix = 3matrix = 9matrix = 9matrix = bmatrix = 8matrix = 1
+matrix = ematrix = 1matrix = 3matrix = 9matrix = 5matrix = 3matrix = 4matrix = 4matrix = ematrix = 1matrix = cmatrix = 5matrix = 2matrix = 3matrix = fmatrix = 6matrix = 2matrix = ematrix = bmatrix = 7matrix = cmatrix = 4matrix = ematrix = bmatrix = 1matrix = dmatrix = 7matrix = 8matrix = 7matrix = 5matrix = 7matrix = fmatrix = amatrix = 1matrix = 8matrix = 3matrix = bmatrix = 6matrix = ematrix = 9matrix = 0matrix = 1matrix = 2matrix = 0matrix = 6matrix = 4matrix = ematrix = 5matrix = fmatrix = 5matrix = 0matrix = 2matrix = cmatrix = bmatrix = 5matrix = 4matrix = fmatrix = 5matrix = 9matrix = 3matrix = 1matrix = amatrix = 6matrix = f
+matrix = dmatrix = 5matrix = 7matrix = ematrix = 4matrix = amatrix = cmatrix = cmatrix = 7matrix = ematrix = 4matrix = 2matrix = 3matrix = bmatrix = fmatrix = fmatrix = cmatrix = 5matrix = 6matrix = 9matrix = amatrix = amatrix = 8matrix = 9matrix = 7matrix = 8matrix = 0matrix = 4matrix = 7matrix = dmatrix = 9matrix = 5matrix = cmatrix = 8matrix = 5matrix = 3matrix = 7matrix = amatrix = 2matrix = 4matrix = 1matrix = ematrix = 2matrix = cmatrix = amatrix = 1matrix = 4matrix = 5matrix = cmatrix = cmatrix = 0matrix = 2matrix = ematrix = 6matrix = cmatrix = ematrix = 3matrix = cmatrix = ematrix = 4matrix = ematrix = 3matrix = 2matrix = d
+matrix = 3matrix = 0matrix = amatrix = ematrix = cmatrix = 1matrix = 2matrix = 8matrix = 4matrix = 1matrix = 9matrix = dmatrix = 1matrix = bmatrix = 3matrix = bmatrix = 4matrix = 1matrix = fmatrix = 9matrix = 9matrix = 9matrix = fmatrix = 1matrix = 2matrix = 7matrix = 3matrix = 9matrix = 6matrix = 4matrix = bmatrix = 8matrix = dmatrix = 5matrix = 1matrix = 4matrix = 4matrix = 6matrix = 4matrix = 4matrix = 8matrix = 1matrix = 4matrix = 7matrix = 5matrix = 5matrix = amatrix = 5matrix = 1matrix = bmatrix = bmatrix = 3matrix = 2matrix = 9matrix = 2matrix = 5matrix = 1matrix = 0matrix = cmatrix = 2matrix = dmatrix = 7matrix = 8matrix = f
+matrix = 3matrix = 4matrix = 6matrix = 7matrix = ematrix = 3matrix = 5matrix = ematrix = 2matrix = 7matrix = 8matrix = ematrix = cmatrix = ematrix = dmatrix = cmatrix = 3matrix = fmatrix = dmatrix = bmatrix = 1matrix = amatrix = 5matrix = cmatrix = 2matrix = 2matrix = dmatrix = 0matrix = ematrix = 1matrix = 8matrix = 7matrix = dmatrix = 4matrix = amatrix = dmatrix = 8matrix = 3matrix = cmatrix = 0matrix = 7matrix = fmatrix = amatrix = dmatrix = cmatrix = 4matrix = 2matrix = 1matrix = ematrix = 4matrix = cmatrix = 2matrix = 5matrix = fmatrix = 4matrix = fmatrix = 5matrix = bmatrix = 9matrix = 6matrix = 0matrix = 6matrix = 8matrix = 6
+matrix = 6matrix = cmatrix = 2matrix = 6matrix = 8matrix = amatrix = 0matrix = 0matrix = 1matrix = 7matrix = dmatrix = 1matrix = bmatrix = 5matrix = ematrix = 2matrix = 4matrix = 3matrix = 0matrix = ematrix = 7matrix = amatrix = bmatrix = 7matrix = ematrix = 5matrix = fmatrix = dmatrix = cmatrix = 5matrix = 0matrix = dmatrix = dmatrix = 3matrix = 7matrix = 5matrix = amatrix = 8matrix = 3matrix = amatrix = fmatrix = dmatrix = 5matrix = 7matrix = dmatrix = 1matrix = 5matrix = amatrix = amatrix = amatrix = 7matrix = cmatrix = 4matrix = cmatrix = dmatrix = bmatrix = 0matrix = 8matrix = 7matrix = 6matrix = dmatrix = fmatrix = 2matrix = c
+matrix = 6matrix = 3matrix = bmatrix = 9matrix = 2matrix = fmatrix = 0matrix = 8matrix = 6matrix = dmatrix = 3matrix = 5matrix = fmatrix = 2matrix = ematrix = 0matrix = 5matrix = 2matrix = 2matrix = cmatrix = 8matrix = 7matrix = 4matrix = 0matrix = 4matrix = 3matrix = 1matrix = fmatrix = 8matrix = 8matrix = 2matrix = 8matrix = 8matrix = ematrix = 1matrix = 5matrix = 0matrix = 2matrix = 0matrix = 9matrix = 8matrix = 2matrix = cmatrix = dmatrix = cmatrix = 7matrix = 9matrix = amatrix = 2matrix = dmatrix = 9matrix = 8matrix = 0matrix = 3matrix = ematrix = 2matrix = bmatrix = dmatrix = 3matrix = cmatrix = 4matrix = 6matrix = 6matrix = a
+hashes_done = 9
+init begin
+debug
+debug
+debug
+debug
+debug
+debug
+debug
+debug
+debug
+debug
+debug
+debug
+debug
+debug
+debug
+debug
+debug
+debug
+debug
+debug
+debug0
+value=f5fe5901
+value=d939454d
+value=fb0f0069
+value=fbcda9b4
+value=f73958bc
+value=7ebf3e89
+value=a7a30bf4
+value=ff7ea7c6
+value=59be0ff3
+value=bff7eb75
+value=dfffac5b
+value=b7fbf659
+value=e2ff09b4
+value=dab73b99
+value=3d3741e1
+value=4777643a
+value=ddef0a52
+value=f2e4ff23
+value=f66f52eb
+value=b3ff3706
+value=eee4719c
+value=dff907a0
+value=6ff73f28
+value=bf7b49e8
+value=5ccd168a
+value=6dff4fb2
+value=dfebb9e9
+value=d7fbe5e6
+value=5e3f6871
+value=17fcc584
+value=ff5f7f53
+value=bbbf5600
+value=7ffbe733
+value=b3ff2a30
+value=f47f2c77
+value=6f674082
+value=b97fb7df
+value=4bbc2ba8
+value=dfeeff51
+value=dfbb1c04
+value=fff6c443
+value=ff2d01a6
+value=f7d7caf7
+value=97717092
+value=7b6d7d59
+value=b7750de4
+value=9fffdab2
+value=ebfbb7a7
+value=fafed81f
+value=fee38e44
+value=ffe58875
+value=cd0594d9
+value=9b7b8bde
+value=dff65385
+value=4fbe4969
+value=ffef46b0
+value=fb7f5565
+value=9f2f1abb
+value=bff5cb4f
+value=dfbadf1a
+value=3df5ced7
+value=7057ca8e
+value=fefb1c95
+value=3ed656f8
+value=bffe4f44
+value=fd9d1ad2
+value=f18309bc
+value=fbbf7664
+value=feff26ec
+value=bcff535c
+value=fdff3111
+value=be2f2cce
+value=5a7b5b49
+value=cf5c4658
+value=cb332ee2
+value=e3fb623a
+value=b3eb0f33
+value=32af500c
+value=7fbe5a01
+value=dec9bde3
+value=db7f94b2
+value=f755cc50
+value=655f1d7a
+value=e7fec67f
+value=f5ed2f68
+value=e5ddd025
+value=b6af90ff
+value=edfcd448
+value=cd7b4205
+value=bfbe94f9
+value=e6d3d401
+value=53add7fe
+value=fcbebc49
+value=3afc2791
+value=6fff2083
+value=6ebf36b5
+value=8fdc2d6f
+value=9f7e1d45
+value=7dcbb7c4
+value=dffe0335
+value=9bbfbfa2
+value=ec9d12e6
+value=9d8ff8dd
+value=ffeec74f
+value=bbfe83fa
+value=ff7f9d61
+value=f4fd050b
+value=f7b754d1
+value=1b8e2b90
+value=ebff46b5
+value=f5f729d1
+value=bbdf6105
+value=c7dbce3e
+value=deffca77
+value=fb5efcf1
+value=e5f72c17
+value=7c4f9bb9
+value=37fcf370
+value=5f0ff062
+value=66eeb3f1
+value=d3de20b4
+value=677f5848
+value=feffa40d
+value=7a5f47ec
+value=dffee550
+value=fe2d312e
+value=fd87121d
+value=3d754926
+value=de444050
+value=e1c886a0
+value=00000000
+value=20000000
+value=00000000
+value=fb000000
+value=fffff7fd
+value=00000000
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=dfffffc0
+value=ffff2600
+value=f3f9ff00
+value=ffd82600
+value=2efef036
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[0].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @25959376
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[1].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @25959376
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[2].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @25959376
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[3].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @25959376
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[4].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @25959376
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[5].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @25959376
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[6].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @25959376
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[7].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @25959376
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[8].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @25959376
+value=ffffffff
+value=ffffffff
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[9].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @26079328
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[10].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @26079328
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[11].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @26079328
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[12].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @26079328
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[13].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @26079328
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[14].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @26079328
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[15].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @26079328
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[16].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @26079328
+tb.card.u_ddr4_rdimm_C.\rcd_enabled.NOT_LRDIMM.u_ddr4_dimm .\rank_instances[0].even_ranks.u_ddr4_rank .\Micron_model.instance_of_sdram_devices[17].micron_mem_model.u_ddr4_model .always_diff_ck.if_diff_ck:Initialization complete @26079328
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+value=ffffffff
+INFO: [Common 17-41] Interrupt caught. Command should exit soon.
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:01:27 . Memory (MB): peak = 2530.648 ; gain = 0.000 ; free physical = 87750 ; free virtual = 126499
+INFO: [Common 17-344] 'run' was cancelled
+xsim: Time (s): cpu = 00:00:02 ; elapsed = 00:01:28 . Memory (MB): peak = 2530.648 ; gain = 247.840 ; free physical = 87750 ; free virtual = 126499
+INFO: [Common 17-344] 'source' was cancelled
+INFO: [Common 17-206] Exiting xsim at Thu Jun 10 19:38:49 2021...

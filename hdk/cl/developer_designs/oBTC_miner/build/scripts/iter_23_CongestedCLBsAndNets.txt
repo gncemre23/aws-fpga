@@ -1,0 +1,35 @@
+List of CLB Tiles
+CLEM_X52Y395
+CLEL_R_X52Y395
+CLEM_X54Y241
+CLEL_R_X54Y241
+CLEL_R_X38Y264
+CLEM_X37Y222
+CLEL_R_X37Y222
+CLEM_X37Y228
+CLEL_R_X37Y228
+CLEL_R_X32Y358
+CLEM_X18Y320
+CLEL_R_X18Y320
+CLEL_R_X55Y237
+CLEM_X54Y220
+CLEL_R_X54Y220
+CLEM_X54Y221
+CLEL_R_X54Y221
+
+List of Congested Nets
+WRAPPER_INST/CL/top_ins/genblk1[6].heavy_hash_blk_dut/heavy_hash_dut/hashout_fifo_out/xpm_fifo_sync_inst/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/doutb[202]
+WRAPPER_INST/CL/top_ins/genblk1[3].heavy_hash_blk_dut/heavy_hash_dut/hashout_fifo_out/xpm_fifo_sync_inst/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/doutb[133]
+WRAPPER_INST/CL/top_ins/genblk1[2].heavy_hash_blk_dut/heavy_hash_dut/hashout_fifo_out/xpm_fifo_sync_inst/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/doutb[163]
+WRAPPER_INST/CL/top_ins/genblk1[1].heavy_hash_blk_dut/heavy_hash_dut/hashout_fifo_out/xpm_fifo_sync_inst/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/doutb[251]
+WRAPPER_INST/CL/top_ins/genblk1[8].heavy_hash_blk_dut/heavy_hash_dut/hashout_fifo_out/xpm_fifo_sync_inst/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/doutb[213]
+WRAPPER_INST/CL/top_ins/genblk1[1].heavy_hash_blk_dut/heavy_hash_dut/hashout_fifo_out/xpm_fifo_sync_inst/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/doutb[148]
+WRAPPER_INST/CL/top_ins/genblk1[1].heavy_hash_blk_dut/heavy_hash_dut/hashout_fifo_out/xpm_fifo_sync_inst/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst/doutb[147]
+WRAPPER_INST/CL/top_ins/genblk1[6].heavy_hash_blk_dut/comparator_inst/Q[201]
+WRAPPER_INST/CL/top_ins/genblk1[3].heavy_hash_blk_dut/comparator_inst/Q[133]
+WRAPPER_INST/CL/top_ins/genblk1[2].heavy_hash_blk_dut/comparator_inst/target_reg_reg[255]_0[161]
+WRAPPER_INST/CL/top_ins/genblk1[8].heavy_hash_blk_dut/comparator_inst/Q[215]
+WRAPPER_INST/CL/top_ins/genblk1[1].heavy_hash_blk_dut/comparator_inst/Q[252]
+WRAPPER_INST/CL/top_ins/genblk1[1].heavy_hash_blk_dut/comparator_inst/Q[254]
+WRAPPER_INST/CL/top_ins/genblk1[1].heavy_hash_blk_dut/comparator_inst/Q[251]
+

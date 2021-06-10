@@ -33,8 +33,41 @@ if {[llength [glob -nocomplain -dir $TARGET_DIR *]] != 0} {
 ## Change file names and paths below to reflect your CL area.  DO NOT include AWS RTL files.
 file copy -force $CL_DIR/design/cl_hello_world_defines.vh             $TARGET_DIR
 file copy -force $CL_DIR/design/cl_id_defines.vh                      $TARGET_DIR
-file copy -force $CL_DIR/design/cl_hello_world.sv                     $TARGET_DIR 
-file copy -force $CL_DIR/../common/design/cl_common_defines.vh        $TARGET_DIR 
+file copy -force $CL_DIR/design/wrapper_top.sv                      	$TARGET_DIR 
+file copy -force $CL_DIR/design/counter.sv                        	  $TARGET_DIR 
+file copy -force $CL_DIR/design/comparator.sv                    	    $TARGET_DIR
+file copy -force $CL_DIR/design/fifo_async.sv                    	    $TARGET_DIR
+file copy -force $CL_DIR/design/fifo_in_out.sv                    	  $TARGET_DIR
+file copy -force $CL_DIR/design/fsm_64to256.sv                    	  $TARGET_DIR
+file copy -force $CL_DIR/design/fsm_matrix2hash.sv                    $TARGET_DIR
+file copy -force $CL_DIR/design/heavy_hash_blk.sv                    	$TARGET_DIR
+file copy -force $CL_DIR/design/heavy_hash.sv                    	    $TARGET_DIR
+file copy -force $CL_DIR/design/matrix_controller.sv             	    $TARGET_DIR 
+file copy -force $CL_DIR/design/matrix_data_path.sv              	    $TARGET_DIR
+file copy -force $CL_DIR/design/matrix_ram.sv                    	    $TARGET_DIR
+file copy -force $CL_DIR/design/matrix_top.sv                    	    $TARGET_DIR
+file copy -force $CL_DIR/design/nonce_gen.sv                    	    $TARGET_DIR
+file copy -force $CL_DIR/design/PE.sv                           	    $TARGET_DIR
+file copy -force $CL_DIR/design/top.sv                          	    $TARGET_DIR
+
+file copy -force $CL_DIR/design/countern.vhd                          $TARGET_DIR
+file copy -force $CL_DIR/design/keccak_bytepad.vhd                    $TARGET_DIR
+file copy -force $CL_DIR/design/keccak_cons.vhd                       $TARGET_DIR
+file copy -force $CL_DIR/design/keccak_control.vhd                   	$TARGET_DIR 
+file copy -force $CL_DIR/design/keccak_datapath.vhd                	  $TARGET_DIR 
+file copy -force $CL_DIR/design/keccak_fsm1.vhd                 	    $TARGET_DIR
+file copy -force $CL_DIR/design/keccak_fsm2.vhd                  	    $TARGET_DIR
+file copy -force $CL_DIR/design/keccak_pkg.vhd                    	  $TARGET_DIR
+file copy -force $CL_DIR/design/keccak_round.vhd                   	  $TARGET_DIR
+file copy -force $CL_DIR/design/keccak_top.vhd                        $TARGET_DIR
+file copy -force $CL_DIR/design/piso.vhd                              $TARGET_DIR
+file copy -force $CL_DIR/design/regn.vhd                              $TARGET_DIR
+file copy -force $CL_DIR/design/sha3_fsm3.vhd                         $TARGET_DIR
+file copy -force $CL_DIR/design/sha3_pkg.vhd                          $TARGET_DIR
+file copy -force $CL_DIR/design/sipo.vhd                              $TARGET_DIR
+file copy -force $CL_DIR/design/sr_reg.vhd                            $TARGET_DIR
+
+file copy -force $CL_DIR/../common/design/cl_common_defines.vh        $TARGET_DIR
 file copy -force $UNUSED_TEMPLATES_DIR/unused_apppf_irq_template.inc  $TARGET_DIR
 file copy -force $UNUSED_TEMPLATES_DIR/unused_cl_sda_template.inc     $TARGET_DIR
 file copy -force $UNUSED_TEMPLATES_DIR/unused_ddr_a_b_d_template.inc  $TARGET_DIR

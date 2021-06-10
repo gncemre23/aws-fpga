@@ -1,0 +1,21 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:47 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Tue Jun  8 11:28:45 2021
+# Process ID: 4491
+# Current directory: /home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-30297-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.runs/xsdbm_synth_1
+# Command line: vivado -log xsdbm.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source xsdbm.tcl
+# Log file: /home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-30297-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.runs/xsdbm_synth_1/xsdbm.vds
+# Journal file: /home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-30297-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.runs/xsdbm_synth_1/vivado.jou
+#-----------------------------------------------------------
+source xsdbm.tcl -notrace
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+WARNING: [IP_Flow 19-2248] Failed to load user IP repository '/home/centos/src/project_data/aws-fpga/hdk/common/shell_v04261818/design/cache/ddr4_phy'; Can't find the specified path.
+If this directory should no longer be in your list of user repositories, go to the IP Settings dialog and remove it.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/opt/Xilinx/Vivado/2020.2/data/ip'.
+Command: synth_design -top xsdbm -part xcvu9p-flgb2104-2-i -mode out_of_context
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xcvu9p'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xcvu9p'
+INFO: [Device 21-403] Loading part xcvu9p-flgb2104-2-i

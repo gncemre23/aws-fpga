@@ -19,6 +19,7 @@
 -sourcelibext .sv
 -sourcelibext .svh
 
+
 -sourcelibdir ${CL_ROOT}/../common/design
 -sourcelibdir ${CL_ROOT}/design
 -sourcelibdir ${CL_ROOT}/verif/sv
@@ -59,7 +60,23 @@ ${HDK_SHELL_DESIGN_DIR}/ip/axi_register_slice_light/hdl/axi_infrastructure_v1_1_
 ${HDK_SHELL_DESIGN_DIR}/ip/axi_clock_converter_0/hdl/axi_clock_converter_v2_1_vl_rfs.v
 ${HDK_SHELL_DESIGN_DIR}/ip/axi_clock_converter_0/hdl/fifo_generator_v13_2_rfs.v
 ${SH_LIB_DIR}/../ip/axi_clock_converter_0/sim/axi_clock_converter_0.v
-${CL_ROOT}/design/cl_hello_world.sv
+${CL_ROOT}/design/wrapper_top.sv
+${CL_ROOT}/design/comparator.sv
+${CL_ROOT}/design/counter.sv
+${CL_ROOT}/design/fifo_async.sv
+${CL_ROOT}/design/fifo_in_out.sv
+${CL_ROOT}/design/fsm_64to256.sv
+${CL_ROOT}/design/fsm_matrix2hash.sv
+${CL_ROOT}/design/heavy_hash_blk.sv
+${CL_ROOT}/design/heavy_hash.sv
+${CL_ROOT}/design/matrix_controller.sv
+${CL_ROOT}/design/matrix_data_path.sv
+${CL_ROOT}/design/matrix_ram.sv
+${CL_ROOT}/design/matrix_top.sv
+${CL_ROOT}/design/nonce_gen.sv
+${CL_ROOT}/design/PE.sv
+${CL_ROOT}/design/top.sv
+
 
 -f ${HDK_COMMON_DIR}/verif/tb/filelists/tb.${SIMULATOR}.f
 

@@ -1,8 +1,6 @@
-# AWS EC2 FPGA Shell Errata 
+# AWS EC2 FPGA Shell Errata (04261818)
 
-## AWS Shell F1.X.1.4 (04261818)
-
-### Implementation Restrictions
+## Implementation Restrictions
 * PCIE AXI4 interfaces between Custom Logic(CL) and Shell(SH) have following restrictions:
   * All PCIe transactions must adhere to the PCIe Express base spec
   * 4Kbyte Address boundary for all transactions(PCIe restriction)
@@ -18,10 +16,12 @@
 
 * AFI must be re-loaded after an instance re-boot.
 
-### Unsupported Features
+## Unsupported Features (Planned for future releases)
 * FPGA to FPGA over serial ring links for F1.16xl and F1.4xl
 * Aurora and Reliable Aurora modules for the FPGA-to-FPGA 
 * Cadence Xcelium simulations tools
 
-### Known Bugs/Issues
+## Known Bugs/Issues
 * **sh_cl_ddr_is_ready[2:0]** outputs of sh_ddr.sv are not synchronized to clk_main_a0.  Developers should synchronize these signals to clk_main_a0.
+
+

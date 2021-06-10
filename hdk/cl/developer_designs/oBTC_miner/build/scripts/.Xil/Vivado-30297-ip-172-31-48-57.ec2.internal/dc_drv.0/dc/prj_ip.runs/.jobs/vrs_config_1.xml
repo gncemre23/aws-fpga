@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<Runs Version="1" Minor="0">
+	<Run Id="xsdbm_synth_1" LaunchDir="/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/build/scripts/.Xil/Vivado-30297-ip-172-31-48-57.ec2.internal/dc_drv.0/dc/prj_ip.runs/xsdbm_synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+	<Parameters>
+		<Parameter Name="runs.monitorLSFJobs" Val="true" Type="bool"/>
+		<Parameter Name="runs.enableClusterConf" Val="true" Type="bool"/>
+	</Parameters>
+</Runs>
+

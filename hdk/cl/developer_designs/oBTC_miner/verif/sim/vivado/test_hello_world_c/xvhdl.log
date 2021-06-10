@@ -1,0 +1,30 @@
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/sha3_pkg.vhd" into library xil_defaultlib
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_pkg.vhd" into library xil_defaultlib
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_bytepad.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'keccak_bytepad'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/countern.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'countern'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_cons.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'keccak_cons'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/sipo.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'sipo'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/sr_reg.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'sr_reg'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/regn.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'regn'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_fsm1.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'keccak_fsm1'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_fsm2.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'keccak_fsm2'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/piso.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'piso'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/sha3_fsm3.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'sha3_fsm3'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_control.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'keccak_control'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_round.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'keccak_round'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_datapath.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'keccak_datapath'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_top.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'keccak_top'

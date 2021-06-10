@@ -1,0 +1,15 @@
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/sha3_pkg.vhd" into library xil_defaultlib
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_pkg.vhd" into library xil_defaultlib
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_bytepad.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'keccak_bytepad'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/countern.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'countern'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_cons.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'keccak_cons'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_control.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'keccak_control'
+ERROR: [VRFC 10-2987] 'keccak_fsm1' is not compiled in library 'xil_defaultlib' [/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_control.vhd:77]
+ERROR: [VRFC 10-2987] 'keccak_fsm2' is not compiled in library 'xil_defaultlib' [/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_control.vhd:87]
+ERROR: [VRFC 10-2987] 'sha3_fsm3' is not compiled in library 'xil_defaultlib' [/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_control.vhd:95]
+ERROR: [VRFC 10-3782] unit 'struct' ignored due to previous errors [/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_control.vhd:53]
+INFO: [VRFC 10-3070] VHDL file '/home/centos/src/project_data/aws-fpga/hdk/cl/developer_designs/oBTC_miner/design/keccak_control.vhd' ignored due to errors

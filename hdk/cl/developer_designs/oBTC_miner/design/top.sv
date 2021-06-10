@@ -227,7 +227,7 @@ module top
   always_ff @( posedge clk_top )
   begin : pipe_stages
     
-    for (i = 0 ; i < BLK_CNT ; i ++ )
+    for (int i = 0 ; i < BLK_CNT ; i ++ )
     begin
       //pipe_stages for start_heavy_hash
       pipe_stage0_start_heavy_hash[i] <= start_heavy_hash;
@@ -389,7 +389,7 @@ module top
   always_comb
   begin : encoder
     mux_sel = 0;
-    for (i = 0; i < BLK_CNT; i++)
+    for (int i = 0; i < BLK_CNT; i++)
     begin
       if (pipe_stage4_result[i])
         mux_sel = i[5:0];
@@ -397,6 +397,7 @@ module top
   end
 
   assign hash_out = hash_blk_out[hash_sel_sync_reg2];
+  assign hash_we = hash_out_we[hash_sel_sync_reg2];
   
 
 
@@ -483,8 +484,8 @@ module top
             stop_blk <= 1'b0;
             start_heavy_hash <= 1'b1;
             state <= OPERATE;
-            block_header_re <= 1'b1;
-            target_re <= 1'b1;
+            //block_header_re <= 1'b1;
+            //target_re <= 1'b1;
           end
         end
         OPERATE:
