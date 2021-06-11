@@ -307,7 +307,7 @@ module top
 
 
 
-  assign stop_ack_reg[0] = 1'b0;
+  assign status_blk_reg[0] = 1'b0;
   assign result_reg[0] = 1'b0;
   assign stop_ack_reg[0] = 1'b1;
    
@@ -490,6 +490,7 @@ module top
         end
         OPERATE:
         begin
+          start_heavy_hash <= 1'b0;
           if(!block_header_empty)
             block_header_re <= 1'b1;
           else

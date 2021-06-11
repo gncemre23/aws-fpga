@@ -441,6 +441,8 @@ parameter  BLK_CNT = 4 ;
     end
 
 
+  always@(top_ins.hash_out)
+    $display("hash_out: %h",top_ins.hash_out);
 
 
 

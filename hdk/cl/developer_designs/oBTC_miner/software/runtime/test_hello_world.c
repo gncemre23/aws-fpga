@@ -187,7 +187,7 @@ int main(int argc, char **argv)
         "FPGA slot id 0 have the following Virtual LED:\n"
         "0000-0000-0000-0000\n");
 
-    work_t g_work;
+    work_t g_work0, g_work1;
     uint16_t matrix[64][64];
 
     FILE *fp;
@@ -206,7 +206,8 @@ int main(int argc, char **argv)
     printf("-------work--------\n");
     for (int i = 0; i < 20; i++)
     {
-        g_work.data[i] = work_word[i];
+        g_work0.data[i] = work_word[i];
+        g_work1.data[i] = work_word[i];
         printf("%08x\n", work_word[i]);
     }
     printf("\n");
@@ -220,7 +221,7 @@ int main(int argc, char **argv)
         }
     }
 
-    scanhash_heavyhash(&g_work, 10, &hashes_done, matrix);
+    scanhash_heavyhash(&g_work0, 10, &hashes_done, matrix);
     printf("=================Matrix============\n");
     for (size_t i = 0; i < 64; i++)
     {
@@ -232,7 +233,7 @@ int main(int argc, char **argv)
     }
     printf("===================================\n");
     printf("hashes_done = %d\n", hashes_done);
-    heavy_hash_fpga_init(&g_work, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0);
+    heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0);
 
     uint32_t status = 2, hash = 0;
     while (status == 2)
@@ -240,7 +241,10 @@ int main(int argc, char **argv)
         status = read_status(slot_id, FPGA_APP_PF, APP_PF_BAR0);
         printf("status = %d\n", status);
     }
-    while(status == 0);
+    while(status == 0)
+    {
+        status = read_status(slot_id, FPGA_APP_PF, APP_PF_BAR0);
+    }
     hash = read_heavyhash(slot_id, FPGA_APP_PF, APP_PF_BAR0);
     printf("Heavy_hash = %08x\n", hash);
     hash = read_heavyhash(slot_id, FPGA_APP_PF, APP_PF_BAR0);
