@@ -88,16 +88,19 @@ module heavy_hash_blk
   logic [255:0] zero_reg  = 256'd0;
   logic heavy_hash_all_empty;
   logic [31:0] nonce_end;
+  logic [31:0] nonce_end_1;
 
 
   assign stop_ack = stop_ack_comp & stop_ack_nonce;
 
   assign hash_out_we = hashout_fifo_re;
 
+  assign nonce_end_1 = nonce_end -1 ;
+
   always_comb begin : blockName
     if(result)
       status = 1;
-    else if(nonce < nonce_end)
+    else if(nonce < nonce_end_1)
       status = 2;
     else
       status = 0;

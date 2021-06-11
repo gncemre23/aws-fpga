@@ -103,6 +103,8 @@ uint32_t byte_swap(uint32_t value)
     return swapped_value;
 }
 
+uint32_t heavy_hash_fpga [8];
+
 #ifdef SV_TEST
 //For cadence and questa simulators the main has to return some value
 #ifdef INT_MAIN
@@ -245,16 +247,14 @@ int main(int argc, char **argv)
     {
         status = read_status(slot_id, FPGA_APP_PF, APP_PF_BAR0);
     }
-    hash = read_heavyhash(slot_id, FPGA_APP_PF, APP_PF_BAR0);
-    printf("Heavy_hash = %08x\n", hash);
-    hash = read_heavyhash(slot_id, FPGA_APP_PF, APP_PF_BAR0);
-    printf("Heavy_hash = %08x\n", hash);
-    hash = read_heavyhash(slot_id, FPGA_APP_PF, APP_PF_BAR0);
-    printf("Heavy_hash = %08x\n", hash);
-    hash = read_heavyhash(slot_id, FPGA_APP_PF, APP_PF_BAR0);
-    printf("Heavy_hash = %08x\n", hash);
-    hash = read_heavyhash(slot_id, FPGA_APP_PF, APP_PF_BAR0);
-    printf("Heavy_hash = %08x\n", hash);
+    // slave_write(heavy_hash_fpga);
+    // printf("heavy_hash_c:");
+    // for (size_t i = 0; i < 8; i++)
+    // {
+    //     printf("%08x",heavy_hash_fpga[i]);
+    // }
+    // printf("\n");
+    
 
 #ifndef SV_TEST
     return rc;

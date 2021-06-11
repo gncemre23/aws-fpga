@@ -20,6 +20,8 @@ module cl_hello_world
 
   );
 
+  // export "DPI-C" function slave_write;
+
 `include "cl_common_defines.vh"      // CL Defines for all examples
 `include "cl_id_defines.vh"          // Defines for ID0 and ID1 (PCI ID's)
 `include "cl_hello_world_defines.vh" // CL Defines for cl_hello_world
@@ -44,6 +46,19 @@ module cl_hello_world
 `include "unused_cl_sda_template.inc"
 `include "unused_sh_bar1_template.inc"
 `include "unused_apppf_irq_template.inc"
+
+
+// function void slave_write(int data[8]);
+//   data[0] = top_ins.hash_out[31:0];
+//   data[1] = top_ins.hash_out[63:32];
+//   data[2] = top_ins.hash_out[95:64];
+//   data[3] = top_ins.hash_out[127:96];
+//   data[4] = top_ins.hash_out[159:128];
+//   data[5] = top_ins.hash_out[191:160];
+//   data[6] = top_ins.hash_out[223:192];
+//   data[7] = top_ins.hash_out[255:224];
+//   $display("heavy_hash_sv:%h", top_ins.hash_out);
+// endfunction
 
 
 parameter  BLK_CNT = 4 ;
@@ -442,7 +457,9 @@ parameter  BLK_CNT = 4 ;
 
 
   always@(top_ins.hash_out)
+  begin
     $display("hash_out: %h",top_ins.hash_out);
+  end
 
 
 
