@@ -124,7 +124,7 @@ module nonce_gen
       CHECK_NONCE_END:
       begin
         if(nonce_end_reg < block_header_reg[31:0])
-          nonce_end_next = 0xFFFFFFFF;
+          nonce_end_next = 32'hFFFFFFFF;
           state_next = UPDATE_NONCE;
       end
 

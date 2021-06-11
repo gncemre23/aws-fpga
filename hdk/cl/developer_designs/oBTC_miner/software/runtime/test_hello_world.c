@@ -235,13 +235,13 @@ int main(int argc, char **argv)
     printf("hashes_done = %d\n", hashes_done);
     heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0);
 
-    uint32_t status = 2, hash = 0;
-    while (status == 2)
+    uint32_t status = 0, hash = 0;
+    while (status == 0)
     {
         status = read_status(slot_id, FPGA_APP_PF, APP_PF_BAR0);
         printf("status = %d\n", status);
     }
-    while(status == 0)
+    while(status == 2)
     {
         status = read_status(slot_id, FPGA_APP_PF, APP_PF_BAR0);
     }
@@ -373,7 +373,7 @@ void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, in
     }
     //send nonce size
     printf("debug2\n");
-    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG, 0x000FFFFF);
+    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG, 10);
     fail_on(rc, out, "Unable to write to the fpga !");
 
     printf("debug3\n");
