@@ -98,9 +98,9 @@ module heavy_hash_blk
     if(result)
       status = 1;
     else if(nonce < nonce_end)
-      status = 0;
-    else
       status = 2;
+    else
+      status = 0;
   end
 
   nonce_gen
