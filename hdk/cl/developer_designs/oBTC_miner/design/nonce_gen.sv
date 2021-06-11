@@ -44,7 +44,7 @@ module nonce_gen
   logic [639:0] block_header_reg_reg, block_header_reg_next;
   logic [4:0] cnt_reg, cnt_next;
 
-  typedef enum { INIT, READ_BLOCK_HEADER, UPDATE_NONCE, WRITE_HASHIN} state_type;
+  typedef enum { INIT, READ_BLOCK_HEADER, CHECK_NONCE_END, UPDATE_NONCE, WRITE_HASHIN} state_type;
   state_type state_reg, state_next;
 
   
@@ -117,12 +117,19 @@ module nonce_gen
           // $display("block_header_reg = %h",block_header_reg);
           nonce_end_next = block_header_reg[31:0] + nonce_size*NONCE_COEF;
           nonce_next = block_header_reg[31:0] + nonce_size*(NONCE_COEF-1);
-          state_next = UPDATE_NONCE;
+          state_next = CHECK_NONCE_END;
         end
       end
 
-      UPDATE_NONCE:
+      CHECK_NONCE_END:
       begin
+        if(nonce_end_reg < block_header_reg[31:0])
+          nonce_end_next = 0xFFFFFFFF;
+          state_next = UPDATE_NONCE;
+      end
+
+      UPDATE_NONCE:
+      begin      
         if(!stop)
           if(nonce_reg < nonce_end_reg)
           begin
