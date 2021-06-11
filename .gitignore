@@ -111,9 +111,9 @@ patches/*
 .temp
 
 .python-version
-hdk/cl/developer_designs/oBTC_miner/verif/sim/vivado/
+hdk/cl/developer_designs/oBTC_miner/verif/sim/vivado/*
 
-hdk/cl/developer_designs/oBTC_miner/build/checkpoints
-hdk/cl/developer_designs/oBTC_miner/build/reports
+hdk/cl/developer_designs/oBTC_miner/build/checkpoints/*
+hdk/cl/developer_designs/oBTC_miner/build/reports/*
 hdk/cl/developer_designs/oBTC_miner/software/runtime/*.o
 hdk/cl/developer_designs/oBTC_miner/software/runtime/test_hello_world

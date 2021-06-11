@@ -97,7 +97,6 @@ module nonce_gen
         block_header_reg_next = 640'd0;
         nonce_next = 32'd0;
         cnt_next = 5'd0;
-        nonce_end_next = 32'd0;
         if(start)
         begin
           state_next = READ_BLOCK_HEADER;
