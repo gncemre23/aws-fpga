@@ -61,7 +61,7 @@ module cl_hello_world
 // endfunction
 
 
-parameter  BLK_CNT = 4 ;
+parameter  BLK_CNT = 8 ;
   //-------------------------------------------------
   // Wires
   //-------------------------------------------------
@@ -215,6 +215,44 @@ parameter  BLK_CNT = 4 ;
       rst_oBTC_sync <= pre_sync_rst;
     end
 
+  logic dummy_reg_a1;
+  logic dummy_reg_a2;
+  logic dummy_reg_b0;
+  logic dummy_reg_b1;
+  logic dummy_reg_c0;
+  logic dummy_reg_c1;
+  //This registers are added to work around for the error given below
+  //ERROR: [Place 30-838] The following clock nets need to use the same 
+  //clock routing resource, as their clock buffer sources are locked to 
+  //sites that use the same routing track. One or more loads of these 
+  //clocks are locked to clock region(s) X2Y11 X2Y12 which causes the 
+  //clock partitions for these clocks to overlap. This creates 
+  //unresolvable contention on the clock routing resources. 
+  //If the clock buffers need to be locked, we recommend users constrain 
+  //them to a clock region and not to specific BUFGCE/BUFG_GT sites so 
+  //they can use different routing resources. If clock sources should be 
+  //locked to specific BUFGCE/BUFG_GT sites that share the same routing resources, 
+  //make sure loads of such clocks are not constrained to the same region(s). Clock nets sharing routing resources:
+  //ERROR:[Place 30-678] Failed to do clock region partitioning: failed to resolve clock partition contention for locked clock sources.
+
+  always_ff @(posedge clk_extra_a1)
+    dummy_reg_a1 <= 1'b0;
+
+  always_ff @(posedge clk_extra_a2)
+    dummy_reg_a2 <= 1'b0;
+  
+  always_ff @(posedge clk_extra_b0)
+    dummy_reg_b0 <= 1'b0;
+
+  always_ff @(posedge clk_extra_b1)
+    dummy_reg_b1 <= 1'b0;
+  
+  always_ff @(posedge clk_extra_c0)
+    dummy_reg_c0 <= 1'b0;
+
+  always_ff @(posedge clk_extra_c1)
+    dummy_reg_c1 <= 1'b0;
+
 
   //oBTC_miner instance
   top
@@ -223,9 +261,9 @@ parameter  BLK_CNT = 4 ;
       .BLK_CNT ( BLK_CNT )
     )
     top_ins (
-      .clk_axi (clk_main_a0 ), //125MHz
-      .clk_top (clk_extra_a3 ), //250MHz
-      .rst (rst_oBTC_sync ),
+      .clk_axi (clk_main_a0 ), //250MHz A1
+      .clk_top (clk_main_a0 ), //250MHz
+      .rst (!rst_main_n_sync),//rst_oBTC_sync ),
       .block_header_we (block_header_we ),
       .matrix_fifo_we (matrix_fifo_we ),
       .target_we (target_we ),

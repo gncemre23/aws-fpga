@@ -6,9 +6,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-
 #define EPS 1e-9
-
 
 static inline uint64_t le64dec(const void *pp)
 {
@@ -119,31 +117,30 @@ void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, 
 
     uint16_t vector[64];
     uint16_t product[64];
-    uint32_t nonce = *((uint32_t *) pdata + 19);
+    uint32_t nonce = *((uint32_t *)pdata + 19);
     sha3_256((uint8_t *)hash_first, 32, pdata, pdata_len);
 
-    
-//     if((nonce %1) == 0)
-//     {
-// 	    printf("nonce:%08x\n",nonce);
-// 	    printf("=== hash input %d ===\n",pdata_len);
-// 	    for (int i = 0; i < 80; i++)
-// 	    {
-// 		printf("%02x", *((uint8_t *)pdata + i));
-// 	    }
-// 	    printf("\n");
-	    
-// 	    /*===== Added by egoncu to see block header ======*/
-// 	    printf("=== First hash ===\n");
-// 	    for (int i = 0; i < 32; i++)
-// 	    {
-// 		printf("%02x",hash_first[i]);
-// 	    }
-// 	    printf("\n");
-// 	    printf("==================\n");
+    //     if((nonce %1) == 0)
+    //     {
+    // 	    printf("nonce:%08x\n",nonce);
+    // 	    printf("=== hash input %d ===\n",pdata_len);
+    // 	    for (int i = 0; i < 80; i++)
+    // 	    {
+    // 		printf("%02x", *((uint8_t *)pdata + i));
+    // 	    }
+    // 	    printf("\n");
 
-//     }
-//    /*=================================================*/
+    // 	    /*===== Added by egoncu to see block header ======*/
+    // 	    printf("=== First hash ===\n");
+    // 	    for (int i = 0; i < 32; i++)
+    // 	    {
+    // 		printf("%02x",hash_first[i]);
+    // 	    }
+    // 	    printf("\n");
+    // 	    printf("==================\n");
+
+    //     }
+    //    /*=================================================*/
 
     for (int i = 0; i < 32; ++i)
     {
@@ -157,7 +154,6 @@ void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, 
         for (int j = 0; j < 64; ++j)
         {
             sum += matrix[i][j] * vector[j];
-    
         }
         //printf("sum[%d]=%04x\n",i,sum);
         product[i] = (sum >> 10);
@@ -167,7 +163,7 @@ void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, 
     {
         hash_second[i] = (product[2 * i] << 4) | (product[2 * i + 1]);
     }
-    
+
     //printf("=== Hash XORed ===\n");
     for (int i = 0; i < 32; ++i)
     {
@@ -178,19 +174,18 @@ void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, 
     sha3_256(output, 32, hash_xored, 32);
     // if((nonce % 1) == 0)
     // {
-	//     printf("=== First heavyhash ===\n");
-	//     for (int i = 0; i < 32; i++)
-	//     {
-	// 	printf("%02x",*(output+i));
-	//     }
-	//     printf("\n");
-    // }
+    printf("=== First heavyhash ===\n");
+    for (int i = 0; i < 32; i++)
+    {
+        printf("%02x", *(output + i));
+    }
+    printf("\n");
 }
 
-int scanhash_heavyhash(work_t *work, uint32_t max_nonce, uint64_t *hashes_done, uint16_t matrix[64][64])//struct thr_info *mythr)
+int scanhash_heavyhash(work_t *work, uint32_t max_nonce, uint64_t *hashes_done, uint16_t matrix[64][64]) //struct thr_info *mythr)
 {
-    uint32_t edata[20] ;
-    uint32_t hash[8] ;
+    uint32_t edata[20];
+    uint32_t hash[8];
     uint32_t seed[8];
 
     uint32_t *pdata = work->data;
@@ -200,8 +195,8 @@ int scanhash_heavyhash(work_t *work, uint32_t max_nonce, uint64_t *hashes_done, 
     uint32_t n = first_nonce;
     //const int thr_id = mythr->id;
     //const bool bench = opt_benchmark;
-    printf("last_nonce = %d\n",last_nonce);
-    printf("first_nonce = %d\n",first_nonce);
+    printf("last_nonce = %d\n", last_nonce);
+    printf("first_nonce = %d\n", first_nonce);
     //uint_fast16_t matrix[64][64] __attribute__((aligned(64)));
     struct xoshiro_state state;
 
@@ -232,21 +227,20 @@ int scanhash_heavyhash(work_t *work, uint32_t max_nonce, uint64_t *hashes_done, 
         //    	 }
         //     printf("\n");
         //     }
-            
-            
+
         //     printf("=== Header Block(edata ====\n");
         //     for (int i = 0; i < 20; i++)
         //     {
         //         printf("%08x\n", *((uint32_t *)edata+i));
         //     }
         //     printf("\n");
-       
+
         //     printf("=== Header Block(pdata ====\n");
         //     for (int i = 0; i < 20; i++)
         //     {
         //         printf("%08x\n", *((uint32_t *)pdata+i));
         //     }
-        
+
         //     printf("\n");
         //     printf("=== Target ====\n");
         //     for (int i = 0; i < 8; i++)
