@@ -65,7 +65,8 @@ module comparator
     begin
       case (state)
         DRAIN_FIFOS:
-        begin         
+        begin   
+          result <= 1'b0;      
           if(!heavy_hash_all_empty)begin
             hashout_fifo_re <= 1'b1;
             stop_ack_comp <= 1'b0;
