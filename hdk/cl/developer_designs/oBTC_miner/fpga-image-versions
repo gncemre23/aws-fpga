@@ -9,3 +9,16 @@ FPGAmageId": "afi-0ef33a17254f20d34",
     "FpgaImageGlobalId": "agfi-0b29f06da056790a4"
 }
 
+--v6 axi top clk 125Mhz 8blk (debug ports)
+{
+    "FpgaImageId": "afi-05576e2cf6f94565e",
+    "FpgaImageGlobalId": "agfi-03b06e494c94aa589"
+}
+
+--v7 axi top clk 125Mhz 8blk (debug ports)
+{
+"FpgaImageId": "afi-05df620d36041726d",
+"FpgaImageGlobalId": "agfi-02ab65edc60c9f1b8"
+Notes:
+Fixed some bugs.
+}
