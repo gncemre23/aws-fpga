@@ -1,6 +1,7 @@
 //! Taking the block header from block header fifo,
 //! generating the block header just changing the nonce
 `timescale  1ns / 1ps
+`define DBG_
 module nonce_gen
   #(
      parameter NONCE_COEF = 1
@@ -32,6 +33,12 @@ module nonce_gen
      output logic nonce_fifo_we,
      //!signal stating ready to recieve start signal
      output logic stop_ack_nonce,
+
+     //!debug ports if debug is defined
+     `ifdef DBG_
+     output logic state_nonce_dbg,
+     `endif
+
      //!nonce end
      output logic [31:0] nonce_end
    );
@@ -89,6 +96,7 @@ module nonce_gen
     nonce_fifo_we = 1'b0;
     nonce_fifo_din = 32'd0;
     stop_ack_next = stop_ack_reg;
+    state_next = state_reg;
     case (state_reg)
       INIT:
       begin
@@ -181,6 +189,11 @@ module nonce_gen
 
     endcase
   end
+
+  //debug assingments
+  `ifdef DBG_
+  assign state_nonce_dbg = state_reg;
+  `endif
 
 
 

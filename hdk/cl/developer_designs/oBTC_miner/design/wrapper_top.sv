@@ -198,6 +198,27 @@ parameter  BLK_CNT = 8 ;
   logic hash_re; 
   logic [$clog2(BLK_CNT)-1:0] hash_select;
 
+
+  `ifdef DBG_
+  logic [255:0] hash_out_dbg;
+  logic hash_out_we_dbg;
+  logic stop_ack_dbg;
+  logic [2:0] state_nonce_dbg;
+  logic [2:0] state_comparator_dbg;
+  logic hashin_fifo_in_we;
+  logic [63:0] hashin_fifo_in_din;
+  logic sha3in_dst_write_dbg;
+  logic [63:0] sha3in_dout_dbg;
+  logic sha3out_dst_write_dbg;
+  logic [63:0] sha3out_dout_dbg;
+  logic [1:0] state_top_dbg;
+  logic start_dbg;
+  logic stop_dbg;
+  logic [255:0] target_dbg;
+  logic [31:0] nonce_end_dbg;
+  `endif
+
+
   //-------------------------------------------------
   // Reset Synchronization for oBTC
   //------------------------- ------------------------
@@ -277,8 +298,29 @@ parameter  BLK_CNT = 8 ;
       .status  ( status),
       .heavyhash (heavyhash),
       .hash_re (hash_re),
+
+      `ifdef DBG_
+      .hash_out_dbg (hash_out_dbg ),
+      .hash_out_we_dbg (hash_out_we_dbg ),
+      .stop_ack_dbg (stop_ack_dbg ),
+      .state_nonce_dbg (state_nonce_dbg ),
+      .state_comparator_dbg (state_comparator_dbg ),
+      .hashin_fifo_in_we (hashin_fifo_in_we ),
+      .hashin_fifo_in_din (hashin_fifo_in_din ),
+      .sha3in_dst_write_dbg (sha3in_dst_write_dbg ),
+      .sha3in_dout_dbg (sha3in_dout_dbg ),
+      .sha3out_dst_write_dbg (sha3out_dst_write_dbg ),
+      .sha3out_dout_dbg (sha3out_dout_dbg ),
+      .state_top_dbg(state_top_dbg),
+      .start_dbg(start_dbg),
+      .stop_dbg(stop_dbg),
+      .target_dbg(target_dbg),
+      .nonce_end_dbg(nonce_end_dbg),
+      `endif
+
       .hash_select (hash_select)
     );
+
 
   
 
@@ -494,10 +536,10 @@ parameter  BLK_CNT = 8 ;
     end
 
 
-  always@(top_ins.hash_out)
-  begin
-    $display("hash_out: %h",top_ins.hash_out);
-  end
+  // always@(top_ins.hash_out)
+  // begin
+  //   $display("hash_out: %h",top_ins.hash_out);
+  // end
 
 
 
@@ -580,6 +622,45 @@ parameter  BLK_CNT = 8 ;
           .probe4 ({32'b0,ocl_sh_rdata_q[31:0]}),
           .probe5 (sh_ocl_rready_q)
         );
+  
+  
+  `ifdef DBG_
+  ila_0 CL_ILA_2 (
+          .clk    (clk_main_a0),
+          .probe0 (hash_out_we_dbg),
+          .probe1 (hash_out_dbg[63:0]),
+          .probe2 (hashin_fifo_in_we),
+          .probe3 (state_top_dbg[0]),
+          .probe4 (hashin_fifo_in_din),
+          .probe5 (state_top_dbg[1])
+  );
+
+  ila_0 CL_ILA_3 (
+          .clk    (clk_main_a0),
+          .probe0 (sha3in_dst_write_dbg),
+          .probe1 (sha3in_dout_dbg),
+          .probe2 (sha3out_dst_write_dbg),
+          .probe3 (start_dbg),
+          .probe4 (sha3out_dout_dbg),
+          .probe5 (stop_dbg)
+  );
+
+  ila_0 CL_ILA_4 (
+          .clk    (clk_main_a0),
+          .probe0 (status[0]),
+          .probe1 ({61'd0,state_nonce_dbg}),
+          .probe2 (status[1]),
+          .probe3 (stop_ack_dbg),
+          .probe4 ({32'd0,nonce_end_dbg}),
+          .probe5 (start_dbg)
+  );
+  ila_0 CL_ILA_5 (
+          .clk    (clk_main_a0),
+          .probe0 (start_dbg),
+          .probe1 (target_dbg[63:0]),
+          .probe4 ({61'd0,state_comparator_dbg})
+  );
+  `endif
 
   // Debug Bridge
   cl_debug_bridge CL_DEBUG_BRIDGE (

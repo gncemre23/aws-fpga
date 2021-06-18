@@ -3,6 +3,7 @@
 //! if the hash output is less than the target value, golden nonce is obtained.
 
 `timescale  1ns / 1ps
+`define DBG_
 module comparator
   (
     //!global clk
@@ -24,6 +25,11 @@ module comparator
     output logic hashout_fifo_re,
     input logic [255:0] hash_out,
     input logic hash_out_empty,
+
+    `ifdef DBG_
+    output logic [2:0] state_comparator_dbg,
+    output logic [255:0] target_dbg,
+    `endif
 
     //! result stating if the output of heavy hash is less than the target
     //! 1 : less than target (objective)
@@ -109,7 +115,11 @@ module comparator
               end
               else if(!hash_out_empty)
                 hashout_fifo_re <= 1'b1;
+              else
+                hashout_fifo_re <= 1'b0;
             end
+            else
+              hashout_fifo_re <= 1'b0;
           end
           else
             state <= DRAIN_FIFOS;
@@ -133,6 +143,8 @@ module comparator
               hashout_fifo_re <= 1'b1;
               state <= COMPARE_0;
             end
+            else
+              hashout_fifo_re <= 1'b0;
           end
           else
             state <= DRAIN_FIFOS;
@@ -156,6 +168,8 @@ module comparator
               hashout_fifo_re <= 1'b1;
               state <= COMPARE_0;
             end
+            else
+              hashout_fifo_re <= 1'b0;
           end
           else
             state <= DRAIN_FIFOS;
@@ -174,6 +188,8 @@ module comparator
               hashout_fifo_re <= 1'b1;
               state <= COMPARE_0;
             end
+            else
+              hashout_fifo_re <= 1'b0;
           end
           else
             state <= DRAIN_FIFOS;
@@ -193,5 +209,10 @@ module comparator
 
   end
 
+
+`ifdef DBG_
+assign state_compator_dbg = state;
+assign target_dbg = target_reg;
+`endif
 
 endmodule

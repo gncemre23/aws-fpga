@@ -32,6 +32,7 @@
 //!                              └────────┘                 └────────────────┘
 
 `timescale  1ns / 1ps
+`define DBG_
 module heavy_hash #(parameter WCOUNT = 4 )
   (
     //!global clk
@@ -73,6 +74,17 @@ module heavy_hash #(parameter WCOUNT = 4 )
     input logic nonce_fifo_we,
     //!nonce output
     output logic [31:0] nonce,
+
+    //Debug ports if debug is defined
+    `ifdef DBG_
+    /*internal signal definitions for sha3in*/
+    output logic sha3in_dst_write,
+    output logic [63 : 0] sha3in_dout,
+
+    /*internal signal definitions for sha3out*/
+    output logic sha3out_dst_write,
+    output logic [63 : 0] sha3out_dout,
+    `endif
     //! or operation of the empty signals of all fifos
     output logic heavy_hash_all_empty
   );
@@ -97,12 +109,15 @@ module heavy_hash #(parameter WCOUNT = 4 )
   /*internal signal definitions for hashin_fifo_out*/
   //!data in of hashin_fifo_out
   logic [255 : 0] hashin_fifo_out_din;
+
   //!data out of hashin_fifo_out
   logic [WCOUNT*4 - 1 : 0] hashin_fifo_out_dout;
-  //!read enable of hashin_fifo_out
-  logic hashin_fifo_out_re;
   //!write enable of hashin_fifo_out
   logic hashin_fifo_out_we;
+
+  //!read enable of hashin_fifo_out
+  logic hashin_fifo_out_re;
+  
   //!empty flag of hashin_fifo_out
   logic hashin_fifo_out_empty;
   //!full flag of hashin_fifo_out
@@ -130,6 +145,7 @@ module heavy_hash #(parameter WCOUNT = 4 )
   //!full flag of hashout_fifo_out
   logic hashout_fifo_out_full;
 
+  `ifndef DBG_
   /*internal signal definitions for sha3in*/
   logic sha3in_dst_write;
   logic [63 : 0] sha3in_dout;
@@ -137,6 +153,7 @@ module heavy_hash #(parameter WCOUNT = 4 )
   /*internal signal definitions for sha3out*/
   logic sha3out_dst_write;
   logic [63 : 0] sha3out_dout;
+  `endif
 
 
 

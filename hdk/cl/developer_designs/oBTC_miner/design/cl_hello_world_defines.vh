@@ -34,6 +34,8 @@
 `define START_REG_ADDR          32'h0000_0524
 `define STOP_REG_ADDR           32'h0000_0528
 `define HEAVYHASH_SEL_REG_ADDR  32'h0000_052C
+//for ila debugs
+`define DBG_
 
 // Uncomment to disable Virtual JTAG
 //`define DISABLE_VJTAG_DEBUG

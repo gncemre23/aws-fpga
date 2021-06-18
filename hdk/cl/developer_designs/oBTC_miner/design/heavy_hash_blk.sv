@@ -20,6 +20,7 @@
 /*                                     nonce               result        */
 /* ================== Heavy hash block ================================= */
 `timescale  1ns / 1ps
+`define DBG_
 module heavy_hash_blk
   #(
      parameter NONCE_COEF = 1,
@@ -67,14 +68,33 @@ module heavy_hash_blk
      output logic [1:0] status,
 
      output logic [255:0] hash_out,
+
+     //debug ports if debug is defined
+     `ifdef DBG_
+     output logic [2:0] state_nonce_dbg,
+     output logic [2:0] state_comparator_dbg,
+     output logic [255:0] target_dbg,
+     output logic hashin_fifo_in_we,
+     output logic [63:0] hashin_fifo_in_din,
+     output logic sha3in_dst_write_dbg,
+     output logic [63:0] sha3in_dout_dbg,
+     output logic sha3out_dst_write_dbg,
+     output logic [63:0] sha3out_dout_dbg,
+     output logic [31:0] nonce_end,
+     `endif
+
+
      output logic hash_out_we
 
    );
 
 
   //internal signals
+  `ifndef DBG_
   logic hashin_fifo_in_we;
   logic [63:0] hashin_fifo_in_din;
+  logic [31:0] nonce_end;
+  `endif
   logic hashin_fifo_in_full;
   logic matrix_fifo_in_full;
   logic hashout_fifo_re;
@@ -87,7 +107,6 @@ module heavy_hash_blk
   logic [31:0] nonce_fifo_din;
   logic [255:0] zero_reg  = 256'd0;
   logic heavy_hash_all_empty;
-  logic [31:0] nonce_end;
   logic [31:0] nonce_end_1;
 
 
@@ -124,6 +143,9 @@ module heavy_hash_blk
       .nonce_fifo_din (nonce_fifo_din ),
       .nonce_fifo_we (nonce_fifo_we ),
       .stop_ack_nonce  ( stop_ack_nonce),
+      `ifdef DBG_
+      .state_nonce_dbg(state_nonce_dbg),
+      `endif
       .nonce_end(nonce_end)
     );
 
@@ -149,6 +171,12 @@ module heavy_hash_blk
       .nonce_fifo_din(nonce_fifo_din),
       .nonce_fifo_we(nonce_fifo_we),
       .nonce_fifo_full(nonce_fifo_full),
+      `ifdef DBG_
+      .sha3in_dst_write(sha3in_dst_write_dbg),
+      .sha3in_dout(sha3in_dout_dbg),
+      .sha3out_dst_write(sha3out_dst_write_dbg),
+      .sha3out_dout(sha3out_dout_dbg),
+      `endif
       .nonce(nonce),
       .heavy_hash_all_empty(heavy_hash_all_empty)
     );
@@ -165,6 +193,10 @@ module heavy_hash_blk
       .hashout_fifo_re (hashout_fifo_re ),
       .hash_out (hash_out ),
       .hash_out_empty (hash_out_empty ),
+      `ifdef DBG_
+      .state_comparator_dbg(state_comparator_dbg),
+      .target_dbg(target_dbg),
+      `endif
       .result  ( result)
     );
 
