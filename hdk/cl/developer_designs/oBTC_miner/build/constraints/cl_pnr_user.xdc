@@ -26,7 +26,7 @@ add_cells_to_pblock [get_pblocks pblock_SLR0] [get_cells -quiet -hierarchical -f
 add_cells_to_pblock [get_pblocks pblock_SLR0] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/top_ins/genblk1[5].heavy_hash_blk_dut}]
 add_cells_to_pblock [get_pblocks pblock_SLR0] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/top_ins/genblk1[6].heavy_hash_blk_dut}]
 add_cells_to_pblock [get_pblocks pblock_SLR0] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/top_ins/genblk1[7].heavy_hash_blk_dut}]
-resize_pblock [get_pblocks pblock_SLR0] -add {CLOCKREGION_X0Y0:CLOCKREGION_X5Y4}
+resize_pblock [get_pblocks pblock_SLR0] -add {CLOCKREGION_X0Y0:CLOCKREGION_X3Y4}
 set_property PARENT pblock_CL [get_pblocks pblock_SLR0]
 
 # create_pblock pblock_SLR1
