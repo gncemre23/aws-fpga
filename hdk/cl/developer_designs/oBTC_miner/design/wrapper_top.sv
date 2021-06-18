@@ -48,19 +48,6 @@ module cl_hello_world
 `include "unused_apppf_irq_template.inc"
 
 
-// function void slave_write(int data[8]);
-//   data[0] = top_ins.hash_out[31:0];
-//   data[1] = top_ins.hash_out[63:32];
-//   data[2] = top_ins.hash_out[95:64];
-//   data[3] = top_ins.hash_out[127:96];
-//   data[4] = top_ins.hash_out[159:128];
-//   data[5] = top_ins.hash_out[191:160];
-//   data[6] = top_ins.hash_out[223:192];
-//   data[7] = top_ins.hash_out[255:224];
-//   $display("heavy_hash_sv:%h", top_ins.hash_out);
-// endfunction
-
-
 parameter  BLK_CNT = 8 ;
   //-------------------------------------------------
   // Wires
@@ -297,7 +284,6 @@ parameter  BLK_CNT = 8 ;
       .nonce (nonce ),
       .status  ( status),
       .heavyhash (heavyhash),
-      .hash_re (hash_re),
 
       `ifdef DBG_
       .hash_out_dbg (hash_out_dbg ),
@@ -318,7 +304,7 @@ parameter  BLK_CNT = 8 ;
       .nonce_end_dbg(nonce_end_dbg),
       `endif
 
-      .hash_select (hash_select)
+      .hash_re (hash_re)  
     );
 
 
