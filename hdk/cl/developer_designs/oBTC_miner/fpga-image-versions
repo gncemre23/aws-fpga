@@ -22,3 +22,11 @@ FPGAmageId": "afi-0ef33a17254f20d34",
 Notes:
 Fixed some bugs.
 }
+
+--v8 axi top clk 125Mhz 8blk (debug ports)
+{
+    "FpgaImageId": "afi-0b3b8c6e08c1fb6fb",
+    "FpgaImageGlobalId": "agfi-058f2ca655e24e376"
+    Notes: 
+    <heavy hash out is generated with result is 1
+}
