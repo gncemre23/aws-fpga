@@ -1,6 +1,7 @@
 
 `timescale  1ns / 1ps
 `define DBG_
+`define SIM_
 module top
   #(
      parameter WCOUNT = 4,
@@ -371,7 +372,7 @@ module top
 
 
       //pipe_stages for hash_out
-      pipe_stage0_hash_out[i] <= hash_out[i];
+      pipe_stage0_hash_out[i] <= hash_blk_out[i];
       pipe_stage1_hash_out[i] <= pipe_stage0_hash_out[i];
       pipe_stage2_hash_out[i] <= pipe_stage1_hash_out[i];
       pipe_stage3_hash_out[i] <= pipe_stage2_hash_out[i];
@@ -496,10 +497,14 @@ module top
     end
   end
 
-  assign hash_out = pipe_stage4_hash_out[mux_select];
-  assign hash_we = pipe_stage4_result[mux_select];
+  assign hash_out = pipe_stage4_hash_out[mux_sel];
+  assign hash_we = result_sync_reg0 & !stop_blk;
   
-
+  `ifdef SIM_
+  always_comb
+    if(hash_we)
+      $display("hash_out = %h",hash_out);
+  `endif
 
   always_ff @( posedge clk_axi )
   begin : clk_domain_axi
@@ -527,7 +532,10 @@ module top
   always_ff @( posedge clk_top )
   begin : clk_domain_top
     if(result_sync_reg0)
+    begin
       nonce <= pipe_stage4_nonce[mux_sel];//nonce_reg0 <= pipe_stage4_nonce[mux_sel];
+      $display("Golde nonce = %h ", pipe_stage4_nonce[mux_sel]);
+    end  
 
     status_sync_reg0 <= status_reg;
     hash_out_sync_reg0 <= hash_fifo_out;
@@ -615,8 +623,11 @@ module top
           else
             target_re <= 1'b0;
 
-          if(stop_reg2)
+          if(stop | result_sync_reg0)
+          begin
             state <= INIT;
+            stop_blk <= 1'b1;
+          end
         end
       endcase
     end

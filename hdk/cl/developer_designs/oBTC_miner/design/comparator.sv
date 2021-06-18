@@ -37,8 +37,8 @@ module comparator
     output logic result
   );
 
-  logic [3:0] cnt;
-  logic [255:0] target_reg;
+  logic [3:0] cnt_next, cnt_reg;
+  logic [255:0] target_reg, target_next;
   typedef enum { DRAIN_FIFOS,
                  READ_TARGET,
                  COMPARE_0,
@@ -46,173 +46,174 @@ module comparator
                  COMPARE_2,
                  COMPARE_3
                } state_type;
-  state_type state;
+  state_type state_next, state_reg;
 
-  //TODO: seperate comb and seq
-  always_ff @( posedge clk )
-  begin : comp_fsm
+  always_ff @(posedge clk)
+  begin
     if(rst)
     begin
-      hashout_fifo_re <= 1'b0;
-      cnt <= 4'd0;
+      state_reg <= DRAIN_FIFOS;
+      cnt_reg <= 4'd0;
       target_reg <= 256'd0;
-      stop_ack_comp <= 1'b1;
-      result <= 1'b0;
-      state <= DRAIN_FIFOS;
     end
-
     else
     begin
-      case (state)
-        DRAIN_FIFOS:
-        begin   
-          result <= 1'b0;      
-          if(!heavy_hash_all_empty)begin
-            hashout_fifo_re <= 1'b1;
-            stop_ack_comp <= 1'b0;
-          end
-          else
-          begin
-            stop_ack_comp <= 1'b1;
-            hashout_fifo_re <= 1'b0;
-            if(start)
-            begin
-              state <= READ_TARGET;
-            end
-          end
-        end
-        READ_TARGET:
-        begin
-          if(!stop)
-          begin
-            stop_ack_comp <= 1'b0;
-            if(cnt < 8)
-            begin
-              target_reg <= {target,target_reg[255:32]};
-              cnt <= cnt + 4'd1;
-            end
-            else if(!hash_out_empty)
-              state <= COMPARE_0;
-          end
-          else
-            state <= DRAIN_FIFOS;
-        end
-        COMPARE_0:
-        begin
-          if(!stop)
-          begin
-            if(!hash_out_empty)
-            begin
-              if(target_reg[255:192] > hash_out[255:192])
-              begin
-                hashout_fifo_re <= 1'b0;
-                result <= 1'b1;
-                state <= DRAIN_FIFOS;
-              end
-              else if(target_reg[255:192] == hash_out[255:192])
-              begin
-                hashout_fifo_re <= 1'b0;
-                state <= COMPARE_1;
-              end
-              else if(!hash_out_empty)
-                hashout_fifo_re <= 1'b1;
-              else
-                hashout_fifo_re <= 1'b0;
-            end
-            else
-              hashout_fifo_re <= 1'b0;
-          end
-          else
-            state <= DRAIN_FIFOS;
-        end
-        COMPARE_1:
-        begin
-          if(!stop)
-          begin
-            if(target_reg[191:128] > hash_out[191:128])
-            begin
-              result <= 1'b1;
-              state <= DRAIN_FIFOS;
-            end
-            else if(target_reg[191:128] == hash_out[191:128])
-            begin
-              hashout_fifo_re <= 1'b0;
-              state <= COMPARE_2;
-            end
-            else if(!hash_out_empty)
-            begin
-              hashout_fifo_re <= 1'b1;
-              state <= COMPARE_0;
-            end
-            else
-              hashout_fifo_re <= 1'b0;
-          end
-          else
-            state <= DRAIN_FIFOS;
-        end
-        COMPARE_2:
-        begin
-          if(!stop)
-          begin
-            if(target_reg[127:64] > hash_out[127:64])
-            begin
-              result <= 1'b1;
-              state <= DRAIN_FIFOS;
-            end
-            else if(target_reg[127:64] == hash_out[127:64])
-            begin
-              hashout_fifo_re <= 1'b0;
-              state <= COMPARE_3;
-            end
-            else if(!hash_out_empty)
-            begin
-              hashout_fifo_re <= 1'b1;
-              state <= COMPARE_0;
-            end
-            else
-              hashout_fifo_re <= 1'b0;
-          end
-          else
-            state <= DRAIN_FIFOS;
-        end
-        COMPARE_3:
-        begin
-          if(!stop)
-          begin
-            if(target_reg[63:0] > hash_out[63:0])
-            begin
-              result <= 1'b1;
-              state <= DRAIN_FIFOS;
-            end
-            else if(!hash_out_empty)
-            begin
-              hashout_fifo_re <= 1'b1;
-              state <= COMPARE_0;
-            end
-            else
-              hashout_fifo_re <= 1'b0;
-          end
-          else
-            state <= DRAIN_FIFOS;
-        end
-        default:
-        begin
-          hashout_fifo_re <= 1'b0;
-          cnt <= 4'd0;
-          target_reg <= 256'd0;
-          stop_ack_comp <= 1'b1;
-          result <= 1'b0;
-          state <= DRAIN_FIFOS;
-        end
-
-      endcase
+      state_reg <= state_next;
+      cnt_reg <= cnt_next;
+      target_reg <= target_next;
     end
+  end
+
+
+  always_comb
+  begin
+  //default assingments
+  hashout_fifo_re = 1'b0;
+  cnt_next = cnt_reg;
+  target_next = target_reg;
+  stop_ack_comp = 1'b0;
+  result = 1'b0;
+  state_next = state_reg; 
+  case (state_reg)
+    DRAIN_FIFOS:
+    begin   
+      result = 1'b0;      
+      if(!heavy_hash_all_empty)begin
+        hashout_fifo_re = 1'b1;
+        stop_ack_comp = 1'b0;
+      end
+      else
+      begin
+        stop_ack_comp = 1'b1;
+        hashout_fifo_re = 1'b0;
+        if(start)
+        begin
+          state_next = READ_TARGET;
+        end
+      end
+    end
+    READ_TARGET:
+    begin
+      if(!stop)
+      begin
+        stop_ack_comp = 1'b0;
+        if(cnt_reg < 8)
+        begin
+          target_next = {target,target_reg[255:32]};
+          cnt_next = cnt_reg + 4'd1;
+        end
+        else if(!hash_out_empty)
+          state_next = COMPARE_0;
+      end
+      else
+        state_next = DRAIN_FIFOS;
+    end
+    COMPARE_0:
+    begin
+      if(!stop)
+      begin
+        if(!hash_out_empty)
+        begin
+          if(target_reg[255:192] > hash_out[255:192])
+          begin
+            hashout_fifo_re = 1'b0;
+            result = 1'b1;
+            state_next = DRAIN_FIFOS;
+          end
+          else if(target_reg[255:192] == hash_out[255:192])
+          begin
+            hashout_fifo_re = 1'b0;
+            state_next = COMPARE_1;
+          end
+          else if(!hash_out_empty)
+            hashout_fifo_re = 1'b1;
+          else
+            hashout_fifo_re = 1'b0;
+        end
+        else
+          hashout_fifo_re = 1'b0;
+      end
+      else
+        state_next = DRAIN_FIFOS;
+    end
+    COMPARE_1:
+    begin
+      if(!stop)
+      begin
+        if(target_reg[191:128] > hash_out[191:128])
+        begin
+          result = 1'b1;
+          state_next = DRAIN_FIFOS;
+        end
+        else if(target_reg[191:128] == hash_out[191:128])
+        begin
+          hashout_fifo_re = 1'b0;
+          state_next = COMPARE_2;
+        end
+        else if(!hash_out_empty)
+        begin
+          hashout_fifo_re = 1'b1;
+          state_next = COMPARE_0;
+        end
+        else
+          hashout_fifo_re = 1'b0;
+      end
+      else
+        state_next = DRAIN_FIFOS;
+    end
+    COMPARE_2:
+    begin
+      if(!stop)
+      begin
+        if(target_reg[127:64] > hash_out[127:64])
+        begin
+          result = 1'b1;
+          state_next = DRAIN_FIFOS;
+        end
+        else if(target_reg[127:64] == hash_out[127:64])
+        begin
+          hashout_fifo_re = 1'b0;
+          state_next = COMPARE_3;
+        end
+        else if(!hash_out_empty)
+        begin
+          hashout_fifo_re = 1'b1;
+          state_next = COMPARE_0;
+        end
+        else
+          hashout_fifo_re = 1'b0;
+      end
+      else
+        state_next = DRAIN_FIFOS;
+    end
+    COMPARE_3:
+    begin
+      if(!stop)
+      begin
+        if(target_reg[63:0] > hash_out[63:0])
+        begin
+          result = 1'b1;
+          state_next = DRAIN_FIFOS;
+        end
+        else if(!hash_out_empty)
+        begin
+          hashout_fifo_re = 1'b1;
+          state_next = COMPARE_0;
+        end
+        else
+          hashout_fifo_re = 1'b0;
+      end
+      else
+        state_next = DRAIN_FIFOS;
+    end
+
+  endcase
 
   end
 
 
 `ifdef DBG_
-assign state_compator_dbg = state;
+assign state_compator_dbg = state_reg;
 assign target_dbg = target_reg;
 `endif
 

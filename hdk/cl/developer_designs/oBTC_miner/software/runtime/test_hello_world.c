@@ -194,7 +194,7 @@ int main(int argc, char **argv)
     uint16_t matrix[64][64];
 
     FILE *fp;
-    const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000";
+    const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000096";
     uint8_t work_byte[100];
     uint32_t work_word[25];
     uint64_t hashes_done = 0;
@@ -224,7 +224,7 @@ int main(int argc, char **argv)
         }
     }
 
-    scanhash_heavyhash(&g_work0, 10, &hashes_done, matrix);
+    scanhash_heavyhash(&g_work0, 0xc8, &hashes_done, matrix);
     printf("=================Matrix============\n");
     for (size_t i = 0; i < 64; i++)
     {
@@ -420,17 +420,18 @@ void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, in
         }
     }
     printf("debug1\n");
-    //send target
-    rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 1);
-    fail_on(rc, out, "Unable to write to the fpga !");
-    for (int i = 1; i < 7; i++)
+    //send target 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    for (int i = 0; i < 7; i++)
     {
-        rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 0);
+        rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 0xFFFFFFFF);
         fail_on(rc, out, "Unable to write to the fpga !");
     }
+    rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 0x00BFFFFF);
+    fail_on(rc, out, "Unable to write to the fpga !");
+
     //send nonce size
     printf("debug2\n");
-    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG, 10);
+    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG, 50);
     fail_on(rc, out, "Unable to write to the fpga !");
 
     printf("debug3\n");

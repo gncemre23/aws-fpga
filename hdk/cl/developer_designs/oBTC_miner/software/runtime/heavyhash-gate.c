@@ -119,7 +119,7 @@ void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, 
     uint16_t product[64];
     uint32_t nonce = *((uint32_t *)pdata + 19);
     sha3_256((uint8_t *)hash_first, 32, pdata, pdata_len);
-
+    printf("nonce:%08x\n",nonce);
     //     if((nonce %1) == 0)
     //     {
     // 	    printf("nonce:%08x\n",nonce);
