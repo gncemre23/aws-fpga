@@ -133,6 +133,8 @@ module top
   logic [BLK_CNT-1:0] result_blk;
   logic [BLK_CNT-1:0] stop_ack_blk;
   logic [BLK_CNT:0] result_reg;
+  logic result_state;
+
   logic stop_blk;
   logic [1:0] status_blk_reg [BLK_CNT:0];
   logic [1:0] status_blk [BLK_CNT-1:0];
@@ -497,8 +499,16 @@ module top
     end
   end
 
+
+  always_ff @(posedge clk_top)
+  begin
+    result_state <= result_sync_reg0;
+  end
+
+
   assign hash_out = pipe_stage4_hash_out[mux_sel];
-  assign hash_we = result_sync_reg0 & !stop_blk;
+  //posedge of result
+  assign hash_we = result_sync_reg0 & ~result_state;
   
   `ifdef SIM_
   always_comb
@@ -531,7 +541,7 @@ module top
 
   always_ff @( posedge clk_top )
   begin : clk_domain_top
-    if(result_sync_reg0)
+    if(result_sync_reg0 & ~result_state)
     begin
       nonce <= pipe_stage4_nonce[mux_sel];//nonce_reg0 <= pipe_stage4_nonce[mux_sel];
       $display("Golde nonce = %h ", pipe_stage4_nonce[mux_sel]);
