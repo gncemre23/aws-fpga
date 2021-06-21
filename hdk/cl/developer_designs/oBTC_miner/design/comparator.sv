@@ -38,6 +38,7 @@ module comparator
   );
 
   logic [3:0] cnt_next, cnt_reg;
+  logic result_next, result_reg;
   logic [255:0] target_reg, target_next;
   typedef enum { DRAIN_FIFOS,
                  READ_TARGET,
@@ -55,9 +56,11 @@ module comparator
       state_reg <= DRAIN_FIFOS;
       cnt_reg <= 4'd0;
       target_reg <= 256'd0;
+      result_reg <= 1'b0;
     end
     else
     begin
+      result_reg <= result_next;
       state_reg <= state_next;
       cnt_reg <= cnt_next;
       target_reg <= target_next;
@@ -72,12 +75,11 @@ module comparator
   cnt_next = cnt_reg;
   target_next = target_reg;
   stop_ack_comp = 1'b0;
-  result = 1'b0;
+  result_next = result_reg;
   state_next = state_reg; 
   case (state_reg)
     DRAIN_FIFOS:
-    begin   
-      result = 1'b0;      
+    begin               
       if(!heavy_hash_all_empty)begin
         hashout_fifo_re = 1'b1;
         stop_ack_comp = 1'b0;
@@ -88,6 +90,7 @@ module comparator
         hashout_fifo_re = 1'b0;
         if(start)
         begin
+          result_next = 1'b0;
           state_next = READ_TARGET;
         end
       end
@@ -117,7 +120,7 @@ module comparator
           if(target_reg[255:192] > hash_out[255:192])
           begin
             hashout_fifo_re = 1'b0;
-            result = 1'b1;
+            result_next = 1'b1;
             state_next = DRAIN_FIFOS;
           end
           else if(target_reg[255:192] == hash_out[255:192])
@@ -142,7 +145,7 @@ module comparator
       begin
         if(target_reg[191:128] > hash_out[191:128])
         begin
-          result = 1'b1;
+          result_next = 1'b1;
           state_next = DRAIN_FIFOS;
         end
         else if(target_reg[191:128] == hash_out[191:128])
@@ -167,7 +170,7 @@ module comparator
       begin
         if(target_reg[127:64] > hash_out[127:64])
         begin
-          result = 1'b1;
+          result_next = 1'b1;
           state_next = DRAIN_FIFOS;
         end
         else if(target_reg[127:64] == hash_out[127:64])
@@ -192,7 +195,7 @@ module comparator
       begin
         if(target_reg[63:0] > hash_out[63:0])
         begin
-          result = 1'b1;
+          result_next = 1'b1;
           state_next = DRAIN_FIFOS;
         end
         else if(!hash_out_empty)
@@ -211,6 +214,7 @@ module comparator
 
   end
 
+assign result = result_reg;
 
 `ifdef DBG_
 assign state_compator_dbg = state_reg;
