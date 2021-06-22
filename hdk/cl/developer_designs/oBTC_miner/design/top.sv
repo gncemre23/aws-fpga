@@ -241,6 +241,12 @@ module top
                } state_type;
   state_type state;
 
+  typedef enum { STATE_0,
+                 STATE_1,
+                 STATE_2
+               } state_status_type;
+  state_status_type state_status_next, state_status_reg;
+
 
   
 
@@ -507,8 +513,6 @@ module top
 
 
   assign hash_out = pipe_stage4_hash_out[mux_sel];
-  //posedge of result
-  assign hash_we = result_sync_reg0 & ~result_state;
   
   `ifdef SIM_
   always_comb
@@ -633,7 +637,7 @@ module top
           else
             target_re <= 1'b0;
 
-          if(stop | result_sync_reg0)
+          if(stop)
           begin
             state <= INIT;
             stop_blk <= 1'b1;
@@ -643,11 +647,62 @@ module top
     end
   end
 
+  //status FSM
+  always_ff @(posedge clk_top)
+  begin
+    if(rst)
+      state_status_reg <= STATE_0;
+    else
+    begin
+      state_status_reg <= state_status_next;
+    end
+  end
 
-  //assign nonce = nonce_sync_reg2;
+
+  always_comb
+  begin
+    //default assignments
+    status = 2'b00;
+    state_status_next = state_status_reg;
+    hash_we = 1'b0;
+    case(state_status_reg)
+    STATE_0:
+    begin
+      status = 2'b00;
+      if(status_reg == 2'b10)
+        state_status_next = STATE_1;
+      else if (status_reg[0] == 1'b1 && ~stop_ack)
+      begin
+        state_status_next = STATE_2;
+        hash_we = 1'b1;
+      end   
+    end
+    STATE_1:
+    begin
+      status = 2'b10;
+      if(status_reg[0] == 1'b1)
+      begin
+        hash_we = 1'b1;
+        state_status_next = STATE_2;
+      end
+      else if (status_reg == 2'b00)
+      begin
+        state_status_next = STATE_0;
+      end
+    end
+    STATE_2:
+    begin
+      status = 2'b01;
+      if(start_heavy_hash)
+        state_status_next = STATE_0;
+    end
+    endcase
+  end
+
+  //-----------------------------
+
+
   assign result = result_sync_reg0;
-  //assign start_heavy_hash = stop_ack & start_reg2;
-  assign status = status_reg;
   assign heavyhash = hash_fifo_out;
 
 

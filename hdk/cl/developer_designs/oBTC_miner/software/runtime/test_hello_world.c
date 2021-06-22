@@ -255,7 +255,7 @@ int main(int argc, char **argv)
     fpga_pci_poke(pci_bar_handle, STOP_REG, 1);
 
     fpga_pci_poke(pci_bar_handle, START_REG, 1);
-    while (status != 0)
+    while (status == 2)
     {
         fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
         //printf("status = %d\n", status);
@@ -264,18 +264,15 @@ int main(int argc, char **argv)
     fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
     printf("status = %d\n", status);
 
-    for (size_t i = 0; i < 10; i++)
+    printf("hash0_fpga = ");
+    for (int j = 0; j < 8; j++)
     {
-        printf("hash0_fpga[%d] = ", i);
-        for (int j = 0; j < 8; j++)
-        {
-            rc = 1;
-            while (rc != 0)
-                rc = fpga_pci_peek(pci_bar_handle, HASH_REG, &hash);
-            printf("%08x", hash);
-        }
-        printf("\n");
+        rc = 1;
+        while (rc != 0)
+            rc = fpga_pci_peek(pci_bar_handle, HASH_REG, &hash);
+        printf("%08x", hash);
     }
+    printf("\n");
 
     fpga_pci_poke(pci_bar_handle, STOP_REG, 1);
 
@@ -289,27 +286,26 @@ int main(int argc, char **argv)
 
     fpga_pci_poke(pci_bar_handle, START_REG, 1);
 #ifdef SV_TEST
-    while (status == 0)
+    while (status != 2)
     {
         fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
         printf("status = %d\n", status);
     }
 #endif
-    while (status != 0)
+    while (status == 2)
     {
         fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
         //printf("status = %d\n", status);
     }
-    for (size_t i = 0; i < 10; i++)
+
+    printf("hash1_fpga");
+    for (int j = 0; j < 8; j++)
     {
-        printf("hash1_fpga[%d] = ", i);
-        for (int j = 0; j < 8; j++)
-        {
-            fpga_pci_peek(pci_bar_handle, HASH_REG, &hash);
-            printf("%08x", hash);
-        }
-        printf("\n");
+        fpga_pci_peek(pci_bar_handle, HASH_REG, &hash);
+        printf("%08x", hash);
     }
+    printf("\n");
+
     fpga_pci_poke(pci_bar_handle, STOP_REG, 1);
     fpga_pci_detach(pci_bar_handle);
     printf("\ndone1\n");

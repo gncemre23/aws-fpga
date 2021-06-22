@@ -88,6 +88,7 @@ module comparator
       begin
         stop_ack_comp = 1'b1;
         hashout_fifo_re = 1'b0;
+        
         if(start)
         begin
           result_next = 1'b0;
