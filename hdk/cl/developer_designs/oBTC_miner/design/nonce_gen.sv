@@ -1,7 +1,7 @@
 //! Taking the block header from block header fifo,
 //! generating the block header just changing the nonce
 `timescale  1ns / 1ps
-`define DBG_
+//`define DBG_
 module nonce_gen
   #(
      parameter NONCE_COEF = 1

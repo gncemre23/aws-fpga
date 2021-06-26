@@ -20,7 +20,7 @@
 /*                                     nonce               result        */
 /* ================== Heavy hash block ================================= */
 `timescale  1ns / 1ps
-`define DBG_
+//`define DBG_
 module heavy_hash_blk
   #(
      parameter NONCE_COEF = 1,

@@ -60,6 +60,7 @@
 #define HASH_REG UINT64_C(0x508)
 #define NONCE_SIZE_REG UINT64_C(0x520)
 #define HEAVYHASH_SEL_REG UINT64_C(0x52C)
+#define NONCE_REG UINT64_C(0x510)
 /* use the stdout logger for printing debug information  */
 #ifndef SV_TEST
 const struct logger *logger = &logger_stdout;
@@ -198,6 +199,7 @@ int main(int argc, char **argv)
     uint8_t work_byte[100];
     uint32_t work_word[25];
     uint64_t hashes_done = 0;
+    uint32_t golden_nonce = 0;
 
     for (int i = 0; i < 80; i++)
         sscanf(&line[i * 2], "%2x", &work_byte[i]);
@@ -252,14 +254,20 @@ int main(int argc, char **argv)
     }
 #endif
     //fpga_pci_poke(pci_bar_handle, STOP_REG, 1);
-    fpga_pci_poke(pci_bar_handle, STOP_REG, 1);
+   // fpga_pci_poke(pci_bar_handle, STOP_REG, 1);
 
     fpga_pci_poke(pci_bar_handle, START_REG, 1);
-    while (status == 2)
+    while (status == 1)
     {
         fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
         //printf("status = %d\n", status);
     }
+    while (status == 0 || status == 2)
+    {
+        fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
+        //printf("status = %d\n", status);
+    }
+
 
     fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
     printf("status = %d\n", status);
@@ -292,13 +300,27 @@ int main(int argc, char **argv)
         printf("status = %d\n", status);
     }
 #endif
-    while (status == 2)
+    while (status == 1)
+    {
+        fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
+        //printf("status = %d\n", status);
+    }
+    while (status == 0 || status == 2)
     {
         fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
         //printf("status = %d\n", status);
     }
 
-    printf("hash1_fpga");
+    fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
+    printf("status = %d\n", status);
+    
+    if(status == 1)
+    {
+        fpga_pci_peek(pci_bar_handle, NONCE_REG, &golden_nonce);
+        printf("Golden_nonce = %08x\n", golden_nonce);
+    }
+    
+    printf("hash1_fpga = ");
     for (int j = 0; j < 8; j++)
     {
         fpga_pci_peek(pci_bar_handle, HASH_REG, &hash);

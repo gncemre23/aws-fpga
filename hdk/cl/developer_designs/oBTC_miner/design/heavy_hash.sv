@@ -32,7 +32,7 @@
 //!                              └────────┘                 └────────────────┘
 
 `timescale  1ns / 1ps
-`define DBG_
+//`define DBG_
 module heavy_hash #(parameter WCOUNT = 4 )
   (
     //!global clk

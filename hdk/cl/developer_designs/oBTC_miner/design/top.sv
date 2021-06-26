@@ -1,7 +1,7 @@
 
 `timescale  1ns / 1ps
-`define DBG_
-`define SIM_
+//`define DBG_
+//`define SIM_
 module top
   #(
      parameter WCOUNT = 4,
@@ -162,30 +162,55 @@ module top
   logic [BLK_CNT-1:0] pipe_stage2_start_heavy_hash;
   logic [BLK_CNT-1:0] pipe_stage3_start_heavy_hash;
   logic [BLK_CNT-1:0] pipe_stage4_start_heavy_hash;
+  logic [BLK_CNT-1:0] pipe_stage5_start_heavy_hash;
+  logic [BLK_CNT-1:0] pipe_stage6_start_heavy_hash;
+  logic [BLK_CNT-1:0] pipe_stage7_start_heavy_hash;
+  logic [BLK_CNT-1:0] pipe_stage8_start_heavy_hash;
+  logic [BLK_CNT-1:0] pipe_stage9_start_heavy_hash;
 
   logic [BLK_CNT-1:0] pipe_stage0_stop_blk;
   logic [BLK_CNT-1:0] pipe_stage1_stop_blk;
   logic [BLK_CNT-1:0] pipe_stage2_stop_blk;
   logic [BLK_CNT-1:0] pipe_stage3_stop_blk;
   logic [BLK_CNT-1:0] pipe_stage4_stop_blk;
+  logic [BLK_CNT-1:0] pipe_stage5_stop_blk;
+  logic [BLK_CNT-1:0] pipe_stage6_stop_blk;
+  logic [BLK_CNT-1:0] pipe_stage7_stop_blk;
+  logic [BLK_CNT-1:0] pipe_stage8_stop_blk;
+  logic [BLK_CNT-1:0] pipe_stage9_stop_blk;
 
   logic [BLK_CNT-1:0] pipe_stage0_matrix_we;
   logic [BLK_CNT-1:0] pipe_stage1_matrix_we;
   logic [BLK_CNT-1:0] pipe_stage2_matrix_we;
   logic [BLK_CNT-1:0] pipe_stage3_matrix_we;
   logic [BLK_CNT-1:0] pipe_stage4_matrix_we;
+  logic [BLK_CNT-1:0] pipe_stage5_matrix_we;
+  logic [BLK_CNT-1:0] pipe_stage6_matrix_we;
+  logic [BLK_CNT-1:0] pipe_stage7_matrix_we;
+  logic [BLK_CNT-1:0] pipe_stage8_matrix_we;
+  logic [BLK_CNT-1:0] pipe_stage9_matrix_we;
 
   logic [BLK_CNT-1:0] pipe_stage0_stop_ack;
   logic [BLK_CNT-1:0] pipe_stage1_stop_ack;
   logic [BLK_CNT-1:0] pipe_stage2_stop_ack;
   logic [BLK_CNT-1:0] pipe_stage3_stop_ack;
   logic [BLK_CNT-1:0] pipe_stage4_stop_ack;
+  logic [BLK_CNT-1:0] pipe_stage5_stop_ack;
+  logic [BLK_CNT-1:0] pipe_stage6_stop_ack;
+  logic [BLK_CNT-1:0] pipe_stage7_stop_ack;
+  logic [BLK_CNT-1:0] pipe_stage8_stop_ack;
+  logic [BLK_CNT-1:0] pipe_stage9_stop_ack;
 
   logic [BLK_CNT-1:0] pipe_stage0_result;
   logic [BLK_CNT-1:0] pipe_stage1_result;
   logic [BLK_CNT-1:0] pipe_stage2_result;
   logic [BLK_CNT-1:0] pipe_stage3_result;
   logic [BLK_CNT-1:0] pipe_stage4_result;
+  logic [BLK_CNT-1:0] pipe_stage5_result;
+  logic [BLK_CNT-1:0] pipe_stage6_result;
+  logic [BLK_CNT-1:0] pipe_stage7_result;
+  logic [BLK_CNT-1:0] pipe_stage8_result;
+  logic [BLK_CNT-1:0] pipe_stage9_result;
 
 
   logic [31:0] pipe_stage0_block_header [BLK_CNT-1:0];
@@ -193,42 +218,78 @@ module top
   logic [31:0] pipe_stage2_block_header [BLK_CNT-1:0];
   logic [31:0] pipe_stage3_block_header [BLK_CNT-1:0];
   logic [31:0] pipe_stage4_block_header [BLK_CNT-1:0];
+  logic [31:0] pipe_stage5_block_header [BLK_CNT-1:0];
+  logic [31:0] pipe_stage6_block_header [BLK_CNT-1:0];
+  logic [31:0] pipe_stage7_block_header [BLK_CNT-1:0];
+  logic [31:0] pipe_stage8_block_header [BLK_CNT-1:0];
+  logic [31:0] pipe_stage9_block_header [BLK_CNT-1:0];
+
 
   logic [31:0] pipe_stage0_target [BLK_CNT-1:0];
   logic [31:0] pipe_stage1_target [BLK_CNT-1:0];
   logic [31:0] pipe_stage2_target [BLK_CNT-1:0];
   logic [31:0] pipe_stage3_target [BLK_CNT-1:0];
   logic [31:0] pipe_stage4_target [BLK_CNT-1:0];
+  logic [31:0] pipe_stage5_target [BLK_CNT-1:0];
+  logic [31:0] pipe_stage6_target [BLK_CNT-1:0];
+  logic [31:0] pipe_stage7_target [BLK_CNT-1:0];
+  logic [31:0] pipe_stage8_target [BLK_CNT-1:0];
+  logic [31:0] pipe_stage9_target [BLK_CNT-1:0];
 
   logic [31:0] pipe_stage0_matrix [BLK_CNT-1:0];
   logic [31:0] pipe_stage1_matrix [BLK_CNT-1:0];
   logic [31:0] pipe_stage2_matrix [BLK_CNT-1:0];
   logic [31:0] pipe_stage3_matrix [BLK_CNT-1:0];
   logic [31:0] pipe_stage4_matrix [BLK_CNT-1:0];
+  logic [31:0] pipe_stage5_matrix [BLK_CNT-1:0];
+  logic [31:0] pipe_stage6_matrix [BLK_CNT-1:0];
+  logic [31:0] pipe_stage7_matrix [BLK_CNT-1:0];
+  logic [31:0] pipe_stage8_matrix [BLK_CNT-1:0];
+  logic [31:0] pipe_stage9_matrix [BLK_CNT-1:0];
 
   logic [31:0] pipe_stage0_nonce_size [BLK_CNT-1:0];
   logic [31:0] pipe_stage1_nonce_size [BLK_CNT-1:0];
   logic [31:0] pipe_stage2_nonce_size [BLK_CNT-1:0];
   logic [31:0] pipe_stage3_nonce_size [BLK_CNT-1:0];
   logic [31:0] pipe_stage4_nonce_size [BLK_CNT-1:0];
+  logic [31:0] pipe_stage5_nonce_size [BLK_CNT-1:0];
+  logic [31:0] pipe_stage6_nonce_size [BLK_CNT-1:0];
+  logic [31:0] pipe_stage7_nonce_size [BLK_CNT-1:0];
+  logic [31:0] pipe_stage8_nonce_size [BLK_CNT-1:0];
+  logic [31:0] pipe_stage9_nonce_size [BLK_CNT-1:0];
 
   logic [31:0] pipe_stage0_nonce [BLK_CNT-1:0];
   logic [31:0] pipe_stage1_nonce [BLK_CNT-1:0];
   logic [31:0] pipe_stage2_nonce [BLK_CNT-1:0];
   logic [31:0] pipe_stage3_nonce [BLK_CNT-1:0];
   logic [31:0] pipe_stage4_nonce [BLK_CNT-1:0];
+  logic [31:0] pipe_stage5_nonce [BLK_CNT-1:0];
+  logic [31:0] pipe_stage6_nonce [BLK_CNT-1:0];
+  logic [31:0] pipe_stage7_nonce [BLK_CNT-1:0];
+  logic [31:0] pipe_stage8_nonce [BLK_CNT-1:0];
+  logic [31:0] pipe_stage9_nonce [BLK_CNT-1:0];
 
   logic [1:0] pipe_stage0_status [BLK_CNT-1:0];
   logic [1:0] pipe_stage1_status [BLK_CNT-1:0];
   logic [1:0] pipe_stage2_status [BLK_CNT-1:0];
   logic [1:0] pipe_stage3_status [BLK_CNT-1:0];
   logic [1:0] pipe_stage4_status [BLK_CNT-1:0];
+  logic [1:0] pipe_stage5_status [BLK_CNT-1:0];
+  logic [1:0] pipe_stage6_status [BLK_CNT-1:0];
+  logic [1:0] pipe_stage7_status [BLK_CNT-1:0];
+  logic [1:0] pipe_stage8_status [BLK_CNT-1:0];
+  logic [1:0] pipe_stage9_status [BLK_CNT-1:0];
 
   logic [255:0] pipe_stage0_hash_out [BLK_CNT-1:0];
   logic [255:0] pipe_stage1_hash_out [BLK_CNT-1:0];
   logic [255:0] pipe_stage2_hash_out [BLK_CNT-1:0];
   logic [255:0] pipe_stage3_hash_out [BLK_CNT-1:0];
   logic [255:0] pipe_stage4_hash_out [BLK_CNT-1:0];
+  logic [255:0] pipe_stage5_hash_out [BLK_CNT-1:0];
+  logic [255:0] pipe_stage6_hash_out [BLK_CNT-1:0];
+  logic [255:0] pipe_stage7_hash_out [BLK_CNT-1:0];
+  logic [255:0] pipe_stage8_hash_out [BLK_CNT-1:0];
+  logic [255:0] pipe_stage9_hash_out [BLK_CNT-1:0];
 
 
 
@@ -262,13 +323,13 @@ module top
         heavy_hash_blk_dut (
           .clk (clk_top ),
           .rst (rst ),
-          .start ( pipe_stage4_start_heavy_hash[i]),
-          .stop (pipe_stage4_stop_blk[i] ),
-          .block_header (pipe_stage4_block_header[i] ),
-          .matrix_in (pipe_stage4_matrix[i] ),
-          .target (pipe_stage4_target[i] ),
-          .nonce_size (pipe_stage4_nonce_size[i] ),
-          .matrix_we (pipe_stage4_matrix_we[i]),
+          .start ( pipe_stage9_start_heavy_hash[i]),
+          .stop (pipe_stage9_stop_blk[i] ),
+          .block_header (pipe_stage9_block_header[i] ),
+          .matrix_in (pipe_stage9_matrix[i] ),
+          .target (pipe_stage9_target[i] ),
+          .nonce_size (pipe_stage9_nonce_size[i] ),
+          .matrix_we (pipe_stage9_matrix_we[i]),
           .nonce (golden_nonce[i] ),
           .result (result_blk[i] ),
           .stop_ack  ( stop_ack_blk[i]),
@@ -305,6 +366,11 @@ module top
       pipe_stage2_start_heavy_hash[i] <= pipe_stage1_start_heavy_hash[i];
       pipe_stage3_start_heavy_hash[i] <= pipe_stage2_start_heavy_hash[i];
       pipe_stage4_start_heavy_hash[i] <= pipe_stage3_start_heavy_hash[i];
+      pipe_stage5_start_heavy_hash[i] <= pipe_stage4_start_heavy_hash[i];
+      pipe_stage6_start_heavy_hash[i] <= pipe_stage5_start_heavy_hash[i];
+      pipe_stage7_start_heavy_hash[i] <= pipe_stage6_start_heavy_hash[i];
+      pipe_stage8_start_heavy_hash[i] <= pipe_stage7_start_heavy_hash[i];
+      pipe_stage9_start_heavy_hash[i] <= pipe_stage8_start_heavy_hash[i];
 
       //pipe_stages for stop_blk
       pipe_stage0_stop_blk[i] <= stop_blk;
@@ -312,6 +378,11 @@ module top
       pipe_stage2_stop_blk[i] <= pipe_stage1_stop_blk[i];
       pipe_stage3_stop_blk[i] <= pipe_stage2_stop_blk[i];
       pipe_stage4_stop_blk[i] <= pipe_stage3_stop_blk[i];
+      pipe_stage5_stop_blk[i] <= pipe_stage4_stop_blk[i];
+      pipe_stage6_stop_blk[i] <= pipe_stage5_stop_blk[i];
+      pipe_stage7_stop_blk[i] <= pipe_stage6_stop_blk[i];
+      pipe_stage8_stop_blk[i] <= pipe_stage7_stop_blk[i];
+      pipe_stage9_stop_blk[i] <= pipe_stage8_stop_blk[i];
 
       //pipe_stages for stop_blk
       pipe_stage0_stop_ack[i] <= stop_ack_blk[i];
@@ -319,6 +390,11 @@ module top
       pipe_stage2_stop_ack[i] <= pipe_stage1_stop_ack[i];
       pipe_stage3_stop_ack[i] <= pipe_stage2_stop_ack[i];
       pipe_stage4_stop_ack[i] <= pipe_stage3_stop_ack[i];
+      pipe_stage5_stop_ack[i] <= pipe_stage4_stop_ack[i];
+      pipe_stage6_stop_ack[i] <= pipe_stage5_stop_ack[i];
+      pipe_stage7_stop_ack[i] <= pipe_stage6_stop_ack[i];
+      pipe_stage8_stop_ack[i] <= pipe_stage7_stop_ack[i];
+      pipe_stage9_stop_ack[i] <= pipe_stage8_stop_ack[i];
 
       //pipe_stages for block header
       pipe_stage0_block_header[i] <= block_header_dout;
@@ -326,6 +402,12 @@ module top
       pipe_stage2_block_header[i] <= pipe_stage1_block_header[i];
       pipe_stage3_block_header[i] <= pipe_stage2_block_header[i];
       pipe_stage4_block_header[i] <= pipe_stage3_block_header[i];
+      pipe_stage5_block_header[i] <= pipe_stage4_block_header[i];
+      pipe_stage6_block_header[i] <= pipe_stage5_block_header[i];
+      pipe_stage7_block_header[i] <= pipe_stage6_block_header[i];
+      pipe_stage8_block_header[i] <= pipe_stage7_block_header[i];
+      pipe_stage9_block_header[i] <= pipe_stage8_block_header[i];
+
 
       //pipe_stages for matrix in
       pipe_stage0_matrix[i] <= matrix_dout;
@@ -333,6 +415,11 @@ module top
       pipe_stage2_matrix[i] <= pipe_stage1_matrix[i];
       pipe_stage3_matrix[i] <= pipe_stage2_matrix[i];
       pipe_stage4_matrix[i] <= pipe_stage3_matrix[i];
+      pipe_stage5_matrix[i] <= pipe_stage4_matrix[i];
+      pipe_stage6_matrix[i] <= pipe_stage5_matrix[i];
+      pipe_stage7_matrix[i] <= pipe_stage6_matrix[i];
+      pipe_stage8_matrix[i] <= pipe_stage7_matrix[i];
+      pipe_stage9_matrix[i] <= pipe_stage8_matrix[i];
 
       //pipe_stages for matrix in
       pipe_stage0_matrix_we[i] <= matrix_we;
@@ -340,6 +427,11 @@ module top
       pipe_stage2_matrix_we[i] <= pipe_stage1_matrix_we[i];
       pipe_stage3_matrix_we[i] <= pipe_stage2_matrix_we[i];
       pipe_stage4_matrix_we[i] <= pipe_stage3_matrix_we[i];
+      pipe_stage5_matrix_we[i] <= pipe_stage4_matrix_we[i];
+      pipe_stage6_matrix_we[i] <= pipe_stage5_matrix_we[i];
+      pipe_stage7_matrix_we[i] <= pipe_stage6_matrix_we[i];
+      pipe_stage8_matrix_we[i] <= pipe_stage7_matrix_we[i];
+      pipe_stage9_matrix_we[i] <= pipe_stage8_matrix_we[i];
 
       //pipe_stages for target
       pipe_stage0_target[i] <= target_dout;
@@ -347,6 +439,11 @@ module top
       pipe_stage2_target[i] <= pipe_stage1_target[i];
       pipe_stage3_target[i] <= pipe_stage2_target[i];
       pipe_stage4_target[i] <= pipe_stage3_target[i];
+      pipe_stage5_target[i] <= pipe_stage4_target[i];
+      pipe_stage6_target[i] <= pipe_stage5_target[i];
+      pipe_stage7_target[i] <= pipe_stage6_target[i];
+      pipe_stage8_target[i] <= pipe_stage7_target[i];
+      pipe_stage9_target[i] <= pipe_stage8_target[i];
 
       
       //pipe_stages for nonce size
@@ -355,6 +452,11 @@ module top
       pipe_stage2_nonce_size[i] <= pipe_stage1_nonce_size[i];
       pipe_stage3_nonce_size[i] <= pipe_stage2_nonce_size[i];
       pipe_stage4_nonce_size[i] <= pipe_stage3_nonce_size[i];
+      pipe_stage5_nonce_size[i] <= pipe_stage4_nonce_size[i];
+      pipe_stage6_nonce_size[i] <= pipe_stage5_nonce_size[i];
+      pipe_stage7_nonce_size[i] <= pipe_stage6_nonce_size[i];
+      pipe_stage8_nonce_size[i] <= pipe_stage7_nonce_size[i];
+      pipe_stage9_nonce_size[i] <= pipe_stage8_nonce_size[i];
 
       //pipe_stages for nonce
       pipe_stage0_nonce[i] <= golden_nonce[i];
@@ -362,6 +464,11 @@ module top
       pipe_stage2_nonce[i] <= pipe_stage1_nonce[i];
       pipe_stage3_nonce[i] <= pipe_stage2_nonce[i];
       pipe_stage4_nonce[i] <= pipe_stage3_nonce[i];
+      pipe_stage5_nonce[i] <= pipe_stage4_nonce[i];
+      pipe_stage6_nonce[i] <= pipe_stage5_nonce[i];
+      pipe_stage7_nonce[i] <= pipe_stage6_nonce[i];
+      pipe_stage8_nonce[i] <= pipe_stage7_nonce[i];
+      pipe_stage9_nonce[i] <= pipe_stage8_nonce[i];
 
       
       //pipe_stages for result
@@ -370,6 +477,11 @@ module top
       pipe_stage2_result[i] <= pipe_stage1_result[i];
       pipe_stage3_result[i] <= pipe_stage2_result[i];
       pipe_stage4_result[i] <= pipe_stage3_result[i];
+      pipe_stage5_result[i] <= pipe_stage4_result[i];
+      pipe_stage6_result[i] <= pipe_stage5_result[i];
+      pipe_stage7_result[i] <= pipe_stage6_result[i];
+      pipe_stage8_result[i] <= pipe_stage7_result[i];
+      pipe_stage9_result[i] <= pipe_stage8_result[i];
 
       //pipe_stages for status
       pipe_stage0_status[i] <= status_blk[i];
@@ -377,6 +489,11 @@ module top
       pipe_stage2_status[i] <= pipe_stage1_status[i];
       pipe_stage3_status[i] <= pipe_stage2_status[i];
       pipe_stage4_status[i] <= pipe_stage3_status[i];
+      pipe_stage5_status[i] <= pipe_stage4_status[i];
+      pipe_stage6_status[i] <= pipe_stage5_status[i];
+      pipe_stage7_status[i] <= pipe_stage6_status[i];
+      pipe_stage8_status[i] <= pipe_stage7_status[i];
+      pipe_stage9_status[i] <= pipe_stage8_status[i];
 
 
       //pipe_stages for hash_out
@@ -385,8 +502,11 @@ module top
       pipe_stage2_hash_out[i] <= pipe_stage1_hash_out[i];
       pipe_stage3_hash_out[i] <= pipe_stage2_hash_out[i];
       pipe_stage4_hash_out[i] <= pipe_stage3_hash_out[i];
-
-
+      pipe_stage5_hash_out[i] <= pipe_stage4_hash_out[i];
+      pipe_stage6_hash_out[i] <= pipe_stage5_hash_out[i];
+      pipe_stage7_hash_out[i] <= pipe_stage6_hash_out[i];
+      pipe_stage8_hash_out[i] <= pipe_stage7_hash_out[i]; 
+      pipe_stage9_hash_out[i] <= pipe_stage8_hash_out[i];      
 
     end
   end
@@ -395,8 +515,8 @@ module top
   //debug assignments
   `ifdef DBG_
   assign state_top_dbg = state;
-  assign start_dbg = pipe_stage4_start_heavy_hash[0];
-  assign stop_dbg = pipe_stage4_stop_blk[0];
+  assign start_dbg = pipe_stage9_start_heavy_hash[0];
+  assign stop_dbg = pipe_stage9_stop_blk[0];
   assign hash_out_dbg = hash_blk_out[0] ;
   assign hash_out_we_dbg = hash_out_we[0];
   assign stop_ack_dbg = stop_ack_reg[BLK_CNT]  ;
@@ -423,9 +543,9 @@ module top
   generate
     for (i = 0 ; i < BLK_CNT ; i ++ )
     begin
-      assign result_reg[i+1] = pipe_stage4_result[i] | result_reg[i];
-      assign status_blk_reg[i+1] = pipe_stage4_status[i] | status_blk_reg[i];
-      assign stop_ack_reg[i+1] = pipe_stage4_stop_ack[i] & stop_ack_reg[i];
+      assign result_reg[i+1] = pipe_stage9_result[i] | result_reg[i];
+      assign status_blk_reg[i+1] = pipe_stage9_status[i] | status_blk_reg[i];
+      assign stop_ack_reg[i+1] = pipe_stage9_stop_ack[i] & stop_ack_reg[i];
     end
   endgenerate
 
@@ -500,7 +620,7 @@ module top
     mux_sel = 0;
     for (int i = 0; i < BLK_CNT; i++)
     begin
-      if (pipe_stage4_result[i])
+      if (pipe_stage9_result[i])
         mux_sel = i[5:0];
     end
   end
@@ -512,7 +632,7 @@ module top
   end
 
 
-  assign hash_out = pipe_stage4_hash_out[mux_sel];
+  assign hash_out = pipe_stage9_hash_out[mux_sel];
   
   `ifdef SIM_
   always_comb
@@ -547,8 +667,8 @@ module top
   begin : clk_domain_top
     if(result_sync_reg0 & ~result_state)
     begin
-      nonce <= pipe_stage4_nonce[mux_sel];//nonce_reg0 <= pipe_stage4_nonce[mux_sel];
-      $display("Golde nonce = %h ", pipe_stage4_nonce[mux_sel]);
+      nonce <= pipe_stage9_nonce[mux_sel];//nonce_reg0 <= pipe_stage4_nonce[mux_sel];
+      $display("Golde nonce = %h ", pipe_stage9_nonce[mux_sel]);
     end  
 
     status_sync_reg0 <= status_reg;

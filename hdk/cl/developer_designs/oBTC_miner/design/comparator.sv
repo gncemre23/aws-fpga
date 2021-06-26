@@ -3,7 +3,7 @@
 //! if the hash output is less than the target value, golden nonce is obtained.
 
 `timescale  1ns / 1ps
-`define DBG_
+//`define DBG_
 module comparator
   (
     //!global clk

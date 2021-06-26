@@ -48,7 +48,7 @@ module cl_hello_world
 `include "unused_apppf_irq_template.inc"
 
 
-parameter  BLK_CNT = 8 ;
+parameter  BLK_CNT = 16 ;
   //-------------------------------------------------
   // Wires
   //-------------------------------------------------
@@ -225,6 +225,7 @@ parameter  BLK_CNT = 8 ;
 
   logic dummy_reg_a1;
   logic dummy_reg_a2;
+  logic dummy_reg_a3;
   logic dummy_reg_b0;
   logic dummy_reg_b1;
   logic dummy_reg_c0;
@@ -248,6 +249,9 @@ parameter  BLK_CNT = 8 ;
 
   always_ff @(posedge clk_extra_a2)
     dummy_reg_a2 <= 1'b0;
+  
+  always_ff @(posedge clk_extra_a3)
+    dummy_reg_a3 <= 1'b0;
   
   always_ff @(posedge clk_extra_b0)
     dummy_reg_b0 <= 1'b0;
