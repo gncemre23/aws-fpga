@@ -30,3 +30,16 @@ Fixed some bugs.
     Notes: 
     <heavy hash out is generated with result is 1
 }
+
+--v9 axi top clk 125Mhz 8blk (debug ports)
+"FpgaImageId": "afi-0e206a404133bca21",
+"FpgaImageGlobalId": "agfi-0964617d602df946e",
+"Name": "cl_oBTC_v9_axi_125MHz_8blk_woSlack",
+Notes:
+New status evaluation logic 
+
+-v10 axi top clk 250Mhz 16block
+{
+    "FpgaImageId": "afi-0c198eeb8611e9daa",
+    "FpgaImageGlobalId": "agfi-0edba2c32b1d22556"
+}
