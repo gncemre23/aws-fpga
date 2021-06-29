@@ -48,7 +48,7 @@ module cl_hello_world
 `include "unused_apppf_irq_template.inc"
 
 
-parameter  BLK_CNT = 16 ;
+parameter  BLK_CNT = 36;
   //-------------------------------------------------
   // Wires
   //-------------------------------------------------

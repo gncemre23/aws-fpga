@@ -145,6 +145,8 @@ module top
 
   logic [255:0] hash_blk_out [BLK_CNT-1: 0];
   logic [255:0] hash_out;
+  logic [255:0] hash_out_reg = 256'd0;
+  logic [2:0] pointer = 3'd0;
   logic [31:0] hash_fifo_out;
   logic [BLK_CNT-1: 0] hash_out_we;
   logic hash_we;
@@ -555,22 +557,6 @@ module top
 
   
 
-  fifo_async
-    #(.DEPTH(64),
-      .WRITE_WIDTH(256),
-      .READ_WIDTH(32))
-    heavyhash_fifo (
-      .wr_clk (clk_top ),
-      .rd_clk (clk_axi ),
-      .rst (rst ),
-      .wr_en ( hash_we ),
-      .rd_en ( hash_re ),
-      .din (hash_out ),
-      .dout (hash_fifo_out ),
-      .full (hash_fifo_full ),
-      .empty  ( hash_fifo_empty)
-    );
-
 
   fifo_async
     #(.DEPTH(64))
@@ -631,6 +617,21 @@ module top
     result_state <= result_sync_reg0;
   end
 
+  always_ff @(posedge clk_top)
+  begin
+    if(hash_we)
+      hash_out_reg <= hash_out;
+    else if(start_heavy_hash)
+      hash_out_reg <= 256'd0;
+  end
+
+  always_ff @(posedge clk_top)
+  begin
+    if(hash_re)
+      pointer <= pointer + 3'd1;
+    if(start_heavy_hash)
+      pointer <= 3'd0;
+  end
 
   assign hash_out = pipe_stage9_hash_out[mux_sel];
   
@@ -823,7 +824,15 @@ module top
 
 
   assign result = result_sync_reg0;
-  assign heavyhash = hash_fifo_out;
+  assign heavyhash = (pointer == 3'd0) ? hash_out_reg[255:224] :
+                     (pointer == 3'd1) ? hash_out_reg[223:192] :
+                     (pointer == 3'd2) ? hash_out_reg[191:160] :
+                     (pointer == 3'd3) ? hash_out_reg[159:128] :
+                     (pointer == 3'd4) ? hash_out_reg[127: 96] :
+                     (pointer == 3'd5) ? hash_out_reg[95 : 64] :
+                     (pointer == 3'd6) ? hash_out_reg[63 : 32] :
+                     (pointer == 3'd7) ? hash_out_reg[31 :  0] :
+                     32'd0;
 
 
 endmodule
