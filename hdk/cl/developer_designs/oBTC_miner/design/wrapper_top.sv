@@ -48,7 +48,7 @@ module cl_hello_world
 `include "unused_apppf_irq_template.inc"
 
 
-parameter  BLK_CNT = 36;
+parameter  BLK_CNT = 4;
   //-------------------------------------------------
   // Wires
   //-------------------------------------------------
@@ -184,6 +184,7 @@ parameter  BLK_CNT = 36;
   logic [31:0] heavyhash;
   logic hash_re; 
   logic [$clog2(BLK_CNT)-1:0] hash_select;
+  logic 
 
 
   `ifdef DBG_
@@ -266,50 +267,54 @@ parameter  BLK_CNT = 36;
     dummy_reg_c1 <= 1'b0;
 
 
-  //oBTC_miner instance
-  top
-    #(
-      .WCOUNT(4 ),
-      .BLK_CNT ( BLK_CNT )
-    )
-    top_ins (
-      .clk_axi (clk_main_a0 ), //250MHz A1
-      .clk_top (clk_main_a0 ), //250MHz
-      .rst (!rst_main_n_sync),//rst_oBTC_sync ),
-      .block_header_we (block_header_we ),
-      .matrix_fifo_we (matrix_fifo_we ),
-      .target_we (target_we ),
-      .start (start ),
-      .stop (stop ),
-      .block_header (block_header ),
-      .matrix_in (matrix_in ),
-      .target (target ),
-      .nonce_size (nonce_size ),
-      .nonce (nonce ),
-      .status  ( status),
-      .heavyhash (heavyhash),
 
-      `ifdef DBG_
-      .hash_out_dbg (hash_out_dbg ),
-      .hash_out_we_dbg (hash_out_we_dbg ),
-      .stop_ack_dbg (stop_ack_dbg ),
-      .state_nonce_dbg (state_nonce_dbg ),
-      .state_comparator_dbg (state_comparator_dbg ),
-      .hashin_fifo_in_we (hashin_fifo_in_we ),
-      .hashin_fifo_in_din (hashin_fifo_in_din ),
-      .sha3in_dst_write_dbg (sha3in_dst_write_dbg ),
-      .sha3in_dout_dbg (sha3in_dout_dbg ),
-      .sha3out_dst_write_dbg (sha3out_dst_write_dbg ),
-      .sha3out_dout_dbg (sha3out_dout_dbg ),
-      .state_top_dbg(state_top_dbg),
-      .start_dbg(start_dbg),
-      .stop_dbg(stop_dbg),
-      .target_dbg(target_dbg),
-      .nonce_end_dbg(nonce_end_dbg),
-      `endif
+  //--------------------------------------------------------------
+  // Heavy hash blocks instantiation
+  //--------------------------------------------------------------
+  logic [31:0] rdata_blk[BLK_CNT-1 : 0];
 
-      .hash_re (hash_re)  
-    );
+  genvar i;
+  generate
+    for (i=0;i<BLK_CNT;i++ )
+    begin
+      heavy_hash_blk
+        #(
+          .NONCE_COEF(i+1),
+          .WCOUNT ( WCOUNT )
+        )
+        heavy_hash_blk_dut (
+          .clk_axi (clk_main_a0 ),
+          .clk_top (clk_extra_b0), //B5 = 400MHz
+          .rst (rst_main_n_sync ),
+          //axi input interfaces
+          .awvalid(awvalid),
+          .awaddr(awaddr),
+          .wvalid(wvalid),
+          .wdata(wdata),
+          .arvalid(arvalid),
+          .araddr(araddr),
+          .rready(rready),
+
+          //axi output interfaces
+          .rdata(rdata_blk[i])
+        );
+    end
+  endgenerate
+
+
+  //--------------------------------------------------------------
+  // OR operations for rdata_blk signals 
+  // only one of the blocks output is different than zero.
+  //--------------------------------------------------------------
+  assign rdata_blk_or[0] = 1'b0;
+   
+  generate
+    for (i = 0 ; i < BLK_CNT ; i ++ )
+    begin
+      assign rdata_blk_or[i+1] = rdata_blk[i] | rdata_blk_or[i];
+    end
+  endgenerate
+
 
 
   
@@ -427,10 +432,7 @@ parameter  BLK_CNT = 36;
       rvalid <= 1;
       rdata  <= (araddr_q == `HELLO_WORLD_REG_ADDR  ) ? hello_world_q_byte_swapped[31:0]:
              (araddr_q == `VLED_REG_ADDR         ) ? {16'b0,vled_q[15:0]            }:
-             (araddr_q == `STATUS_REG_ADDR  )      ? {30'b0,status[1:0]              }:
-             (araddr_q == `NONCE_REG_ADDR  )       ? nonce:
-             (araddr_q == `HEAVYHASH_REG_ADDR  )   ? heavyhash:
-             `UNIMPLEMENTED_REG_VALUE        ;
+             rdata_blk_or[BLK_CNT];
       rresp  <= 0;
       if(araddr_q == `HEAVYHASH_REG_ADDR)
         hash_re <= 1'b1;
@@ -462,68 +464,7 @@ parameter  BLK_CNT = 36;
          hello_world_q[23:16], hello_world_q[31:24]};
 
 
-  //-------------------------------------------------
-  // oBTC module write registers
-  //-------------------------------------------------
-
-  always_ff @(posedge clk_main_a0)
-    if (!rst_main_n_sync)
-    begin                    // Reset
-      block_header <= 32'h0000_0000;
-      matrix_in <= 32'h0000_0000;
-      target <= 32'h0000_0000;
-      nonce_size <= 32'h0000_0000;
-      start <= 1'b0;
-      stop <= 1'b0;
-      target_we <= 1'b0;
-      hash_select <= 1'b0;
-      block_header_we <= 1'b0;
-      matrix_fifo_we <= 1'b0;
-    end
-    else if (wready & (wr_addr == `BLOCKHEADER_REG_ADDR))
-    begin
-      block_header <= wdata[31:0];
-      block_header_we <= 1'b1;
-    end
-    else if (wready & (wr_addr == `MATRIX_REG_ADDR))
-    begin
-      matrix_in <= wdata[31:0];
-      matrix_fifo_we <= 1'b1;
-    end
-    else if (wready & (wr_addr == `TARGET_REG_ADDR))
-    begin
-      target <= wdata[31:0];
-      target_we <= 1'b1;
-    end
-    else if (wready & (wr_addr == `NONCESIZE_REG_ADDR))
-    begin
-      nonce_size <= wdata[31:0];
-    end
-    else if (wready & (wr_addr == `START_REG_ADDR))
-    begin
-      start <= 1'b1;
-    end
-    else if (wready & (wr_addr == `STOP_REG_ADDR))
-    begin
-      stop <= 1'b1;
-    end
-    else if (wready & (wr_addr == `HEAVYHASH_SEL_REG_ADDR))
-    begin
-      hash_select <= wdata[$clog2(BLK_CNT)-1:0];
-    end
-    else
-    begin
-      target_we <= 1'b0;
-      block_header_we <= 1'b0;
-      matrix_fifo_we <= 1'b0;
-      block_header <= 32'd0;
-      target <= 32'd0;
-      matrix_in <= 32'd0;
-      nonce_size <= nonce_size;
-      hash_select <= hash_select;
-      start <= 1'b0;
-      stop <= 1'b0;
-    end
+  
 
 
   // always@(top_ins.hash_out)
