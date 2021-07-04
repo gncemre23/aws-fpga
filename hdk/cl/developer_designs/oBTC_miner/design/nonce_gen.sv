@@ -17,6 +17,8 @@ module nonce_gen
      input logic stop,
      //!block header input from block_header fifo
      input logic [31:0] block_header,
+     //!block_header write enable
+     input block_header_we
      //!nonce size information calculated by software
      input logic [31:0] nonce_size,
      //!hashin fifo write enable
@@ -116,8 +118,11 @@ module nonce_gen
         stop_ack_next = 1'b0;
         if(cnt_reg < 20)
         begin
-          block_header_next = {block_header,block_header_reg[639:32]};
-          cnt_next = cnt_reg + 5'd1;
+          if(block_header_we)
+          begin
+            block_header_next = {block_header,block_header_reg[639:32]};
+            cnt_next = cnt_reg + 5'd1;
+          end
         end
         else
         begin

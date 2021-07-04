@@ -12,6 +12,8 @@ module comparator
     input logic rst,
     //!32-bit target from asychronous fifo
     input logic [31:0] target,
+    //!target write enable
+    input logic target_we,
     //!start input to prepare the system
     input logic start,
     //!stop input
@@ -103,8 +105,11 @@ module comparator
         stop_ack_comp = 1'b0;
         if(cnt_reg < 8)
         begin
+          if(target_we)
+          begin
           target_next = {target,target_reg[255:32]};
           cnt_next = cnt_reg + 4'd1;
+          end
         end
         else if(!hash_out_empty)
           state_next = COMPARE_0;

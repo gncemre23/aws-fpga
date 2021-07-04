@@ -48,7 +48,7 @@ module cl_hello_world
 `include "unused_apppf_irq_template.inc"
 
 
-parameter  BLK_CNT = 4;
+  parameter  BLK_CNT = 4;
   //-------------------------------------------------
   // Wires
   //-------------------------------------------------
@@ -66,7 +66,7 @@ parameter  BLK_CNT = 4;
 
 
 
-  
+
 
 
 
@@ -165,7 +165,7 @@ parameter  BLK_CNT = 4;
       .m_axi_rvalid  (ocl_sh_rvalid_q),
       .m_axi_rready  (sh_ocl_rready_q)
     );
-    
+
   //-------------------------------------------------
   // Wires for oBTCMiner_design
   //-------------------------------------------------
@@ -182,13 +182,13 @@ parameter  BLK_CNT = 4;
   logic [31:0] nonce;
   logic [1:0] status;
   logic [31:0] heavyhash;
-  logic hash_re; 
+  logic hash_re;
   logic [$clog2(BLK_CNT)-1:0] hash_select;
-  logic 
+  logic
 
 
-  `ifdef DBG_
-  logic [255:0] hash_out_dbg;
+`ifdef DBG_
+    logic [255:0] hash_out_dbg;
   logic hash_out_we_dbg;
   logic stop_ack_dbg;
   logic [2:0] state_nonce_dbg;
@@ -204,7 +204,7 @@ parameter  BLK_CNT = 4;
   logic stop_dbg;
   logic [255:0] target_dbg;
   logic [31:0] nonce_end_dbg;
-  `endif
+`endif
 
 
   //-------------------------------------------------
@@ -232,16 +232,16 @@ parameter  BLK_CNT = 4;
   logic dummy_reg_c0;
   logic dummy_reg_c1;
   //This registers are added to work around for the error given below
-  //ERROR: [Place 30-838] The following clock nets need to use the same 
-  //clock routing resource, as their clock buffer sources are locked to 
-  //sites that use the same routing track. One or more loads of these 
-  //clocks are locked to clock region(s) X2Y11 X2Y12 which causes the 
-  //clock partitions for these clocks to overlap. This creates 
-  //unresolvable contention on the clock routing resources. 
-  //If the clock buffers need to be locked, we recommend users constrain 
-  //them to a clock region and not to specific BUFGCE/BUFG_GT sites so 
-  //they can use different routing resources. If clock sources should be 
-  //locked to specific BUFGCE/BUFG_GT sites that share the same routing resources, 
+  //ERROR: [Place 30-838] The following clock nets need to use the same
+  //clock routing resource, as their clock buffer sources are locked to
+  //sites that use the same routing track. One or more loads of these
+  //clocks are locked to clock region(s) X2Y11 X2Y12 which causes the
+  //clock partitions for these clocks to overlap. This creates
+  //unresolvable contention on the clock routing resources.
+  //If the clock buffers need to be locked, we recommend users constrain
+  //them to a clock region and not to specific BUFGCE/BUFG_GT sites so
+  //they can use different routing resources. If clock sources should be
+  //locked to specific BUFGCE/BUFG_GT sites that share the same routing resources,
   //make sure loads of such clocks are not constrained to the same region(s). Clock nets sharing routing resources:
   //ERROR:[Place 30-678] Failed to do clock region partitioning: failed to resolve clock partition contention for locked clock sources.
 
@@ -250,16 +250,16 @@ parameter  BLK_CNT = 4;
 
   always_ff @(posedge clk_extra_a2)
     dummy_reg_a2 <= 1'b0;
-  
+
   always_ff @(posedge clk_extra_a3)
     dummy_reg_a3 <= 1'b0;
-  
+
   always_ff @(posedge clk_extra_b0)
     dummy_reg_b0 <= 1'b0;
 
   always_ff @(posedge clk_extra_b1)
     dummy_reg_b1 <= 1'b0;
-  
+
   always_ff @(posedge clk_extra_c0)
     dummy_reg_c0 <= 1'b0;
 
@@ -272,6 +272,7 @@ parameter  BLK_CNT = 4;
   // Heavy hash blocks instantiation
   //--------------------------------------------------------------
   logic [31:0] rdata_blk[BLK_CNT-1 : 0];
+  logic rvalid_heavy_hash;
 
   genvar i;
   generate
@@ -296,18 +297,19 @@ parameter  BLK_CNT = 4;
           .rready(rready),
 
           //axi output interfaces
-          .rdata(rdata_blk[i])
+          .rdata(rdata_blk[i]),
+          .rvalid_heavy_hash(rvalid_heavy_hash)
         );
     end
   endgenerate
 
 
   //--------------------------------------------------------------
-  // OR operations for rdata_blk signals 
+  // OR operations for rdata_blk signals
   // only one of the blocks output is different than zero.
   //--------------------------------------------------------------
   assign rdata_blk_or[0] = 1'b0;
-   
+
   generate
     for (i = 0 ; i < BLK_CNT ; i ++ )
     begin
@@ -317,7 +319,7 @@ parameter  BLK_CNT = 4;
 
 
 
-  
+
 
 
   //--------------------------------------------------------------
@@ -427,18 +429,21 @@ parameter  BLK_CNT = 4;
       rresp  <= 0;
       hash_re <= 0;
     end
-    else if (arvalid_q)
+    else if (arvalid_q && (araddr_q == `HELLO_WORLD_REG_ADDR || araddr_q == `VLED_REG_ADDR))
     begin
       rvalid <= 1;
       rdata  <= (araddr_q == `HELLO_WORLD_REG_ADDR  ) ? hello_world_q_byte_swapped[31:0]:
              (araddr_q == `VLED_REG_ADDR         ) ? {16'b0,vled_q[15:0]            }:
-             rdata_blk_or[BLK_CNT];
+             0;
       rresp  <= 0;
-      if(araddr_q == `HEAVYHASH_REG_ADDR)
-        hash_re <= 1'b1;
-      else
-        hash_re <= 1'b0;
     end
+    else if (rvalid_heavy_hash)
+    begin
+      rvalid <= 1;
+      rdata <= rdata_blk_or[BLK_CNT];
+      rresp  <= 0;
+    end
+
 
 
   //-------------------------------------------------
@@ -464,7 +469,7 @@ parameter  BLK_CNT = 4;
          hello_world_q[23:16], hello_world_q[31:24]};
 
 
-  
+
 
 
   // always@(top_ins.hash_out)
@@ -553,9 +558,10 @@ parameter  BLK_CNT = 4;
           .probe4 ({32'b0,ocl_sh_rdata_q[31:0]}),
           .probe5 (sh_ocl_rready_q)
         );
-  
-  
-  `ifdef DBG_
+
+
+`ifdef DBG_
+
   ila_0 CL_ILA_2 (
           .clk    (clk_main_a0),
           .probe0 (hash_out_we_dbg),
@@ -564,7 +570,7 @@ parameter  BLK_CNT = 4;
           .probe3 (state_top_dbg[0]),
           .probe4 (hashin_fifo_in_din),
           .probe5 (state_top_dbg[1])
-  );
+        );
 
   ila_0 CL_ILA_3 (
           .clk    (clk_main_a0),
@@ -574,7 +580,7 @@ parameter  BLK_CNT = 4;
           .probe3 (start_dbg),
           .probe4 (sha3out_dout_dbg),
           .probe5 (stop_dbg)
-  );
+        );
 
   ila_0 CL_ILA_4 (
           .clk    (clk_main_a0),
@@ -584,14 +590,14 @@ parameter  BLK_CNT = 4;
           .probe3 (stop_ack_dbg),
           .probe4 ({32'd0,nonce_end_dbg}),
           .probe5 (start_dbg)
-  );
+        );
   ila_0 CL_ILA_5 (
           .clk    (clk_main_a0),
           .probe0 (start_dbg),
           .probe1 (target_dbg[63:0]),
           .probe4 ({61'd0,state_comparator_dbg})
-  );
-  `endif
+        );
+`endif
 
   // Debug Bridge
   cl_debug_bridge CL_DEBUG_BRIDGE (
