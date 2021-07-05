@@ -182,7 +182,7 @@ module heavy_hash #(parameter WCOUNT = 4 )
       .clk (clk ),
       .rst (rst ),
       .wr_en (nonce_fifo_we ),
-      .rd_en (hashout_fifo_out_re ),
+      .rd_en (hashout_fifo_out_we ),//hashout_fifo_out_re
       .din (nonce_fifo_din ),
       .dout (nonce ),
       .full (nonce_fifo_full ),

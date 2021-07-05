@@ -64,7 +64,7 @@ module cl_hello_world
 
 
 
-
+  genvar k;
 
 
 
@@ -184,11 +184,10 @@ module cl_hello_world
   logic [31:0] heavyhash;
   logic hash_re;
   logic [$clog2(BLK_CNT)-1:0] hash_select;
-  logic
 
 
 `ifdef DBG_
-    logic [255:0] hash_out_dbg;
+  logic [255:0] hash_out_dbg;
   logic hash_out_we_dbg;
   logic stop_ack_dbg;
   logic [2:0] state_nonce_dbg;
@@ -268,54 +267,10 @@ module cl_hello_world
 
 
 
-  //--------------------------------------------------------------
-  // Heavy hash blocks instantiation
-  //--------------------------------------------------------------
-  logic [31:0] rdata_blk[BLK_CNT-1 : 0];
-  logic rvalid_heavy_hash;
-
-  genvar i;
-  generate
-    for (i=0;i<BLK_CNT;i++ )
-    begin
-      heavy_hash_blk
-        #(
-          .NONCE_COEF(i+1),
-          .WCOUNT ( WCOUNT )
-        )
-        heavy_hash_blk_dut (
-          .clk_axi (clk_main_a0 ),
-          .clk_top (clk_extra_b0), //B5 = 400MHz
-          .rst (rst_main_n_sync ),
-          //axi input interfaces
-          .awvalid(awvalid),
-          .awaddr(awaddr),
-          .wvalid(wvalid),
-          .wdata(wdata),
-          .arvalid(arvalid),
-          .araddr(araddr),
-          .rready(rready),
-
-          //axi output interfaces
-          .rdata(rdata_blk[i]),
-          .rvalid_heavy_hash(rvalid_heavy_hash)
-        );
-    end
-  endgenerate
+  
 
 
-  //--------------------------------------------------------------
-  // OR operations for rdata_blk signals
-  // only one of the blocks output is different than zero.
-  //--------------------------------------------------------------
-  assign rdata_blk_or[0] = 1'b0;
-
-  generate
-    for (i = 0 ; i < BLK_CNT ; i ++ )
-    begin
-      assign rdata_blk_or[i+1] = rdata_blk[i] | rdata_blk_or[i];
-    end
-  endgenerate
+  
 
 
 
@@ -366,6 +321,61 @@ module cl_hello_world
   assign ocl_sh_rvalid_q  = rvalid;
   assign ocl_sh_rdata_q   = rdata;
   assign ocl_sh_rresp_q   = rresp[1:0];
+
+
+
+
+  //--------------------------------------------------------------
+  // Heavy hash blocks instantiation
+  //--------------------------------------------------------------
+  logic [31:0] rdata_blk[BLK_CNT-1 : 0];
+  logic rvalid_heavy_hash[BLK_CNT-1:0];
+  logic [31:0] rdata_blk_or[BLK_CNT : 0];
+  logic [31:0] rvalid_or[BLK_CNT : 0];
+  
+  generate
+    for (k=0;k<BLK_CNT;k++ )
+    begin
+      heavy_hash_blk
+        #(
+          .NONCE_COEF(k+1),
+          .WCOUNT ( 4 )
+        )
+        heavy_hash_blk_dut (
+          .clk_axi (clk_main_a0 ),
+          .clk_int (clk_extra_c1), //B5 = 400MHz
+          .rst_n (rst_main_n_sync ),
+          //axi input interfaces
+          .awvalid(awvalid),
+          .awaddr(awaddr),
+          .wvalid(wvalid),
+          .wdata(wdata),
+          .arvalid(arvalid),
+          .araddr(araddr),
+          .rready(rready),
+          .bvalid(bvalid),
+          .bready(bready),
+          //axi output interfaces
+          .rdata(rdata_blk[k]),
+          .rvalid_heavy_hash(rvalid_heavy_hash[k])
+        );
+    end
+  endgenerate
+
+
+  //--------------------------------------------------------------
+  // OR operations for rdata_blk signals
+  // only one of the blocks output is different than zero.
+  //--------------------------------------------------------------
+  assign rdata_blk_or[0] = 1'b0;
+  assign rvalid_or[0] = 1'b0;
+  generate
+    for (k = 0 ; k < BLK_CNT ; k ++ )
+    begin
+      assign rdata_blk_or[k+1] = rdata_blk[k] | rdata_blk_or[k];
+      assign rvalid_or[k+1] = rvalid_heavy_hash[k] | rvalid_or[k];
+    end
+  endgenerate
 
   // Write Request
   logic        wr_active;
@@ -437,7 +447,7 @@ module cl_hello_world
              0;
       rresp  <= 0;
     end
-    else if (rvalid_heavy_hash)
+    else if (rvalid_or[BLK_CNT])
     begin
       rvalid <= 1;
       rdata <= rdata_blk_or[BLK_CNT];

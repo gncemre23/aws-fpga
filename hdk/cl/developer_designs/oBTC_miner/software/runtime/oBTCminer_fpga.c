@@ -66,6 +66,7 @@
 #define NONCE_REG_BASE UINT64_C(0x510)
 
 #define FPGA_REG_OFFSET 36
+#define BLK_CNT 4
 /* use the stdout logger for printing debug information  */
 #ifndef SV_TEST
 const struct logger *logger = &logger_stdout;
@@ -104,8 +105,10 @@ uint32_t byte_swap(uint32_t value);
  */
 int peek_poke_example(uint32_t value, int slot_id, int pf_id, int bar_id);
 void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, int pf_id, int bar_id);
-uint32_t read_heavyhash(int slot_id, int pf_id, int bar_id);
-uint32_t read_status(int slot_id, int pf_id, int bar_id);
+uint32_t read_golden_nonce(int slot_id, int pf_id, int bar_id, uint8_t golden_blk);
+uint32_t read_heavyhash(int slot_id, int pf_id, int bar_id, uint8_t golden_blk);
+void wait_status(int slot_id, int pf_id, int bar_id, uint32_t *status, uint8_t *golden_block);
+void heavy_hash_fpga_deinit(int slot_id, int pf_id, int bar_id);
 //pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
 
 uint32_t byte_swap(uint32_t value)
@@ -209,7 +212,7 @@ int main(int argc, char **argv)
     uint16_t matrix[64][64];
 
     FILE *fp;
-    const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000096";
+    const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000";
     uint8_t work_byte[100];
     uint32_t work_word[25];
     uint64_t hashes_done = 0;
@@ -254,27 +257,34 @@ int main(int argc, char **argv)
     printf("hashes_done = %d\n", hashes_done);
     heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0);
 
-    uint32_t status = 0, hash = 0;
+    uint32_t status[BLK_CNT] = {0};
+    uint32_t hash = 0;
     uint32_t heavy_hash[8];
     uint32_t golden_blk;
 
     //wait until status will be other than 2
     wait_status(slot_id, FPGA_APP_PF, APP_PF_BAR0, &status, &golden_blk);
 
-    if (status == 1)
+    for (size_t i = 0; i < BLK_CNT; i++)
     {
-        golden_nonce = read_golden_nonce(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk);
-        for (size_t i = 7; i > -1; i++)
+        if (status[i] == 1)
         {
-            heavy_hash[i] = read_heavyhash(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk);
-        }
+            golden_blk = i;
+            golden_nonce = read_golden_nonce(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk) - 1;
+            for (size_t j = 0; j < 8; j++)
+            {
+                heavy_hash[j] = read_heavyhash(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk);
+            }
 
-        printf("Golden nonce is = %08x\n", golden_nonce);
-        for (size_t i = 0; i < 8; i++)
-        {
-            printf("Golden nonce is = %08x", heavy_hash[i]);
+            printf("Golden nonce is = %08x\n", golden_nonce);
+            printf("Golden hash is =");
+            for (size_t j = 0; j < 8; j++)
+            {
+                printf("%08x", heavy_hash[j]);
+            }
+            printf("\n");
+            break;
         }
-        printf("\n");
     }
     heavy_hash_fpga_deinit(slot_id, FPGA_APP_PF, APP_PF_BAR0);
 
@@ -362,6 +372,28 @@ void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, in
     fail_on(rc, out, "Unable to write to the fpga !");
 #endif
     printf("init begin\n");
+
+    //send stop to all blocks
+    rc = fpga_pci_poke(pci_bar_handle, STOP_REG, 1);
+    fail_on(rc, out, "Unable to write to the fpga !");
+
+    //send start to all blocks
+    rc = fpga_pci_poke(pci_bar_handle, START_REG, 1);
+    fail_on(rc, out, "Unable to write to the fpga !");
+
+    //send nonce size to all blocks
+    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG, 50);
+    fail_on(rc, out, "Unable to write to the fpga !");
+
+    //send target to all blocks
+    for (int i = 0; i < 7; i++)
+    {
+        rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 0xFFFFFFFF);
+        fail_on(rc, out, "Unable to write to the fpga !");
+    }
+    rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 0x00DFFFFF);
+    fail_on(rc, out, "Unable to write to the fpga !");
+
     //send block header to all blocks
     for (int i = 19; i >= 0; i--)
     {
@@ -379,26 +411,6 @@ void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, in
             fail_on(rc, out, "Unable to write to the fpga !");
         }
     }
-    //send target to all blocks
-    for (int i = 0; i < 7; i++)
-    {
-        rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 0xFFFFFFFF);
-        fail_on(rc, out, "Unable to write to the fpga !");
-    }
-    rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 0x00BFFFFF);
-    fail_on(rc, out, "Unable to write to the fpga !");
-
-    //send nonce size to all blocks
-    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG, 50);
-    fail_on(rc, out, "Unable to write to the fpga !");
-
-    //send stop to all blocks
-    rc = fpga_pci_poke(pci_bar_handle, STOP_REG, 1);
-    fail_on(rc, out, "Unable to write to the fpga !");
-
-    //send start to all blocks
-    fpga_pci_poke(pci_bar_handle, START_REG, 1);
-    fail_on(rc, out, "Unable to write to the fpga !");
 
     printf("init done \n ...");
 
@@ -449,15 +461,14 @@ void wait_status(int slot_id, int pf_id, int bar_id, uint32_t *status, uint8_t *
     // fail_on(rc, out, "Unable to attach to the AFI on slot id %d", slot_id);
 #endif
     //read status registers from all blocks
-    while (status == 2)
+    uint32_t status_and = 2;
+    while (status_and == 2)
     {
         for (size_t i = 0; i < BLK_CNT; i++)
         {
-            *golden_block = i;
-            rc = fpga_pci_peek(pci_bar_handle, STATUS_REG_BASE + k * FPGA_REG_OFFSET, status);
+            rc = fpga_pci_peek(pci_bar_handle, STATUS_REG_BASE + i * FPGA_REG_OFFSET, &status[i]);
             fail_on(rc, out, "Unable to write to the fpga !");
-            if (status != 2)
-                break;
+            status_and &= status[i];
         }
     }
 

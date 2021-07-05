@@ -37,31 +37,37 @@ module heavy_hash_blk
      input logic rst_n,
 
      //!AXI write address valid signal
-     input awvalid,
+     input logic awvalid,
 
      //!AXI write address
-     input [31:0] awaddr,
+     input logic [31:0] awaddr,
 
      //!AXI write data valid signal
-     input wvalid,
+     input logic wvalid,
+
+     //!AXI bvalid
+     input logic bvalid,
+
+     //!AXI bready,
+     input logic bready,
 
      //!AXI write data
-     input [31:0] wdata,
+     input logic [31:0] wdata,
 
      //!AXI read address valid
-     input arvalid,
+     input logic arvalid,
 
      //!AXI read address
-     input [31:0] araddr,
+     input logic [31:0] araddr,
 
      //!AXI read rready
-     input rready,
+     input logic rready,
 
      //!AXI read data
-     output [31:0] rdata,
+     output logic [31:0] rdata,
 
      //!AXI rvalid output
-     output rvalid_heavy_hash
+     output logic rvalid_heavy_hash
 
    );
 
@@ -133,39 +139,6 @@ module heavy_hash_blk
 
 
 
-  assign stop_ack = stop_ack_comp & stop_ack_nonce;
-
-  assign hash_out_we = hashout_fifo_re;
-
-  assign nonce_end_1 = nonce_end -1 ;
-
-  always_comb
-  begin : blockName
-    if(result)
-      status = 1;
-    else if(nonce < nonce_end_1)
-      status = 2;
-    else
-      status = 0;
-  end
-  //-------------------------------------------------
-  // Golden nonce and Golden hash
-  //-------------------------------------------------
-  logic [31:0]  golden_nonce = 32'd0;
-  logic [255:0] golden_hash = 256'd0;
-  always_ff @( clk_int )
-  begin
-    if(status == 1)
-    begin
-      golden_nonce <= nonce;
-      golden_hash  <= hash_out;
-    end
-    else
-    begin
-      golden_nonce <= golden_nonce;
-      golden_hash  <= golde_hash;
-    end
-  end
 
 
   //-------------------------------------------------
@@ -253,13 +226,26 @@ module heavy_hash_blk
   //-------------------------------------------------
   // araddr_q, arvalid_q, counter i
   logic [31:0] araddr_q;
-  logi arvalid_q;
+  logic arvalid_q;
   logic [2:0] counter_i;
   logic [31:0] rdata_int;
   logic rvalid_heavy_hash_int;
+  logic arvalid_int;
+  logic arvalid_int_old;
+  logic [31:0] araddr_int;
+  logic rvalid_heavy_hash_int_q = 1'b0;
+  logic [31:0] rdata_int_q = 32'd0;
+  logic [2:0] hold_cnt = 3'd0;
 
-  const int NONCE_REG_ADDR_BLK = `NONCE_REG_ADDR + NONCE_COEF*36;
-  const int HEAVYHASH_REG_ADDR_BLK = `HEAVYHASH_REG_ADDR_ADDR + NONCE_COEF*36;
+  const int NONCE_REG_ADDR_BLK = `NONCE_REG_ADDR + (NONCE_COEF-1)*36;
+  const int HEAVYHASH_REG_ADDR_BLK = `HEAVYHASH_REG_ADDR + (NONCE_COEF-1)*36;
+  const int STATUS_REG_ADDR_BLK = `STATUS_REG_ADDR + (NONCE_COEF-1)*36;
+  always_ff @(posedge clk_int)
+  begin
+    arvalid_int_old <= arvalid_int;
+  end
+
+
   always_ff @(posedge clk_int)
     if (rst)
     begin
@@ -267,7 +253,7 @@ module heavy_hash_blk
       arvalid_q  <= 0;
       counter_i  <= 0;
     end
-    else if (arvalid_int)
+    else if (arvalid_int && ~arvalid_int_old)
     begin
       araddr_q <= araddr_int;
       arvalid_q  <= 1'b1;
@@ -275,8 +261,8 @@ module heavy_hash_blk
     end
     else
     begin
-      araddr_q <= araddr_q;
-      arvalid_q  <= arvalid_q;
+      araddr_q <= 0;
+      arvalid_q  <= 0;
       counter_i  <= counter_i;
     end
 
@@ -295,7 +281,35 @@ module heavy_hash_blk
       rvalid_heavy_hash_int = 1'b1;
       rdata_int = heavy_hash_32;
     end
+    else if( araddr_q == STATUS_REG_ADDR_BLK)
+    begin
+      rvalid_heavy_hash_int = 1'b1;
+      rdata_int = {30'd0, status};
+    end
   end
+
+  always_ff @( posedge clk_int ) 
+  begin
+    if(rvalid_heavy_hash_int)
+    begin
+      hold_cnt <= hold_cnt + 1;
+      rvalid_heavy_hash_int_q <= 1'b1;
+      rdata_int_q <= rdata_int;
+    end
+    else if(rvalid_heavy_hash_int_q == 1 && hold_cnt < 4)
+    begin
+      hold_cnt <= hold_cnt + 1;
+      rvalid_heavy_hash_int_q <= rvalid_heavy_hash_int_q;
+      rdata_int_q <= rdata_int_q;
+    end
+    else
+    begin
+      hold_cnt <= 0;
+      rvalid_heavy_hash_int_q <= 0;
+      rdata_int_q <= 0;
+    end    
+  end
+    
 
 
   //-------------------------------------------------
@@ -305,14 +319,22 @@ module heavy_hash_blk
   always_comb
   begin
     case (counter_i)
-      0: heavy_hash_32 = golden_hash[255:224];
-      1: heavy_hash_32 = golden_hash[223:192];
-      2: heavy_hash_32 = golden_hash[191:160];
-      3: heavy_hash_32 = golden_hash[159:128];
-      4: heavy_hash_32 = golden_hash[127: 96];
-      5: heavy_hash_32 = golden_hash[ 95: 64];
-      6: heavy_hash_32 = golden_hash[ 63: 32];
-      7: heavy_hash_32 = golden_hash[ 31:  0]; 
+      0:
+        heavy_hash_32 = golden_hash[255:224];
+      1:
+        heavy_hash_32 = golden_hash[223:192];
+      2:
+        heavy_hash_32 = golden_hash[191:160];
+      3:
+        heavy_hash_32 = golden_hash[159:128];
+      4:
+        heavy_hash_32 = golden_hash[127: 96];
+      5:
+        heavy_hash_32 = golden_hash[ 95: 64];
+      6:
+        heavy_hash_32 = golden_hash[ 63: 32];
+      7:
+        heavy_hash_32 = golden_hash[ 31:  0];
     endcase
   end
 
@@ -414,118 +436,188 @@ module heavy_hash_blk
 
                  .dest_clk(clk_axi),         // 1-bit input: Destination clock.
                  .src_clk(clk_int),           // 1-bit input: Source clock.
-                 .src_in_bin(rdata_int)      // WIDTH-bit input: Binary input bus that will be synchronized to the
+                 .src_in_bin(rdata_int_q)      // WIDTH-bit input: Binary input bus that will be synchronized to the
                  // destination clock domain.
 
                );
-  
+
+  xpm_cdc_gray #(
+                 .DEST_SYNC_FF(4),          // DECIMAL; range: 2-10
+                 .INIT_SYNC_FF(0),          // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
+                 .REG_OUTPUT(0),            // DECIMAL; 0=disable registered output, 1=enable registered output
+                 .SIM_ASSERT_CHK(0),        // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
+                 .SIM_LOSSLESS_GRAY_CHK(0), // DECIMAL; 0=disable lossless check, 1=enable lossless check
+                 .WIDTH(32)                  // DECIMAL; range: 2-32
+               )
+               sync_araddr(
+                 .dest_out_bin(araddr_int), // WIDTH-bit output: Binary input bus (src_in_bin) synchronized to
+                 // destination clock domain. This output is combinatorial unless REG_OUTPUT
+                 // is set to 1.
+
+                 .dest_clk(clk_int),         // 1-bit input: Destination clock.
+                 .src_clk(clk_axi),           // 1-bit input: Source clock.
+                 .src_in_bin(araddr)      // WIDTH-bit input: Binary input bus that will be synchronized to the
+                 // destination clock domain.
+
+               );
+
   //-------------------------------------------------
   // Synchronizations for 1-bit signals
   //-------------------------------------------------
   xpm_cdc_single #(
-      .DEST_SYNC_FF(4),   // DECIMAL; range: 2-10
-      .INIT_SYNC_FF(0),   // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
-      .SIM_ASSERT_CHK(0), // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
-      .SRC_INPUT_REG(0)   // DECIMAL; 0=do not register input, 1=register input
-   )
-   sync_block_header_we (
-      .dest_out(block_header_we_int), // 1-bit output: src_in synchronized to the destination clock domain. This output is
-                           // registered.
-      .dest_clk(clk_int), // 1-bit input: Clock signal for the destination clock domain.
-      .src_clk(clk_axi),   // 1-bit input: optional; required when SRC_INPUT_REG = 1
-      .src_in(block_header_we_axi)      // 1-bit input: Input signal to be synchronized to dest_clk domain.
-   );
+                   .DEST_SYNC_FF(4),   // DECIMAL; range: 2-10
+                   .INIT_SYNC_FF(0),   // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
+                   .SIM_ASSERT_CHK(0), // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
+                   .SRC_INPUT_REG(1)   // DECIMAL; 0=do not register input, 1=register input
+                 )
+                 sync_block_header_we (
+                   .dest_out(block_header_we_int), // 1-bit output: src_in synchronized to the destination clock domain. This output is
+                   // registered.
+                   .dest_clk(clk_int), // 1-bit input: Clock signal for the destination clock domain.
+                   .src_clk(clk_axi),   // 1-bit input: optional; required when SRC_INPUT_REG = 1
+                   .src_in(block_header_we_axi)      // 1-bit input: Input signal to be synchronized to dest_clk domain.
+                 );
 
   xpm_cdc_single #(
-      .DEST_SYNC_FF(4),   // DECIMAL; range: 2-10
-      .INIT_SYNC_FF(0),   // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
-      .SIM_ASSERT_CHK(0), // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
-      .SRC_INPUT_REG(0)   // DECIMAL; 0=do not register input, 1=register input
-   )
-   sync_matrix_we (
-      .dest_out(matrix_we_int), // 1-bit output: src_in synchronized to the destination clock domain. This output is
-                           // registered.
-      .dest_clk(clk_int), // 1-bit input: Clock signal for the destination clock domain.
-      .src_clk(clk_axi),   // 1-bit input: optional; required when SRC_INPUT_REG = 1
-      .src_in(matrix_we_axi)      // 1-bit input: Input signal to be synchronized to dest_clk domain.
-   );
-  
-  xpm_cdc_single #(
-      .DEST_SYNC_FF(4),   // DECIMAL; range: 2-10
-      .INIT_SYNC_FF(0),   // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
-      .SIM_ASSERT_CHK(0), // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
-      .SRC_INPUT_REG(0)   // DECIMAL; 0=do not register input, 1=register input
-   )
-   sync_target_we (
-      .dest_out(target_we_int), // 1-bit output: src_in synchronized to the destination clock domain. This output is
-                           // registered.
-      .dest_clk(clk_int), // 1-bit input: Clock signal for the destination clock domain.
-      .src_clk(clk_axi),   // 1-bit input: optional; required when SRC_INPUT_REG = 1
-      .src_in(target_we_axi)      // 1-bit input: Input signal to be synchronized to dest_clk domain.
-   );
-
+                   .DEST_SYNC_FF(4),   // DECIMAL; range: 2-10
+                   .INIT_SYNC_FF(0),   // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
+                   .SIM_ASSERT_CHK(0), // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
+                   .SRC_INPUT_REG(1)   // DECIMAL; 0=do not register input, 1=register input
+                 )
+                 sync_matrix_we (
+                   .dest_out(matrix_we_int), // 1-bit output: src_in synchronized to the destination clock domain. This output is
+                   // registered.
+                   .dest_clk(clk_int), // 1-bit input: Clock signal for the destination clock domain.
+                   .src_clk(clk_axi),   // 1-bit input: optional; required when SRC_INPUT_REG = 1
+                   .src_in(matrix_we_axi)      // 1-bit input: Input signal to be synchronized to dest_clk domain.
+                 );
 
   xpm_cdc_single #(
-      .DEST_SYNC_FF(4),   // DECIMAL; range: 2-10
-      .INIT_SYNC_FF(0),   // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
-      .SIM_ASSERT_CHK(0), // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
-      .SRC_INPUT_REG(0)   // DECIMAL; 0=do not register input, 1=register input
-   )
-   sync_start (
-      .dest_out(start_int), // 1-bit output: src_in synchronized to the destination clock domain. This output is
-                           // registered.
-      .dest_clk(clk_int), // 1-bit input: Clock signal for the destination clock domain.
-      .src_clk(clk_axi),   // 1-bit input: optional; required when SRC_INPUT_REG = 1
-      .src_in(start_axi)      // 1-bit input: Input signal to be synchronized to dest_clk domain.
-   );
+                   .DEST_SYNC_FF(4),   // DECIMAL; range: 2-10
+                   .INIT_SYNC_FF(0),   // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
+                   .SIM_ASSERT_CHK(0), // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
+                   .SRC_INPUT_REG(1)   // DECIMAL; 0=do not register input, 1=register input
+                 )
+                 sync_target_we (
+                   .dest_out(target_we_int), // 1-bit output: src_in synchronized to the destination clock domain. This output is
+                   // registered.
+                   .dest_clk(clk_int), // 1-bit input: Clock signal for the destination clock domain.
+                   .src_clk(clk_axi),   // 1-bit input: optional; required when SRC_INPUT_REG = 1
+                   .src_in(target_we_axi)      // 1-bit input: Input signal to be synchronized to dest_clk domain.
+                 );
+
 
   xpm_cdc_single #(
-      .DEST_SYNC_FF(4),   // DECIMAL; range: 2-10
-      .INIT_SYNC_FF(0),   // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
-      .SIM_ASSERT_CHK(0), // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
-      .SRC_INPUT_REG(0)   // DECIMAL; 0=do not register input, 1=register input
-   )
-   sync_stop (
-      .dest_out(stop_int), // 1-bit output: src_in synchronized to the destination clock domain. This output is
-                           // registered.
-      .dest_clk(clk_int), // 1-bit input: Clock signal for the destination clock domain.
-      .src_clk(clk_axi),   // 1-bit input: optional; required when SRC_INPUT_REG = 1
-      .src_in(stop_axi)      // 1-bit input: Input signal to be synchronized to dest_clk domain.
-   );
+                   .DEST_SYNC_FF(4),   // DECIMAL; range: 2-10
+                   .INIT_SYNC_FF(0),   // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
+                   .SIM_ASSERT_CHK(0), // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
+                   .SRC_INPUT_REG(0)   // DECIMAL; 0=do not register input, 1=register input
+                 )
+                 sync_start (
+                   .dest_out(start_int), // 1-bit output: src_in synchronized to the destination clock domain. This output is
+                   // registered.
+                   .dest_clk(clk_int), // 1-bit input: Clock signal for the destination clock domain.
+                   .src_clk(clk_axi),   // 1-bit input: optional; required when SRC_INPUT_REG = 1
+                   .src_in(start_axi)      // 1-bit input: Input signal to be synchronized to dest_clk domain.
+                 );
 
-   xpm_cdc_single #(
-      .DEST_SYNC_FF(4),   // DECIMAL; range: 2-10
-      .INIT_SYNC_FF(0),   // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
-      .SIM_ASSERT_CHK(0), // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
-      .SRC_INPUT_REG(0)   // DECIMAL; 0=do not register input, 1=register input
-   )
-   sync_rdata_valid_heavyhash_int (
-      .dest_out(rvalid_heavy_hash), // 1-bit output: src_in synchronized to the destination clock domain. This output is
-                           // registered.
-      .dest_clk(clk_axi), // 1-bit input: Clock signal for the destination clock domain.
-      .src_clk(clk_int),   // 1-bit input: optional; required when SRC_INPUT_REG = 1
-      .src_in(rvalid_heavy_hash_int)      // 1-bit input: Input signal to be synchronized to dest_clk domain.
-   );
+  xpm_cdc_single #(
+                   .DEST_SYNC_FF(4),   // DECIMAL; range: 2-10
+                   .INIT_SYNC_FF(0),   // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
+                   .SIM_ASSERT_CHK(0), // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
+                   .SRC_INPUT_REG(0)   // DECIMAL; 0=do not register input, 1=register input
+                 )
+                 sync_stop (
+                   .dest_out(stop_int), // 1-bit output: src_in synchronized to the destination clock domain. This output is
+                   // registered.
+                   .dest_clk(clk_int), // 1-bit input: Clock signal for the destination clock domain.
+                   .src_clk(clk_axi),   // 1-bit input: optional; required when SRC_INPUT_REG = 1
+                   .src_in(stop_axi)      // 1-bit input: Input signal to be synchronized to dest_clk domain.
+                 );
+
+  xpm_cdc_single #(
+                   .DEST_SYNC_FF(4),   // DECIMAL; range: 2-10
+                   .INIT_SYNC_FF(0),   // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
+                   .SIM_ASSERT_CHK(0), // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
+                   .SRC_INPUT_REG(1)   // DECIMAL; 0=do not register input, 1=register input
+                 )
+                 sync_rdata_valid_heavyhash_int (
+                   .dest_out(rvalid_heavy_hash), // 1-bit output: src_in synchronized to the destination clock domain. This output is
+                   // registered.
+                   .dest_clk(clk_axi), // 1-bit input: Clock signal for the destination clock domain.
+                   .src_clk(clk_int),   // 1-bit input: optional; required when SRC_INPUT_REG = 1
+                   .src_in(rvalid_heavy_hash_int_q)      // 1-bit input: Input signal to be synchronized to dest_clk domain.
+                 );
+
+  xpm_cdc_single #(
+                   .DEST_SYNC_FF(4),   // DECIMAL; range: 2-10
+                   .INIT_SYNC_FF(0),   // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
+                   .SIM_ASSERT_CHK(0), // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
+                   .SRC_INPUT_REG(1)   // DECIMAL; 0=do not register input, 1=register input
+                 )
+                 sync_arvalid (
+                   .dest_out(arvalid_int), // 1-bit output: src_in synchronized to the destination clock domain. This output is
+                   // registered.
+                   .dest_clk(clk_int), // 1-bit input: Clock signal for the destination clock domain.
+                   .src_clk(clk_axi),   // 1-bit input: optional; required when SRC_INPUT_REG = 1
+                   .src_in(arvalid)      // 1-bit input: Input signal to be synchronized to dest_clk domain.
+                 );
+  logic matrix_we;
+  logic matrix_we_int_old;
+  logic block_header_we_int_old;
+  logic target_we_int_old;
+  logic block_header_we;
+  logic target_we;
+  always @(posedge clk_int)
+  begin
+    matrix_we_int_old <= matrix_we_int;
+    block_header_we_int_old <= block_header_we_int;
+    target_we_int_old <= target_we_int;
+  end
+
+  always @(posedge clk_int)
+  begin
+    if(matrix_we_int & ~matrix_we_int_old)
+      matrix_we <= 1'b1;
+    else
+      matrix_we <= 1'b0;
+
+    if(block_header_we_int & ~block_header_we_int_old)
+      block_header_we <= 1'b1;
+    else
+      block_header_we <= 1'b0;
+
+    if(target_we_int & ~target_we_int_old)
+      target_we <= 1'b1;
+    else
+      target_we <= 1'b0;
+
+  end
 
   //-------------------------------------------------
   // Synchronizations for reset
   //-------------------------------------------------
   xpm_cdc_sync_rst #(
-      .DEST_SYNC_FF(4),   // DECIMAL; range: 2-10
-      .INIT(1),           // DECIMAL; 0=initialize synchronization registers to 0, 1=initialize synchronization
-                          // registers to 1
-      .INIT_SYNC_FF(0),   // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
-      .SIM_ASSERT_CHK(0)  // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
-   )
-   sync_rst (
-      .dest_rst(rst), // 1-bit output: src_rst synchronized to the destination clock domain. This output
-                           // is registered.
+                     .DEST_SYNC_FF(4),   // DECIMAL; range: 2-10
+                     .INIT(1),           // DECIMAL; 0=initialize synchronization registers to 0, 1=initialize synchronization
+                     // registers to 1
+                     .INIT_SYNC_FF(0),   // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
+                     .SIM_ASSERT_CHK(0)  // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
+                   )
+                   sync_rst (
+                     .dest_rst(rst), // 1-bit output: src_rst synchronized to the destination clock domain. This output
+                     // is registered.
 
-      .dest_clk(clk_int), // 1-bit input: Destination clock.
-      .src_rst(~rst_n)    // 1-bit input: Source reset signal.
-   );
+                     .dest_clk(clk_int), // 1-bit input: Destination clock.
+                     .src_rst(~rst_n)    // 1-bit input: Source reset signal.
+                   );
 
 
+  //-------------------------------------------------
+  // Synchronizations for reset
+  //-------------------------------------------------
+  logic [63:0] hashin_fifo_in_din;
+  logic [31:0] nonce_end;
 
 
   nonce_gen
@@ -538,7 +630,7 @@ module heavy_hash_blk
       .start (start_int ),
       .stop (stop_int),
       .block_header (block_header_int ),
-      .block_header_we(block_header_we_int),
+      .block_header_we(block_header_we),
       .nonce_size (nonce_size_int ),
       .hashin_fifo_in_we (hashin_fifo_in_we ),
       .hashin_fifo_in_din (hashin_fifo_in_din ),
@@ -564,7 +656,7 @@ module heavy_hash_blk
       .hashin_fifo_in_we (hashin_fifo_in_we ),
       .hashin_fifo_in_din (hashin_fifo_in_din ),
       .hashin_fifo_in_full (hashin_fifo_in_full ),
-      .matrix_fifo_in_we (matrix_we_int ),
+      .matrix_fifo_in_we (matrix_we ),
       .matrix_fifo_in_din (matrix_in_int ),
       // not expecting to be full. TODO: matrix fifo will be taken out from heavy hash
       // only one fifo is enough
@@ -590,7 +682,7 @@ module heavy_hash_blk
       .clk (clk_int ),
       .rst (rst ),
       .target (target_int ),
-      .target_we (target_we_int),
+      .target_we (target_we),
       .start (start_int),
       .stop(stop_int ),
       .stop_ack_comp (stop_ack_comp ),
@@ -605,7 +697,48 @@ module heavy_hash_blk
       .result  ( result)
     );
 
+  //-------------------------------------------------
+  // Status logic
+  //-------------------------------------------------
+  assign stop_ack = stop_ack_comp & stop_ack_nonce;
 
+  assign hash_out_we = hashout_fifo_re;
+
+  assign nonce_end_1 = nonce_end -1 ;
+
+  always_comb
+  begin : blockName
+    if(result)
+      status = 1;
+    else if(nonce < nonce_end_1)
+      status = 2;
+    else
+      status = 0;
+  end
+  //-------------------------------------------------
+  // Golden nonce and Golden hash
+  //-------------------------------------------------
+  logic [31:0]  golden_nonce = 32'd0;
+  logic [255:0] golden_hash = 256'd0;
+  logic status_old = 2'd0;
+  always_ff @( clk_int )
+  begin
+    status_old <= status;
+  end
+
+  always_ff @( clk_int )
+  begin
+    if(status == 1 && status_old == 0)
+    begin
+      golden_nonce <= nonce;
+      golden_hash  <= hash_out;
+    end
+    else
+    begin
+      golden_nonce <= golden_nonce;
+      golden_hash  <= golden_hash;
+    end
+  end
 
 
 

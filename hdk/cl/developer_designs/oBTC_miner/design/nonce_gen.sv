@@ -18,7 +18,7 @@ module nonce_gen
      //!block header input from block_header fifo
      input logic [31:0] block_header,
      //!block_header write enable
-     input block_header_we
+     input logic block_header_we,
      //!nonce size information calculated by software
      input logic [31:0] nonce_size,
      //!hashin fifo write enable

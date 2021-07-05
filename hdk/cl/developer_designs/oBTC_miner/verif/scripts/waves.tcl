@@ -23,5 +23,5 @@ if { [string length $curr_wave] == 0 } {
   }
 }
 
-run 100 us 
+run 50 us 
 quit
