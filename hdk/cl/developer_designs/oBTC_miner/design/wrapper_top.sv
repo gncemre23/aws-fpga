@@ -48,7 +48,7 @@ module cl_hello_world
 `include "unused_apppf_irq_template.inc"
 
 
-  parameter  BLK_CNT = 4;
+  parameter  BLK_CNT = 8;
   //-------------------------------------------------
   // Wires
   //-------------------------------------------------
@@ -343,7 +343,7 @@ module cl_hello_world
         )
         heavy_hash_blk_dut (
           .clk_axi (clk_main_a0 ),
-          .clk_int (clk_extra_c1), //B5 = 400MHz
+          .clk_int (clk_extra_b0), //B5 = 400MHz
           .rst_n (rst_main_n_sync ),
           //axi input interfaces
           .awvalid(awvalid),

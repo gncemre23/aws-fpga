@@ -66,7 +66,7 @@
 #define NONCE_REG_BASE UINT64_C(0x510)
 
 #define FPGA_REG_OFFSET 36
-#define BLK_CNT 4
+#define BLK_CNT 8
 /* use the stdout logger for printing debug information  */
 #ifndef SV_TEST
 const struct logger *logger = &logger_stdout;

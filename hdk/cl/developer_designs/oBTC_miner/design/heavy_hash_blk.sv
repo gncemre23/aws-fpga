@@ -253,11 +253,17 @@ module heavy_hash_blk
       arvalid_q  <= 0;
       counter_i  <= 0;
     end
-    else if (arvalid_int && ~arvalid_int_old)
+    else if (arvalid_int & ~arvalid_int_old)
     begin
       araddr_q <= araddr_int;
       arvalid_q  <= 1'b1;
-      counter_i  <= counter_i + 1;
+      counter_i  <= counter_i;
+    end
+    else if(araddr_q == HEAVYHASH_REG_ADDR_BLK)
+    begin
+        counter_i <= counter_i + 1;
+        araddr_q <= 0;
+        arvalid_q  <= 0;
     end
     else
     begin
@@ -721,12 +727,12 @@ module heavy_hash_blk
   logic [31:0]  golden_nonce = 32'd0;
   logic [255:0] golden_hash = 256'd0;
   logic status_old = 2'd0;
-  always_ff @( clk_int )
+  always_ff @(posedge clk_int )
   begin
     status_old <= status;
   end
 
-  always_ff @( clk_int )
+  always_ff @(posedge clk_int )
   begin
     if(status == 1 && status_old == 0)
     begin
