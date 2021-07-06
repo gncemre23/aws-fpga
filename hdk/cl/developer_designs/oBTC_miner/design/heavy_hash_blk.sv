@@ -663,63 +663,56 @@ module heavy_hash_blk
     );
 
 
-  heavy_hash
-    #(
-      .WCOUNT ( WCOUNT )
-    )
-    heavy_hash_dut (
-      .clk (clk_int ),
-      .rst (rst ),
-      .hashin_fifo_in_we (hashin_fifo_in_we ),
-      .hashin_fifo_in_din (hashin_fifo_in_din ),
-      .hashin_fifo_in_full (hashin_fifo_in_full ),
-      .matrix_fifo_in_we (matrix_we ),
-      .matrix_fifo_in_din (matrix_in_int ),
-      // not expecting to be full. TODO: matrix fifo will be taken out from heavy hash
-      // only one fifo is enough
-      .matrix_fifo_in_full (matrix_fifo_in_full ),
-      .hashout_fifo_out_re (hashout_fifo_re ),
-      .hashout_fifo_out_dout (hash_out ),
-      .hashout_fifo_out_empty  ( hash_out_empty),
-      .nonce_fifo_din(nonce_fifo_din),
-      .nonce_fifo_we(nonce_fifo_we),
-      .nonce_fifo_full(nonce_fifo_full),
-`ifdef DBG_
-      .sha3in_dst_write(sha3in_dst_write_dbg),
-      .sha3in_dout(sha3in_dout_dbg),
-      .sha3out_dst_write(sha3out_dst_write_dbg),
-      .sha3out_dout(sha3out_dout_dbg),
-`endif
-      .nonce(nonce),
-      .heavy_hash_all_empty(heavy_hash_all_empty)
-    );
+  logic heavy_hash_out_re;
+  logic [63:0] heavy_hash_out_data;
+  logic heavy_hash_out_we;
 
-  comparator
-    comparator_inst(
+  heavy_hash 
+  #(
+    .WCOUNT (WCOUNT )
+  )
+  heavy_hash_dut (
+    .clk (clk_int ),
+    .rst (rst ),
+    .hashin_fifo_in_we (hashin_fifo_in_we ),
+    .hashin_fifo_in_din (hashin_fifo_in_din ),
+    .hashin_fifo_in_full (hashin_fifo_in_full ),
+    .matrix_fifo_in_we (matrix_we ),
+    .matrix_fifo_in_din (matrix_in_int ),
+    .matrix_fifo_in_full (matrix_fifo_in_full ),
+    .heavy_hash_out_re (heavy_hash_out_re ),
+    .nonce_fifo_full (nonce_fifo_full ),
+    .nonce_fifo_din (nonce_fifo_din ),
+    .nonce_fifo_we (nonce_fifo_we ),
+    .nonce (nonce ),
+    .heavy_hash_out_data (heavy_hash_out_data ),
+    .heavy_hash_out_we  ( heavy_hash_out_we),
+    .nonce_fifo_re (nonce_fifo_re)
+  );
+
+
+  logic [255:0] heavy_hash_dout;
+  logic nonce_fifo_re;
+  comparator 
+    comparator_inst (
       .clk (clk_int ),
       .rst (rst ),
       .target (target_int ),
-      .target_we (target_we),
-      .start (start_int),
-      .stop(stop_int ),
-      .stop_ack_comp (stop_ack_comp ),
-      .heavy_hash_all_empty (heavy_hash_all_empty ),
-      .hashout_fifo_re (hashout_fifo_re ),
-      .hash_out (hash_out ),
-      .hash_out_empty (hash_out_empty ),
-`ifdef DBG_
-      .state_comparator_dbg(state_comparator_dbg),
-      .target_dbg(target_dbg),
-`endif
-      .result  ( result)
+      .target_we (target_we ),
+      .start (start_int ),
+      .stop (stop_int ),
+      .heavy_hash_re (heavy_hash_out_re ),
+      .heavy_hash_din (heavy_hash_out_data ),
+      .heavy_hash_din_we (heavy_hash_out_we ),
+      .heavy_hash_dout (heavy_hash_dout ),
+      .result  ( result),
+      .nonce_fifo_re (nonce_fifo_re)
     );
+
 
   //-------------------------------------------------
   // Status logic
   //-------------------------------------------------
-  assign stop_ack = stop_ack_comp & stop_ack_nonce;
-
-  assign hash_out_we = hashout_fifo_re;
 
   assign nonce_end_1 = nonce_end -1 ;
 
@@ -748,7 +741,7 @@ module heavy_hash_blk
     if(status == 1 && status_old == 0)
     begin
       golden_nonce <= nonce;
-      golden_hash  <= hash_out;
+      golden_hash  <= heavy_hash_dout;
     end
     else
     begin

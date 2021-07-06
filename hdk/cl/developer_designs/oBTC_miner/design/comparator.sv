@@ -18,31 +18,26 @@ module comparator
     input logic start,
     //!stop input
     input logic stop,
-    //!target ready
-    output logic stop_ack_comp,
 
-    //!obtained by or operation of empty signals from all fifos in heavy_hash
-    input logic heavy_hash_all_empty,
     //!read enable for hashout fifo
-    output logic hashout_fifo_re,
-    input logic [255:0] hash_out,
-    input logic hash_out_empty,
-
-    `ifdef DBG_
-    output logic [2:0] state_comparator_dbg,
-    output logic [255:0] target_dbg,
-    `endif
+    output logic heavy_hash_re,
+    input logic [63:0] heavy_hash_din,
+    input logic heavy_hash_din_we,
+    output logic [255:0] heavy_hash_dout,
 
     //! result stating if the output of heavy hash is less than the target
     //! 1 : less than target (objective)
     //! 0 : greater than target
-    output logic result
+    output logic result,
+    output logic nonce_fifo_re
   );
 
   logic [3:0] cnt_next, cnt_reg;
   logic result_next, result_reg;
   logic [255:0] target_reg, target_next;
-  typedef enum { DRAIN_FIFOS,
+  logic [255:0] heavy_hash_dout_next, heavy_hash_dout_reg;
+  logic equal_next, equal_reg;
+  typedef enum { 
                  READ_TARGET,
                  COMPARE_0,
                  COMPARE_1,
@@ -55,10 +50,12 @@ module comparator
   begin
     if(rst)
     begin
-      state_reg <= DRAIN_FIFOS;
+      state_reg <= READ_TARGET;
       cnt_reg <= 4'd0;
       target_reg <= 256'd0;
       result_reg <= 1'b0;
+      heavy_hash_dout_reg <= 256'd0;
+      equal_reg <= 1'b0;
     end
     else
     begin
@@ -66,6 +63,8 @@ module comparator
       state_reg <= state_next;
       cnt_reg <= cnt_next;
       target_reg <= target_next;
+      heavy_hash_dout_reg <= heavy_hash_dout_next;
+      equal_reg <= equal_next;
     end
   end
 
@@ -73,36 +72,19 @@ module comparator
   always_comb
   begin
   //default assingments
-  hashout_fifo_re = 1'b0;
+  heavy_hash_re = 1'b0;
   cnt_next = cnt_reg;
   target_next = target_reg;
-  stop_ack_comp = 1'b0;
   result_next = result_reg;
   state_next = state_reg; 
+  heavy_hash_dout_next = heavy_hash_dout_reg;
+  equal_next = equal_reg;
+  nonce_fifo_re = 1'b0;
   case (state_reg)
-    DRAIN_FIFOS:
-    begin               
-      if(!heavy_hash_all_empty)begin
-        hashout_fifo_re = 1'b1;
-        stop_ack_comp = 1'b0;
-      end
-      else
-      begin
-        stop_ack_comp = 1'b1;
-        hashout_fifo_re = 1'b0;
-        
-        if(start)
-        begin
-          result_next = 1'b0;
-          state_next = READ_TARGET;
-        end
-      end
-    end
     READ_TARGET:
     begin
       if(!stop)
       begin
-        stop_ack_comp = 1'b0;
         if(cnt_reg < 8)
         begin
           if(target_we)
@@ -111,109 +93,108 @@ module comparator
           cnt_next = cnt_reg + 4'd1;
           end
         end
-        else if(!hash_out_empty)
+        else
+        begin
           state_next = COMPARE_0;
+          heavy_hash_re = 1'b1;
+        end
       end
-      else
-        state_next = DRAIN_FIFOS;
     end
     COMPARE_0:
     begin
       if(!stop)
       begin
-        if(!hash_out_empty)
+        heavy_hash_re = 1'b1;
+        if(heavy_hash_din_we)
         begin
-          if(target_reg[255:192] > hash_out[255:192])
+          heavy_hash_dout_next[255:192] = heavy_hash_din;
+          state_next = COMPARE_1;
+          if(target_reg[255:192] > heavy_hash_din)
           begin
-            hashout_fifo_re = 1'b0;
             result_next = 1'b1;
-            state_next = DRAIN_FIFOS;
           end
-          else if(target_reg[255:192] == hash_out[255:192])
+          else if(target_reg[255:192] == heavy_hash_din)
           begin
-            hashout_fifo_re = 1'b0;
-            state_next = COMPARE_1;
+            equal_next = 1'b1;
           end
-          else if(!hash_out_empty)
-            hashout_fifo_re = 1'b1;
           else
-            hashout_fifo_re = 1'b0;
+            equal_next = 1'b0;
         end
-        else
-          hashout_fifo_re = 1'b0;
       end
       else
-        state_next = DRAIN_FIFOS;
+        state_next = READ_TARGET;
     end
     COMPARE_1:
     begin
       if(!stop)
       begin
-        if(target_reg[191:128] > hash_out[191:128])
+        heavy_hash_re = 1'b1;
+        if(heavy_hash_din_we)
         begin
-          result_next = 1'b1;
-          state_next = DRAIN_FIFOS;
-        end
-        else if(target_reg[191:128] == hash_out[191:128])
-        begin
-          hashout_fifo_re = 1'b0;
+          heavy_hash_dout_next[191:128] = heavy_hash_din;
           state_next = COMPARE_2;
+          if(equal_reg == 1'b1 && target_reg[191:128] > heavy_hash_din)
+          begin
+            result_next = 1'b1;
+          end
+          else if(target_reg[191:128] == heavy_hash_din)
+          begin
+            equal_next = 1'b1;
+          end
+          else 
+          begin
+            equal_next = 1'b0;
+          end
         end
-        else if(!hash_out_empty)
-        begin
-          hashout_fifo_re = 1'b1;
-          state_next = COMPARE_0;
-        end
-        else
-          hashout_fifo_re = 1'b0;
       end
       else
-        state_next = DRAIN_FIFOS;
+        state_next = READ_TARGET;
     end
     COMPARE_2:
     begin
       if(!stop)
       begin
-        if(target_reg[127:64] > hash_out[127:64])
+        heavy_hash_re = 1'b1;
+        if(heavy_hash_din_we)
         begin
-          result_next = 1'b1;
-          state_next = DRAIN_FIFOS;
-        end
-        else if(target_reg[127:64] == hash_out[127:64])
-        begin
-          hashout_fifo_re = 1'b0;
+          heavy_hash_dout_next[127:64] = heavy_hash_din;
           state_next = COMPARE_3;
+          if(equal_reg == 1'b1 && target_reg[127:64] > heavy_hash_din)
+          begin
+            result_next = 1'b1;
+          end
+          else if(target_reg[127:64] == heavy_hash_din)
+          begin
+            equal_next = 1'b1;
+          end
+          else 
+          begin
+            equal_next = 1'b0;
+          end
         end
-        else if(!hash_out_empty)
-        begin
-          hashout_fifo_re = 1'b1;
-          state_next = COMPARE_0;
-        end
-        else
-          hashout_fifo_re = 1'b0;
       end
       else
-        state_next = DRAIN_FIFOS;
+        state_next = READ_TARGET;
     end
     COMPARE_3:
     begin
       if(!stop)
       begin
-        if(target_reg[63:0] > hash_out[63:0])
+        heavy_hash_re = 1'b1;
+        if(heavy_hash_din_we)
         begin
-          result_next = 1'b1;
-          state_next = DRAIN_FIFOS;
-        end
-        else if(!hash_out_empty)
-        begin
-          hashout_fifo_re = 1'b1;
+          heavy_hash_dout_next[63:0] = heavy_hash_din;
           state_next = COMPARE_0;
+          equal_next = 1'b1;
+          nonce_fifo_re = 1'b1;
+          if(equal_reg == 1'b1 && target_reg[63:0] > heavy_hash_din)
+          begin
+            result_next = 1'b1;
+          end
         end
-        else
-          hashout_fifo_re = 1'b0;
       end
       else
-        state_next = DRAIN_FIFOS;
+        state_next = READ_TARGET;
     end
 
   endcase
@@ -221,10 +202,6 @@ module comparator
   end
 
 assign result = result_reg;
-
-`ifdef DBG_
-assign state_compator_dbg = state_reg;
-assign target_dbg = target_reg;
-`endif
+assign heavy_hash_dout = heavy_hash_dout_reg;
 
 endmodule

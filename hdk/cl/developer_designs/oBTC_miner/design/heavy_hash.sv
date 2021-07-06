@@ -61,11 +61,8 @@ module heavy_hash #(parameter WCOUNT = 4 )
 
     /*ports of hashout_fifo_in*/
     //!read enable of hashout_fifo_out
-    input logic hashout_fifo_out_re,
-    //!64-bit data out of hashout_fifo_out
-    output logic [255:0] hashout_fifo_out_dout,
-    //!empty flag of hashout_fifo_in_fifo_in
-    output logic hashout_fifo_out_empty,
+    input logic heavy_hash_out_re,
+
     //!nonce fifo full flag
     output logic nonce_fifo_full,
     //!nonce fifo data in
@@ -74,19 +71,10 @@ module heavy_hash #(parameter WCOUNT = 4 )
     input logic nonce_fifo_we,
     //!nonce output
     output logic [31:0] nonce,
-
-    //Debug ports if debug is defined
-    `ifdef DBG_
-    /*internal signal definitions for sha3in*/
-    output logic sha3in_dst_write,
-    output logic [63 : 0] sha3in_dout,
-
-    /*internal signal definitions for sha3out*/
-    output logic sha3out_dst_write,
-    output logic [63 : 0] sha3out_dout,
-    `endif
     //! or operation of the empty signals of all fifos
-    output logic heavy_hash_all_empty
+    output logic [63:0] heavy_hash_out_data,
+    output logic heavy_hash_out_we,
+    input logic nonce_fifo_re
   );
 
   /*internal signal definitions for hashin_fifo_in*/
@@ -145,7 +133,6 @@ module heavy_hash #(parameter WCOUNT = 4 )
   //!full flag of hashout_fifo_out
   logic hashout_fifo_out_full;
 
-  `ifndef DBG_
   /*internal signal definitions for sha3in*/
   logic sha3in_dst_write;
   logic [63 : 0] sha3in_dout;
@@ -153,7 +140,6 @@ module heavy_hash #(parameter WCOUNT = 4 )
   /*internal signal definitions for sha3out*/
   logic sha3out_dst_write;
   logic [63 : 0] sha3out_dout;
-  `endif
 
 
 
@@ -166,11 +152,6 @@ module heavy_hash #(parameter WCOUNT = 4 )
 
   logic nonce_fifo_empty;
 
-
-  assign heavy_hash_all_empty = nonce_fifo_empty & hashin_fifo_in_empty 
-                                  & sha3_result_empty  & hashin_fifo_out_empty 
-                                  & matrix_fifo_in_empty & matrix_fifo_out_empty
-                                  & hashout_fifo_out_empty;
                                 
   fifo_in_out
     #(
@@ -182,7 +163,7 @@ module heavy_hash #(parameter WCOUNT = 4 )
       .clk (clk ),
       .rst (rst ),
       .wr_en (nonce_fifo_we ),
-      .rd_en (hashout_fifo_out_we ),//hashout_fifo_out_re
+      .rd_en (nonce_fifo_re ),//hashout_fifo_out_re
       .din (nonce_fifo_din ),
       .dout (nonce ),
       .full (nonce_fifo_full ),
@@ -336,41 +317,14 @@ module heavy_hash #(parameter WCOUNT = 4 )
       .clk(clk),
       .src_ready(matrix_fifo_out_empty),
       .src_read(matrix_fifo_out_re),
-      .dst_ready(hashout_fifo_out_full),
+      .dst_ready(~heavy_hash_out_re),
       .dst_write(sha3out_dst_write),
       .din(matrix_fifo_out_dout),
       .dout(sha3out_dout)
     );
-  //TODO: Better way is to change the sha3 to generate 256-bit output
-  fsm_64to256 fsm64to256_out
-              (
-                .clk(clk),
-                .rst(rst),
-                .we_in(sha3out_dst_write),
-                .din(sha3out_dout),
-                .we_out(hashout_fifo_out_we),
-                .dout(hashout_fifo_out_din)
-              );
-
-
-
-
-  fifo_in_out
-    #(
-      .DINWIDTH(256 ),
-      .DOUTWIDTH (256),
-      .DEPTH(128)
-    )
-    hashout_fifo_out (
-      .clk (clk ),
-      .rst (rst ),
-      .wr_en (hashout_fifo_out_we ),
-      .rd_en (hashout_fifo_out_re ),
-      .din (hashout_fifo_out_din ),
-      .dout (hashout_fifo_out_dout ),
-      .full (hashout_fifo_out_full ),
-      .empty  ( hashout_fifo_out_empty)
-    );
+  
+assign heavy_hash_out_data = sha3out_dout;
+assign heavy_hash_out_we = sha3out_dst_write; 
 
 
 endmodule

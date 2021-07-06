@@ -19,7 +19,7 @@ module fifo_in_out
 xpm_fifo_sync #(
       .DOUT_RESET_VALUE("0"),    // String
       .ECC_MODE("no_ecc"),       // String
-      .FIFO_MEMORY_TYPE("block"), // String
+      .FIFO_MEMORY_TYPE("auto"), // String
       .FIFO_READ_LATENCY(1),     // DECIMAL
       .FIFO_WRITE_DEPTH(DEPTH),   // DECIMAL
       .FULL_RESET_VALUE(0),      // DECIMAL
