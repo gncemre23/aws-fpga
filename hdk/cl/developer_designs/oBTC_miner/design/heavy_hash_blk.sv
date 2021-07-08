@@ -421,7 +421,7 @@ module heavy_hash_blk
   xpm_cdc_gray #(
                  .DEST_SYNC_FF(4),          // DECIMAL; range: 2-10
                  .INIT_SYNC_FF(0),          // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
-                 .REG_OUTPUT(0),            // DECIMAL; 0=disable registered output, 1=enable registered output
+                 .REG_OUTPUT(1),            // DECIMAL; 0=disable registered output, 1=enable registered output
                  .SIM_ASSERT_CHK(0),        // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
                  .SIM_LOSSLESS_GRAY_CHK(0), // DECIMAL; 0=disable lossless check, 1=enable lossless check
                  .WIDTH(32)                  // DECIMAL; range: 2-32

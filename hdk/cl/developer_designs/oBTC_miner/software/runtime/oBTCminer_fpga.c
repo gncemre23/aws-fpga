@@ -21,7 +21,7 @@
 #include <unistd.h>
 #include "heavyhash-gate.h"
 
-#define SV_TEST
+//#define SV_TEST
 #ifdef SV_TEST
 #include "fpga_pci_sv.h"
 #else
@@ -457,8 +457,8 @@ void wait_status(int slot_id, int pf_id, int bar_id, uint32_t *status, uint8_t *
     pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
     *golden_block = 0;
 #ifndef SV_TEST
-    // rc = fpga_pci_attach(slot_id, pf_id, bar_id, 0, &pci_bar_handle);
-    // fail_on(rc, out, "Unable to attach to the AFI on slot id %d", slot_id);
+    rc = fpga_pci_attach(slot_id, pf_id, bar_id, 0, &pci_bar_handle);
+    fail_on(rc, out, "Unable to attach to the AFI on slot id %d", slot_id);
 #endif
     //read status registers from all blocks
     uint32_t status_and = 2;
