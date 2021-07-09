@@ -1,5 +1,5 @@
 //TODO draw new diagram regarding the new code
-//!Heavy hash core 
+//!Heavy hash core
 //!     ┌──────────────┐         ┌───────┐
 //!     │              │         │       │
 //!────►│hashin_fifo_in├────────►│sha3_in│
@@ -96,7 +96,7 @@ module heavy_hash #(parameter WCOUNT = 4 )
 
   /*internal signal definitions for hashin_fifo_out*/
   //!data in of hashin_fifo_out
-  logic [255 : 0] hashin_fifo_out_din;
+  logic [63 : 0] hashin_fifo_out_din;
 
   //!data out of hashin_fifo_out
   logic [WCOUNT*4 - 1 : 0] hashin_fifo_out_dout;
@@ -105,7 +105,7 @@ module heavy_hash #(parameter WCOUNT = 4 )
 
   //!read enable of hashin_fifo_out
   logic hashin_fifo_out_re;
-  
+
   //!empty flag of hashin_fifo_out
   logic hashin_fifo_out_empty;
   //!full flag of hashin_fifo_out
@@ -151,8 +151,8 @@ module heavy_hash #(parameter WCOUNT = 4 )
   logic sha3_result_empty;
 
   logic nonce_fifo_empty;
+  logic sha3_in_ready;
 
-                                
   fifo_in_out
     #(
       .DINWIDTH(32 ),
@@ -196,43 +196,30 @@ module heavy_hash #(parameter WCOUNT = 4 )
       .clk(clk),
       .src_ready(hashin_fifo_in_empty),
       .src_read(hashin_fifo_in_re),
-      .dst_ready(hashin_fifo_out_full | sha3_result_full),
+      .dst_ready(sha3_in_ready | sha3_result_full),
       .dst_write(sha3in_dst_write),
       .din(hashin_fifo_in_dout),
       .dout(sha3in_dout)
     );
-  //! The fifo in order to hold values for XOR operations
+  
+
+  fsm_sha3_fifo
+    fsm_sha3_fifo_dut (
+      .clk (clk ),
+      .rst (rst ),
+      .we_in (sha3in_dst_write ),
+      .fifo_full (hashin_fifo_out_full),
+      .din (sha3in_dout ),
+      .ready (sha3_in_ready ),
+      .fifo_we (hashin_fifo_out_we ),
+      .dout  ( hashin_fifo_out_din)
+    );
+
+
+
   fifo_in_out
     #(
       .DINWIDTH(64 ),
-      .DOUTWIDTH (64),
-      .DEPTH(128)
-    )
-    sha3_result_fifo (
-      .clk (clk ),
-      .rst (rst ),
-      .wr_en (sha3in_dst_write ),
-      .rd_en (matrix_out_we ),
-      .din (sha3in_dout ),
-      .dout (sha3_result_dout ),
-      .full (sha3_result_full ),
-      .empty  ( sha3_result_empty)
-    );
-
-  //TODO: Better way is to change the sha3 to generate 256-bit output
-  fsm_64to256 fsm64to256_in
-              (
-                .clk(clk),
-                .rst(rst),
-                .we_in(sha3in_dst_write),
-                .din(sha3in_dout),
-                .we_out(hashin_fifo_out_we),
-                .dout(hashin_fifo_out_din)
-              );
-
-  fifo_in_out
-    #(
-      .DINWIDTH(256 ),
       .DOUTWIDTH (WCOUNT * 4),
       .DEPTH(128)
     )
@@ -262,6 +249,24 @@ module heavy_hash #(parameter WCOUNT = 4 )
       .dout (matrix_fifo_in_dout ),
       .full (matrix_fifo_in_full ),
       .empty  ( matrix_fifo_in_empty)
+    );
+
+    //! The fifo in order to hold values for XOR operations
+  fifo_in_out
+    #(
+      .DINWIDTH(64 ),
+      .DOUTWIDTH (64),
+      .DEPTH(128)
+    )
+    sha3_result_fifo (
+      .clk (clk ),
+      .rst (rst ),
+      .wr_en (sha3in_dst_write ),
+      .rd_en (matrix_out_we ),
+      .din (sha3in_dout ),
+      .dout (sha3_result_dout ),
+      .full (sha3_result_full ),
+      .empty  ( sha3_result_empty)
     );
 
 
@@ -322,9 +327,9 @@ module heavy_hash #(parameter WCOUNT = 4 )
       .din(matrix_fifo_out_dout),
       .dout(sha3out_dout)
     );
-  
-assign heavy_hash_out_data = sha3out_dout;
-assign heavy_hash_out_we = sha3out_dst_write; 
+
+  assign heavy_hash_out_data = sha3out_dout;
+  assign heavy_hash_out_we = sha3out_dst_write;
 
 
 endmodule

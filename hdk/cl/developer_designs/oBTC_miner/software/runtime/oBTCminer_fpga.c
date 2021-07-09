@@ -21,7 +21,7 @@
 #include <unistd.h>
 #include "heavyhash-gate.h"
 
-//#define SV_TEST
+#define SV_TEST
 #ifdef SV_TEST
 #include "fpga_pci_sv.h"
 #else
