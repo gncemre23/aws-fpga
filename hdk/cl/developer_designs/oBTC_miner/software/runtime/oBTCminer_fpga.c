@@ -288,6 +288,40 @@ int main(int argc, char **argv)
     }
     heavy_hash_fpga_deinit(slot_id, FPGA_APP_PF, APP_PF_BAR0);
 
+    //run for second time
+    for (size_t i = 0; i < BLK_CNT; i++)
+    {
+        status[i] = 0;
+    }
+    hash = 0;
+
+    heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0);
+    //wait until status will be other than 2
+    wait_status(slot_id, FPGA_APP_PF, APP_PF_BAR0, &status, &golden_blk);
+
+    for (size_t i = 0; i < BLK_CNT; i++)
+    {
+        if (status[i] == 1)
+        {
+            golden_blk = i;
+            golden_nonce = read_golden_nonce(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk) - 1;
+            for (size_t j = 0; j < 8; j++)
+            {
+                heavy_hash[j] = read_heavyhash(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk);
+            }
+
+            printf("Golden nonce is = %08x\n", golden_nonce);
+            printf("Golden hash is =");
+            for (size_t j = 0; j < 8; j++)
+            {
+                printf("%08x", heavy_hash[j]);
+            }
+            printf("\n");
+            break;
+        }
+    }
+    heavy_hash_fpga_deinit(slot_id, FPGA_APP_PF, APP_PF_BAR0);
+
 #ifndef SV_TEST
     return 0;
 

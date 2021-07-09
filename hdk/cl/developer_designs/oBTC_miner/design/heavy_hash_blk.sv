@@ -696,7 +696,7 @@ module heavy_hash_blk
   comparator 
     comparator_inst (
       .clk (clk_int ),
-      .rst (rst ),
+      .rst (rst | stop_int),
       .target (target_int ),
       .target_we (target_we ),
       .start (start_int ),
