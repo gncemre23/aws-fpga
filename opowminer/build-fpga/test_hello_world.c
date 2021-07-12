@@ -21,7 +21,7 @@
 #include <unistd.h>
 #include "heavyhash-gate.h"
 
-//#define SV_TEST
+#define SV_TEST
 #ifdef SV_TEST
 #include "fpga_pci_sv.h"
 #else
@@ -49,10 +49,6 @@
 `define STOP_REG_ADDR           32'h0000_0528
 `define HEAVYHASH_SEL_REG_ADDR  32'h0000_052C*/
 
-//This registers will exist for all blocks
-//For each block, the address is obtained by base_address+ blk_cnt*36
-//Example for block 2 start_reg_address will be
-//0x524 + 36*2 = 0x56C
 #define HELLO_WORLD_REG_ADDR UINT64_C(0x500)
 #define VLED_REG_ADDR UINT64_C(0x504)
 #define BLOCK_HEADER_REG UINT64_C(0x514)
@@ -60,13 +56,11 @@
 #define TARGET_REG UINT64_C(0x51C)
 #define START_REG UINT64_C(0x524)
 #define STOP_REG UINT64_C(0x528)
-#define STATUS_REG_BASE UINT64_C(0x50C)
-#define HASH_REG_BASE UINT64_C(0x508)
+#define STATUS_REG UINT64_C(0x50C)
+#define HASH_REG UINT64_C(0x508)
 #define NONCE_SIZE_REG UINT64_C(0x520)
-#define NONCE_REG_BASE UINT64_C(0x510)
-
-#define FPGA_REG_OFFSET 36
-#define BLK_CNT 8
+#define HEAVYHASH_SEL_REG UINT64_C(0x52C)
+#define NONCE_REG UINT64_C(0x510)
 /* use the stdout logger for printing debug information  */
 #ifndef SV_TEST
 const struct logger *logger = &logger_stdout;
@@ -87,15 +81,6 @@ void usage(char *program_name)
     printf("usage: %s [--slot <slot-id>][<poke-value>]\n", program_name);
 }
 
-void fail_fpga(int rc, pci_bar_handle_t pci_bar_handle)
-{
-    if (rc < 0)
-    {
-        printf("PCIE write/attach error\n");
-        fpga_pci_detach(pci_bar_handle);
-    }
-}
-
 uint32_t byte_swap(uint32_t value);
 
 #endif
@@ -105,10 +90,8 @@ uint32_t byte_swap(uint32_t value);
  */
 int peek_poke_example(uint32_t value, int slot_id, int pf_id, int bar_id);
 void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, int pf_id, int bar_id);
-uint32_t read_golden_nonce(int slot_id, int pf_id, int bar_id, uint8_t golden_blk);
-uint32_t read_heavyhash(int slot_id, int pf_id, int bar_id, uint8_t golden_blk);
-void wait_status(int slot_id, int pf_id, int bar_id, uint32_t *status, uint8_t *golden_block);
-void heavy_hash_fpga_deinit(int slot_id, int pf_id, int bar_id);
+uint32_t read_heavyhash(int slot_id, int pf_id, int bar_id);
+uint32_t read_status(int slot_id, int pf_id, int bar_id);
 //pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
 
 uint32_t byte_swap(uint32_t value)
@@ -212,7 +195,7 @@ int main(int argc, char **argv)
     uint16_t matrix[64][64];
 
     FILE *fp;
-    const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000";
+    const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000096";
     uint8_t work_byte[100];
     uint32_t work_word[25];
     uint64_t hashes_done = 0;
@@ -257,71 +240,97 @@ int main(int argc, char **argv)
     printf("hashes_done = %d\n", hashes_done);
     heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0);
 
-    uint32_t status[BLK_CNT] = {0};
-    uint32_t hash = 0;
-    uint32_t heavy_hash[8];
-    uint32_t golden_blk;
+    uint32_t status = 0, hash = 0;
 
-    //wait until status will be other than 2
-    wait_status(slot_id, FPGA_APP_PF, APP_PF_BAR0, &status, &golden_blk);
+    pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
 
-    for (size_t i = 0; i < BLK_CNT; i++)
+    fpga_pci_attach(slot_id, FPGA_APP_PF, APP_PF_BAR0, 0, &pci_bar_handle);
+
+#ifdef SV_TEST
+    while (status == 0)
     {
-        if (status[i] == 1)
-        {
-            golden_blk = i;
-            golden_nonce = read_golden_nonce(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk) - 1;
-            for (size_t j = 0; j < 8; j++)
-            {
-                heavy_hash[j] = read_heavyhash(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk);
-            }
-
-            printf("Golden nonce is = %08x\n", golden_nonce);
-            printf("Golden hash is =");
-            for (size_t j = 0; j < 8; j++)
-            {
-                printf("%08x", heavy_hash[j]);
-            }
-            printf("\n");
-            break;
-        }
+        fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
+        printf("status = %d\n", status);
     }
-    heavy_hash_fpga_deinit(slot_id, FPGA_APP_PF, APP_PF_BAR0);
+#endif
+    //fpga_pci_poke(pci_bar_handle, STOP_REG, 1);
+   // fpga_pci_poke(pci_bar_handle, STOP_REG, 1);
 
-    //run for second time
-    for (size_t i = 0; i < BLK_CNT; i++)
+    fpga_pci_poke(pci_bar_handle, START_REG, 1);
+    while (status == 1)
     {
-        status[i] = 0;
+        fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
+        //printf("status = %d\n", status);
     }
-    hash = 0;
+    while (status == 0 || status == 2)
+    {
+        fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
+        //printf("status = %d\n", status);
+    }
+
+
+    fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
+    printf("status = %d\n", status);
+
+    printf("hash0_fpga = ");
+    for (int j = 0; j < 8; j++)
+    {
+        rc = 1;
+        while (rc != 0)
+            rc = fpga_pci_peek(pci_bar_handle, HASH_REG, &hash);
+        printf("%08x", hash);
+    }
+    printf("\n");
+
+    fpga_pci_poke(pci_bar_handle, STOP_REG, 1);
+
+    fpga_pci_detach(pci_bar_handle);
+
+    printf("\ndone0\n");
 
     heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0);
-    //wait until status will be other than 2
-    wait_status(slot_id, FPGA_APP_PF, APP_PF_BAR0, &status, &golden_blk);
+    pci_bar_handle = PCI_BAR_HANDLE_INIT;
+    fpga_pci_attach(slot_id, FPGA_APP_PF, APP_PF_BAR0, 0, &pci_bar_handle);
 
-    for (size_t i = 0; i < BLK_CNT; i++)
+    fpga_pci_poke(pci_bar_handle, START_REG, 1);
+#ifdef SV_TEST
+    while (status != 2)
     {
-        if (status[i] == 1)
-        {
-            golden_blk = i;
-            golden_nonce = read_golden_nonce(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk) - 1;
-            for (size_t j = 0; j < 8; j++)
-            {
-                heavy_hash[j] = read_heavyhash(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk);
-            }
-
-            printf("Golden nonce is = %08x\n", golden_nonce);
-            printf("Golden hash is =");
-            for (size_t j = 0; j < 8; j++)
-            {
-                printf("%08x", heavy_hash[j]);
-            }
-            printf("\n");
-            break;
-        }
+        fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
+        printf("status = %d\n", status);
     }
-    heavy_hash_fpga_deinit(slot_id, FPGA_APP_PF, APP_PF_BAR0);
+#endif
+    while (status == 1)
+    {
+        fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
+        //printf("status = %d\n", status);
+    }
+    while (status == 0 || status == 2)
+    {
+        fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
+        //printf("status = %d\n", status);
+    }
 
+    fpga_pci_peek(pci_bar_handle, STATUS_REG, &status);
+    printf("status = %d\n", status);
+    
+    if(status == 1)
+    {
+        fpga_pci_peek(pci_bar_handle, NONCE_REG, &golden_nonce);
+        printf("Golden_nonce = %08x\n", golden_nonce);
+    }
+    
+    printf("hash1_fpga = ");
+    for (int j = 0; j < 8; j++)
+    {
+        fpga_pci_peek(pci_bar_handle, HASH_REG, &hash);
+        printf("%08x", hash);
+    }
+    printf("\n");
+
+    fpga_pci_poke(pci_bar_handle, STOP_REG, 1);
+    fpga_pci_detach(pci_bar_handle);
+    printf("\ndone1\n");
 #ifndef SV_TEST
     return 0;
 
@@ -403,75 +412,63 @@ void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, in
     uint32_t value;
 #ifndef SV_TEST
     rc = fpga_pci_attach(slot_id, pf_id, bar_id, 0, &pci_bar_handle);
-    fail_on(rc, out, "Unable to write to the fpga !");
+    fail_on(rc, out, "Unable to attach to the AFI on slot id %d", slot_id);
 #endif
     printf("init begin\n");
-
-    //send stop to all blocks
-    rc = fpga_pci_poke(pci_bar_handle, STOP_REG, 1);
-    fail_on(rc, out, "Unable to write to the fpga !");
-
-    //send start to all blocks
-    rc = fpga_pci_poke(pci_bar_handle, START_REG, 1);
-    fail_on(rc, out, "Unable to write to the fpga !");
-
-    //send nonce size to all blocks
-    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG, 50);
-    fail_on(rc, out, "Unable to write to the fpga !");
-
-    //send target to all blocks
-    for (int i = 0; i < 7; i++)
-    {
-        rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 0xFFFFFFFF);
-        fail_on(rc, out, "Unable to write to the fpga !");
-    }
-    rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 0x00DFFFFF);
-    fail_on(rc, out, "Unable to write to the fpga !");
-
-    //send block header to all blocks
+    //send block header
     for (int i = 19; i >= 0; i--)
     {
         rc = fpga_pci_poke(pci_bar_handle, BLOCK_HEADER_REG, work->data[i]);
+        printf("debug\n");
         fail_on(rc, out, "Unable to write to the fpga !");
     }
+    printf("debug0\n");
+    fail_on(rc, out, "Unable to write to the fpga !");
 
-    //send matrix to all blocks
+    //
+
+    //send matrix
     for (int i = 0; i < 64; i++)
     {
         for (int j = 63; j > 0; j = j - 8)
         {
             value = ((uint32_t)matrix[i][j - 7] << 28) | ((uint32_t)matrix[i][j - 6] << 24) | ((uint32_t)matrix[i][j - 5] << 20) | ((uint32_t)matrix[i][j - 4] << 16) | ((uint32_t)matrix[i][j - 3] << 12) | ((uint32_t)matrix[i][j - 2] << 8) | ((uint32_t)matrix[i][j - 1] << 4) | (uint32_t)matrix[i][j];
-            rc = fpga_pci_poke(pci_bar_handle, MATRIX_REG, value);
-            fail_on(rc, out, "Unable to write to the fpga !");
+            // printf("value=%08x\n", value);
+            fpga_pci_poke(pci_bar_handle, MATRIX_REG, value);
         }
     }
-
-    printf("init done \n ...");
-
-out:
-    /* clean up */
-    if (pci_bar_handle >= 0)
+    printf("debug1\n");
+    //send target 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    for (int i = 0; i < 7; i++)
     {
-        rc = fpga_pci_detach(pci_bar_handle);
-        if (rc)
-        {
-            printf("Failure while detaching from the fpga.\n");
-        }
+        rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 0xFFFFFFFF);
+        fail_on(rc, out, "Unable to write to the fpga !");
     }
-}
-
-void heavy_hash_fpga_deinit(int slot_id, int pf_id, int bar_id)
-{
-    int rc;
-    pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
-    uint32_t value;
-#ifndef SV_TEST
-    rc = fpga_pci_attach(slot_id, pf_id, bar_id, 0, &pci_bar_handle);
+    rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 0x00BFFFFF);
     fail_on(rc, out, "Unable to write to the fpga !");
-#endif
-    //send stop to all blocks
+
+    //send nonce size
+    printf("debug2\n");
+    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG, 50);
+    fail_on(rc, out, "Unable to write to the fpga !");
+
+    printf("debug3\n");
+    //send heavy_sel
+    rc = fpga_pci_poke(pci_bar_handle, HEAVYHASH_SEL_REG, 0);
+    fail_on(rc, out, "Unable to write to the fpga !");
+
+    printf("debug4\n");
     rc = fpga_pci_poke(pci_bar_handle, STOP_REG, 1);
-    fail_on(rc, out, "Unable to write to the fpga !");
+    // fail_on(rc, out, "Unable to write to the fpga !");
+    //start
+    printf("debug5\n");
+    // rc = fpga_pci_poke(pci_bar_handle, START_REG, 1);
+    // fail_on(rc, out, "Unable to write to the fpga !");
+    // fpga_pci_poke(pci_bar_handle, START_REG, 1);
+    // fpga_pci_poke(pci_bar_handle, START_REG, 1);
+    // fpga_pci_poke(pci_bar_handle, START_REG, 1);
+    // fpga_pci_poke(pci_bar_handle, START_REG, 1);
+    printf("init done \n ...");
 out:
     /* clean up */
     if (pci_bar_handle >= 0)
@@ -484,58 +481,24 @@ out:
     }
 }
 
-//wait for status to be 1 or 0
-void wait_status(int slot_id, int pf_id, int bar_id, uint32_t *status, uint8_t *golden_block)
-{
-    int rc;
-    pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
-    *golden_block = 0;
-#ifndef SV_TEST
-    rc = fpga_pci_attach(slot_id, pf_id, bar_id, 0, &pci_bar_handle);
-    fail_on(rc, out, "Unable to attach to the AFI on slot id %d", slot_id);
-#endif
-    //read status registers from all blocks
-    uint32_t status_and = 2;
-    while (status_and == 2)
-    {
-        for (size_t i = 0; i < BLK_CNT; i++)
-        {
-            rc = fpga_pci_peek(pci_bar_handle, STATUS_REG_BASE + i * FPGA_REG_OFFSET, &status[i]);
-            fail_on(rc, out, "Unable to write to the fpga !");
-            status_and &= status[i];
-        }
-    }
-
-out:
-    /* clean up */
-    if (pci_bar_handle >= 0)
-    {
-        rc = fpga_pci_detach(pci_bar_handle);
-        if (rc)
-        {
-            printf("Failure while detaching from the fpga.\n");
-        }
-    }
-}
-
-uint32_t read_heavyhash(int slot_id, int pf_id, int bar_id, uint8_t golden_blk)
+uint32_t read_status(int slot_id, int pf_id, int bar_id)
 {
     int rc;
     uint32_t value;
     pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
 #ifndef SV_TEST
-    rc = fpga_pci_attach(slot_id, pf_id, bar_id, 0, &pci_bar_handle);
-    fail_on(rc, out, "Unable to attach to the AFI on slot id %d", slot_id);
+    // rc = fpga_pci_attach(slot_id, pf_id, bar_id, 0, &pci_bar_handle);
+    // fail_on(rc, out, "Unable to attach to the AFI on slot id %d", slot_id);
 #endif
-    rc = fpga_pci_peek(pci_bar_handle, HASH_REG_BASE + FPGA_REG_OFFSET * golden_blk, &value);
+    rc = fpga_pci_peek(pci_bar_handle, STATUS_REG, &value);
 out:
     /* clean up */
     if (pci_bar_handle >= 0)
     {
-        rc = fpga_pci_detach(pci_bar_handle);
+        //   rc = fpga_pci_detach(pci_bar_handle);
         if (rc)
         {
-            printf("Failure while detaching from the fpga.\n");
+            //printf("Failure while detaching from the fpga.\n");
         }
     }
 
@@ -543,7 +506,7 @@ out:
     return value;
 }
 
-uint32_t read_golden_nonce(int slot_id, int pf_id, int bar_id, uint8_t golden_blk)
+uint32_t read_heavyhash(int slot_id, int pf_id, int bar_id)
 {
     int rc;
     uint32_t value;
@@ -552,7 +515,7 @@ uint32_t read_golden_nonce(int slot_id, int pf_id, int bar_id, uint8_t golden_bl
     rc = fpga_pci_attach(slot_id, pf_id, bar_id, 0, &pci_bar_handle);
     fail_on(rc, out, "Unable to attach to the AFI on slot id %d", slot_id);
 #endif
-    rc = fpga_pci_peek(pci_bar_handle, NONCE_REG_BASE + FPGA_REG_OFFSET * golden_blk, &value);
+    rc = fpga_pci_peek(pci_bar_handle, HASH_REG, &value);
 out:
     /* clean up */
     if (pci_bar_handle >= 0)
@@ -560,7 +523,7 @@ out:
         rc = fpga_pci_detach(pci_bar_handle);
         if (rc)
         {
-            printf("Failure while detaching from the fpga.\n");
+            //printf("Failure while detaching from the fpga.\n");
         }
     }
 

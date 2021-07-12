@@ -6,7 +6,32 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include <stdint.h>
+#include <stdbool.h>
+#include <stdarg.h>
+#include <assert.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <netdb.h>
+
+//definitions for socket
+#define PortNumber 9876
+#define MaxConnects 8
+#define BuffSize 256
+#define ConversationLen 3
+#define Host "localhost"
+
 #define EPS 1e-9
+
+void report(const char* msg, int terminate) {
+  perror(msg);
+  if (terminate) exit(-1); /* failure */
+}
 
 static inline uint64_t le64dec(const void *pp)
 {
@@ -118,35 +143,34 @@ void heavyhash(const uint_fast16_t matrix[64][64], uint8_t *pdata, size_t pdata_
 
     uint_fast16_t vector[64] __attribute__((aligned(64)));
     uint_fast16_t product[64] __attribute__((aligned(64)));
-    uint32_t nonce = *((uint32_t *) pdata + 19);
+    uint32_t nonce = *((uint32_t *)pdata + 19);
     sha3_256((uint8_t *)hash_first, 32, pdata, pdata_len);
-    
-    if((nonce %200000) == 0)
-    {
-	    printf("nonce:%08x\n",nonce);
-	    printf("=== hash input %d ===\n",pdata_len);
-	    for (int i = 0; i < 80; i++)
-	    {
-		printf("%02x", *((uint8_t *)pdata + i));
-	    }
-	    printf("\n");
-	    
-	    /*===== Added by egoncu to see block header ======*/
-	    printf("=== First hash ===\n");
-	    for (int i = 0; i < 32; i++)
-	    {
-		printf("%02x", *((uint8_t *)hash_first_eg + i));
-	    }
-	    printf("\n");
-	    for (int i = 0; i < 32; i++)
-	    {
-		printf("%02x",hash_first[i]);
-	    }
-	    printf("\n");
-	    printf("==================\n");
 
+    if ((nonce % 200000) == 0)
+    {
+        printf("nonce:%08x\n", nonce);
+        printf("=== hash input %d ===\n", pdata_len);
+        for (int i = 0; i < 80; i++)
+        {
+            printf("%02x", *((uint8_t *)pdata + i));
+        }
+        printf("\n");
+
+        /*===== Added by egoncu to see block header ======*/
+        printf("=== First hash ===\n");
+        for (int i = 0; i < 32; i++)
+        {
+            printf("%02x", *((uint8_t *)hash_first_eg + i));
+        }
+        printf("\n");
+        for (int i = 0; i < 32; i++)
+        {
+            printf("%02x", hash_first[i]);
+        }
+        printf("\n");
+        printf("==================\n");
     }
-   /*=================================================*/
+    /*=================================================*/
 
     for (int i = 0; i < 32; ++i)
     {
@@ -160,7 +184,6 @@ void heavyhash(const uint_fast16_t matrix[64][64], uint8_t *pdata, size_t pdata_
         for (int j = 0; j < 64; ++j)
         {
             sum += matrix[i][j] * vector[j];
-    
         }
         //printf("sum[%d]=%04x\n",i,sum);
         product[i] = (sum >> 10);
@@ -170,7 +193,7 @@ void heavyhash(const uint_fast16_t matrix[64][64], uint8_t *pdata, size_t pdata_
     {
         hash_second[i] = (product[2 * i] << 4) | (product[2 * i + 1]);
     }
-    
+
     //printf("=== Hash XORed ===\n");
     for (int i = 0; i < 32; ++i)
     {
@@ -179,14 +202,14 @@ void heavyhash(const uint_fast16_t matrix[64][64], uint8_t *pdata, size_t pdata_
     }
     //printf("\n================\n");
     sha3_256(output, 32, hash_xored, 32);
-    if((nonce %200000) == 0)
+    if ((nonce % 200000) == 0)
     {
-	    printf("=== First heavyhash ===\n");
-	    for (int i = 0; i < 32; i++)
-	    {
-		printf("%02x",*(output+i));
-	    }
-	    printf("\n");
+        printf("=== First heavyhash ===\n");
+        for (int i = 0; i < 32; i++)
+        {
+            printf("%02x", *(output + i));
+        }
+        printf("\n");
     }
 }
 
@@ -208,6 +231,40 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
     uint_fast16_t matrix[64][64] __attribute__((aligned(64)));
     struct xoshiro_state state;
 
+
+    // socket client
+    int sockfd = socket(AF_INET,     /* versus AF_LOCAL */
+                        SOCK_STREAM, /* reliable, bidirectional */
+                        0);          /* system picks protocol (TCP) */
+    if (sockfd < 0)
+        report("socket", 1); /* terminate */
+
+    /* get the address of the host */
+    struct hostent *hptr = gethostbyname(Host); /* localhost: 127.0.0.1 */
+    if (!hptr)
+        report("gethostbyname", 1);  /* is hptr NULL? */
+    if (hptr->h_addrtype != AF_INET) /* versus AF_LOCAL */
+        report("bad address family", 1);
+
+    /* connect to the server: configure server's address 1st */
+    struct sockaddr_in saddr;
+    memset(&saddr, 0, sizeof(saddr));
+    saddr.sin_family = AF_INET;
+    saddr.sin_addr.s_addr =
+        ((struct in_addr *)hptr->h_addr_list[0])->s_addr;
+    saddr.sin_port = htons(PortNumber); /* port number in big-endian */
+
+    if (connect(sockfd, (struct sockaddr *)&saddr, sizeof(saddr)) < 0)
+        report("connect", 1);
+    else 
+        printf("connected \n");
+
+    uint32_t value = 0xcafebeef;
+
+    write(sockfd, &value, 4);
+
+    
+
     mm128_bswap32_80(edata, pdata);
 
     sha3_256(seed, 32, edata + 1, 32);
@@ -221,7 +278,7 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
     printf("Thread id = %d \n", thr_id);
     do
     {
-        
+
         edata[19] = n;
         heavyhash(matrix, edata, 80, hash);
         if (unlikely(valid_hash(hash, ptarget) && !bench))
@@ -235,32 +292,31 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
             printf("=== Matrix(matrix form) ====\n");
             for (int i = 0; i < 64; i++)
             {
-            	for(int j=0; j < 64; j++)
-           	 {
-           	     printf("%1x", matrix[i][j]);
-           	 }
-            printf("\n");
+                for (int j = 0; j < 64; j++)
+                {
+                    printf("%1x", matrix[i][j]);
+                }
+                printf("\n");
             }
-            
-            
+
             printf("=== Header Block(edata ====\n");
             for (int i = 0; i < 20; i++)
             {
-                printf("%08x\n", *((uint32_t *)edata+i));
+                printf("%08x\n", *((uint32_t *)edata + i));
             }
             printf("\n");
-       
+
             printf("=== Header Block(pdata ====\n");
             for (int i = 0; i < 20; i++)
             {
-                printf("%08x\n", *((uint32_t *)pdata+i));
+                printf("%08x\n", *((uint32_t *)pdata + i));
             }
-        
+
             printf("\n");
             printf("=== Target ====\n");
             for (int i = 0; i < 8; i++)
             {
-                printf("%02x", ptarget[i]);
+                printf("%08x", ptarget[i]);
             }
             printf("\n");
 
@@ -304,7 +360,7 @@ int scanhash_generic_exampletest(struct work *work, uint32_t max_nonce,
                 submit_solution(work, hash, mythr);
             }
         n++;
-    } while(n != (first_nonce + 2)); //(n < last_nonce && !work_restart[thr_id].restart);
+    } while (n != (first_nonce + 2)); //(n < last_nonce && !work_restart[thr_id].restart);
     *hashes_done = n - first_nonce;
     pdata[19] = n;
     return 0;
