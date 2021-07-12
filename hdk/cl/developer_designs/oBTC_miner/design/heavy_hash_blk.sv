@@ -673,7 +673,7 @@ module heavy_hash_blk
   )
   heavy_hash_dut (
     .clk (clk_int ),
-    .rst (rst ),
+    .rst (rst | stop_int),
     .hashin_fifo_in_we (hashin_fifo_in_we ),
     .hashin_fifo_in_din (hashin_fifo_in_din ),
     .hashin_fifo_in_full (hashin_fifo_in_full ),
@@ -696,7 +696,7 @@ module heavy_hash_blk
   comparator 
     comparator_inst (
       .clk (clk_int ),
-      .rst (rst | stop_int),
+      .rst (rst),
       .target (target_int ),
       .target_we (target_we ),
       .start (start_int ),
