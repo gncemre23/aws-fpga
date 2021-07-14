@@ -66,7 +66,7 @@
 #define NONCE_REG_BASE UINT64_C(0x510)
 
 #define FPGA_REG_OFFSET 36
-#define BLK_CNT 8
+#define BLK_CNT 42
 /* use the stdout logger for printing debug information  */
 #ifndef SV_TEST
 const struct logger *logger = &logger_stdout;
@@ -297,7 +297,7 @@ int main(int argc, char **argv)
 
     heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0);
     //wait until status will be other than 2
-    wait_status(slot_id, FPGA_APP_PF, APP_PF_BAR0, &status, &golden_blk);
+    wait_status(slot_id, FPGA_APP_PF, APP_PF_BAR0, status, &golden_blk);
 
     for (size_t i = 0; i < BLK_CNT; i++)
     {

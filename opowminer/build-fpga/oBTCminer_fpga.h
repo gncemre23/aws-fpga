@@ -40,34 +40,15 @@
 #define NONCE_REG_BASE UINT64_C(0x510)
 
 #define FPGA_REG_OFFSET 36
-#define BLK_CNT 8
-
-
-typedef struct work
-{
-        uint32_t target[8] __attribute__((aligned(64)));
-        uint32_t data[48] __attribute__((aligned(64)));
-        double targetdiff;
-        double sharediff;
-        double stratum_diff;
-        int height;
-        char *txs;
-        char *workid;
-        char *job_id;
-        size_t xnonce2_len;
-        unsigned char *xnonce2;
-        bool sapling;
-        bool stale;
-} work_t __attribute__((aligned(64)));
-
+#define BLK_CNT 42
 
 
 uint32_t byte_swap(uint32_t value);
 int peek_poke_example(uint32_t value);
-void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64]);
+void heavy_hash_fpga_init(uint32_t * work_data, uint16_t matrix[64][64], uint32_t nonce_size, uint32_t * target);
 void heavy_hash_fpga_deinit();
-wait_status(uint32_t * status, uint32_t * golden_blk);
-read_golden_nonce(uint32_t golden_blk);
-read_heavyhash(uint32_t golden_blk);
+void wait_status(uint32_t * status, uint32_t * golden_blk);
+uint32_t read_golden_nonce(uint8_t golden_blk);
+uint32_t read_heavyhash(uint8_t golden_blk);
 
 

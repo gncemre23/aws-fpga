@@ -28,9 +28,11 @@
 
 #define EPS 1e-9
 
-void report(const char* msg, int terminate) {
-  perror(msg);
-  if (terminate) exit(-1); /* failure */
+void report(const char *msg, int terminate)
+{
+    perror(msg);
+    if (terminate)
+        exit(-1); /* failure */
 }
 
 static inline uint64_t le64dec(const void *pp)
@@ -116,7 +118,7 @@ static inline bool is_full_rank(const uint_fast16_t matrix[64][64])
     return compute_rank(matrix) == 64;
 }
 
-static inline void generate_matrix(uint_fast16_t matrix[64][64], struct xoshiro_state *state)
+static inline void generate_matrix(uint16_t matrix[64][64], struct xoshiro_state *state)
 {
     do
     {
@@ -134,15 +136,15 @@ static inline void generate_matrix(uint_fast16_t matrix[64][64], struct xoshiro_
     } while (!is_full_rank(matrix));
 }
 
-void heavyhash(const uint_fast16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, uint8_t *output)
+void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, uint8_t *output)
 {
     uint8_t hash_first[32] __attribute__((aligned(64)));
     uint8_t hash_first_eg[32] __attribute__((aligned(64)));
     uint8_t hash_second[32] __attribute__((aligned(64)));
     uint8_t hash_xored[32] __attribute__((aligned(64)));
 
-    uint_fast16_t vector[64] __attribute__((aligned(64)));
-    uint_fast16_t product[64] __attribute__((aligned(64)));
+    uint16_t vector[64] __attribute__((aligned(64)));
+    uint16_t product[64] __attribute__((aligned(64)));
     uint32_t nonce = *((uint32_t *)pdata + 19);
     sha3_256((uint8_t *)hash_first, 32, pdata, pdata_len);
 
@@ -180,7 +182,7 @@ void heavyhash(const uint_fast16_t matrix[64][64], uint8_t *pdata, size_t pdata_
 
     for (int i = 0; i < 64; ++i)
     {
-        uint_fast16_t sum = 0;
+        uint16_t sum = 0;
         for (int j = 0; j < 64; ++j)
         {
             sum += matrix[i][j] * vector[j];
@@ -228,9 +230,8 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
     const int thr_id = mythr->id;
     const bool bench = opt_benchmark;
 
-    uint_fast16_t matrix[64][64] __attribute__((aligned(64)));
+    uint16_t matrix[64][64];
     struct xoshiro_state state;
-
 
     // socket client
     int sockfd = socket(AF_INET,     /* versus AF_LOCAL */
@@ -256,14 +257,8 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
 
     if (connect(sockfd, (struct sockaddr *)&saddr, sizeof(saddr)) < 0)
         report("connect", 1);
-    else 
+    else
         printf("connected \n");
-
-    uint32_t value = 0xcafebeef;
-
-    write(sockfd, &value, 4);
-
-    
 
     mm128_bswap32_80(edata, pdata);
 
@@ -275,64 +270,78 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
     }
 
     generate_matrix(matrix, &state);
+
+    write(sockfd, work->data, 80);
+
+    write(sockfd, matrix, sizeof(matrix));
+
+    write(sockfd, ptarget, 32);
+
+    write(sockfd, &max_nonce, 4);
+
+    uint32_t golden_nonce = 0;
+
     printf("Thread id = %d \n", thr_id);
-    do
+
+    int count = 0;
+    uint32_t status = 0;
+    while (count == 0)
+        read(sockfd, &status, 4);
+
+    if (status)
     {
+        count = 0;
+        while (count == 0)
+            read(sockfd, &golden_nonce, 4);
+        count = 0;
+        while (count == 0)
+            read(sockfd, hash, 32);
+        pdata[19] = bswap_32(golden_nonce);
+        submit_solution(work, hash, mythr);
+    }
 
-        edata[19] = n;
-        heavyhash(matrix, edata, 80, hash);
-        if (unlikely(valid_hash(hash, ptarget) && !bench))
+    printf("=== Matrix(matrix form) ====\n");
+    for (int i = 0; i < 64; i++)
+    {
+        for (int j = 0; j < 64; j++)
         {
-            pdata[19] = bswap_32(n);
-            submit_solution(work, hash, mythr);
+            printf("%1x", matrix[i][j]);
         }
-        /*===== Added by egoncu to see block header ======*/
-        if (n == first_nonce)
-        {
-            printf("=== Matrix(matrix form) ====\n");
-            for (int i = 0; i < 64; i++)
-            {
-                for (int j = 0; j < 64; j++)
-                {
-                    printf("%1x", matrix[i][j]);
-                }
-                printf("\n");
-            }
+        printf("\n");
+    }
 
-            printf("=== Header Block(edata ====\n");
-            for (int i = 0; i < 20; i++)
-            {
-                printf("%08x\n", *((uint32_t *)edata + i));
-            }
-            printf("\n");
+    printf("=== Header Block(edata ====\n");
+    for (int i = 0; i < 20; i++)
+    {
+        printf("%08x\n", *((uint32_t *)edata + i));
+    }
+    printf("\n");
 
-            printf("=== Header Block(pdata ====\n");
-            for (int i = 0; i < 20; i++)
-            {
-                printf("%08x\n", *((uint32_t *)pdata + i));
-            }
+    printf("=== Header Block(pdata ====\n");
+    for (int i = 0; i < 20; i++)
+    {
+        printf("%08x\n", *((uint32_t *)pdata + i));
+    }
 
-            printf("\n");
-            printf("=== Target ====\n");
-            for (int i = 0; i < 8; i++)
-            {
-                printf("%08x", ptarget[i]);
-            }
-            printf("\n");
+    printf("\n");
+    printf("=== Target ====\n");
+    for (int i = 0; i < 8; i++)
+    {
+        printf("%08x", ptarget[i]);
+    }
+    printf("\n");
 
-            printf("=== First hash ====\n");
-            for (int i = 0; i < 8; i++)
-            {
-                printf("%08x", hash[i]);
-            }
-            printf("\n");
-        }
-        /* ============================================*/
-        n++;
-    } while (n < last_nonce && !work_restart[thr_id].restart);
+    printf("=== First hash ====\n");
+    for (int i = 0; i < 8; i++)
+    {
+        printf("%08x", hash[i]);
+    }
+    printf("\n");
 
-    *hashes_done = n - first_nonce;
-    pdata[19] = n;
+    
+    //TODO: read final nonce from FPGA
+    *hashes_done = max_nonce - first_nonce -1;
+    pdata[19] = max_nonce - 1;
     return 0;
 }
 
