@@ -309,6 +309,7 @@ module heavy_hash #(parameter WCOUNT = 4 )
     (.clk(clk),
      .rst(rst),
      .we_in(matrix_out_we),
+     .fifo_full(matrix_fifo_out_full),
      .we_out(matrix_fifo_out_we),
      .din(matrix_out ^ sha3_result_dout),
      .dout(matrix_fifo_out_din)

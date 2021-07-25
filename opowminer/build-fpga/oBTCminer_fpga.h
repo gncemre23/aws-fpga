@@ -47,7 +47,7 @@ uint32_t byte_swap(uint32_t value);
 int peek_poke_example(uint32_t value);
 void heavy_hash_fpga_init(uint32_t * work_data, uint16_t matrix[64][64], uint32_t nonce_size, uint32_t * target);
 void heavy_hash_fpga_deinit();
-void wait_status(uint32_t * status, uint32_t * golden_blk);
+void wait_status(uint32_t * status);
 uint32_t read_golden_nonce(uint8_t golden_blk);
 uint32_t read_heavyhash(uint8_t golden_blk);
 

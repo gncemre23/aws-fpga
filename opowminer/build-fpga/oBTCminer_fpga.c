@@ -224,24 +224,34 @@ out:
     }
 }
 
-void wait_status(uint32_t *status, uint32_t *golden_blk)
+void wait_status(uint32_t *status)
 {
     int rc;
     pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
-    *golden_blk = 0;
+    uint8_t mine = 0;
 #ifndef SV_TEST
     rc = fpga_pci_attach(0, FPGA_APP_PF, APP_PF_BAR0, 0, &pci_bar_handle);
     fail_on(rc, out, "Unable to attach to the AFI on slot id %d", 0);
 #endif
     //read status registers from all blocks
-    uint32_t status_and = 2;
-    while (status_and == 2)
+    //read status registers from all blocks
+    uint32_t status_or = 2;
+    while (status_or != 0)
     {
         for (size_t i = 0; i < BLK_CNT; i++)
         {
             rc = fpga_pci_peek(pci_bar_handle, STATUS_REG_BASE + i * FPGA_REG_OFFSET, &status[i]);
             fail_on(rc, out, "Unable to write to the fpga !");
-            status_and &= status[i];
+            status_or |= status[i];
+            if(status[i] == 1)
+            {
+                mine = 1;
+                break;
+            }
+        }
+        if (mine)
+        {
+            break;
         }
     }
 

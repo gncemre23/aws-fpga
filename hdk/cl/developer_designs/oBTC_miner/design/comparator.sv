@@ -37,7 +37,7 @@ module comparator
   logic [255:0] target_reg, target_next;
   logic [255:0] heavy_hash_dout_next, heavy_hash_dout_reg;
   logic equal_next, equal_reg;
-  typedef enum { 
+  typedef enum { INIT,
                  READ_TARGET,
                  COMPARE_0,
                  COMPARE_1,
@@ -50,7 +50,7 @@ module comparator
   begin
     if(rst)
     begin
-      state_reg <= READ_TARGET;
+      state_reg <= INIT;
       cnt_reg <= 4'd0;
       target_reg <= 256'd0;
       result_reg <= 1'b0;
@@ -81,6 +81,14 @@ module comparator
   equal_next = equal_reg;
   nonce_fifo_re = 1'b0;
   case (state_reg)
+    INIT:
+    begin
+      result_next = 1'b0;
+      cnt_next = 0;
+      target_next = 0;
+      state_next = READ_TARGET;
+    end
+
     READ_TARGET:
     begin
       if(!stop)
@@ -122,7 +130,7 @@ module comparator
         end
       end
       else
-        state_next = READ_TARGET;
+        state_next = INIT;
     end
     COMPARE_1:
     begin
@@ -148,7 +156,7 @@ module comparator
         end
       end
       else
-        state_next = READ_TARGET;
+        state_next = INIT;
     end
     COMPARE_2:
     begin
@@ -174,7 +182,7 @@ module comparator
         end
       end
       else
-        state_next = READ_TARGET;
+        state_next = INIT;
     end
     COMPARE_3:
     begin
@@ -194,7 +202,7 @@ module comparator
         end
       end
       else
-        state_next = READ_TARGET;
+        state_next = INIT;
     end
 
   endcase

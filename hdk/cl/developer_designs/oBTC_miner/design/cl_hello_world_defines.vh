@@ -15,6 +15,7 @@
 
 `ifndef CL_HELLO_WORLD_DEFINES
 `define CL_HELLO_WORLD_DEFINES
+`define CL_COMMON_DEFAULTS
 
 //Put module name of the CL design here.  This is used to instantiate in top.sv
 `define CL_NAME cl_hello_world
@@ -34,8 +35,15 @@
 `define START_REG_ADDR          32'h0000_0524
 `define STOP_REG_ADDR           32'h0000_0528
 
+// Value to return for PCIS access to unimplemented register address
+`define UNIMPLEMENTED_REG_VALUE 32'hdeaddead
+
+// CL Register Addresses
+`define HELLO_WORLD_REG_ADDR    32'h0000_0500
+`define VLED_REG_ADDR           32'h0000_0504
+
 //for ila debugs
-`define DBG_
+//`define DBG_
 
 // Uncomment to disable Virtual JTAG
 //`define DISABLE_VJTAG_DEBUG

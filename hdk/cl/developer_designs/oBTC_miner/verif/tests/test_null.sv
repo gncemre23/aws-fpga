@@ -23,7 +23,7 @@ module test_null();
       
       tb.test_main(exit_code);
       
-      #200000ns;
+      #50000ns;
 
       tb.power_down();
       
