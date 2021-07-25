@@ -284,7 +284,8 @@ module heavy_hash #(parameter WCOUNT = 4 )
       .m_re (matrix_fifo_in_re ),
       .hashin_re (hashin_fifo_out_re ),
       .hashout_we (matrix_out_we ),
-      .hashout_din  ( matrix_out)
+      .hashout_din  ( matrix_out),
+      .fifo_full (matrix_fifo_out_full)
     );
 
   fifo_in_out

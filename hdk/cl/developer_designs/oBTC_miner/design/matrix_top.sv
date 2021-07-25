@@ -10,6 +10,8 @@ module matrix_top #(parameter WCOUNT = 4 )
     input logic m_empty,
     //!empty flag from the hashin_fifo
     input logic hashin_empty,
+    //!fifo full input causing to stop giving heavyhash output
+    input logic fifo_full,
     //!dataout of hashin fifo
     input logic [WCOUNT*4-1:0] hashin_dout,
     //!dataout of matrix fifo
@@ -70,7 +72,8 @@ module matrix_top #(parameter WCOUNT = 4 )
       .en_column (en_column ),
       .m_re (m_re ),
       .hashin_re (hashin_re ),
-      .hashout_we  ( hashout_we)
+      .hashout_we  ( hashout_we),
+      .fifo_full (fifo_full)
     );
 
   matrix_data_path

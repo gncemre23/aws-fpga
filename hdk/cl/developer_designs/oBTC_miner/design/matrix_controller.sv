@@ -14,6 +14,8 @@ module matrix_controller
     input logic zt,
     //!control signal detemining if the counter_t is achieved the specified limit
     input logic zk,
+    //!fifo full input causing to stop giving heavyhash output
+    input logic fifo_full,
     //!counter k value
     input logic [5:0] counter_k,
     //!empty flag from the M_fifo
@@ -190,8 +192,11 @@ module matrix_controller
         end
         else
         begin
-          ent_next = 1'b1;
-          h_we_next = 1'b1;
+          if(!fifo_full)
+          begin
+            ent_next = 1'b1;
+            h_we_next = 1'b1;
+          end
         end
       end
 
