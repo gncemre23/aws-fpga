@@ -71,8 +71,8 @@ typedef struct work
 
 
 
-void heavyhash(const uint16_t matrix[64][64], uint8_t* pdata, size_t pdata_len, uint8_t* output);
-int scanhash_heavyhash(work_t *work, uint32_t max_nonce, uint64_t *hashes_done, uint16_t matrix[64][64]);
+void heavyhash(const uint16_t matrix[64][64], uint8_t* pdata, size_t pdata_len, uint8_t* output, FILE *file_ptr);
+int scanhash_heavyhash(work_t *work, uint32_t max_nonce, uint64_t *hashes_done, uint16_t matrix[64][64], FILE *file_ptr);
 
 
 #endif

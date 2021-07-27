@@ -109,7 +109,7 @@ static inline void generate_matrix(uint16_t matrix[64][64], struct xoshiro_state
     } while (!is_full_rank(matrix));
 }
 
-void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, uint8_t *output)
+void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, uint8_t *output, FILE * fileptr)
 {
     uint8_t hash_first[32];
     uint8_t hash_second[32];
@@ -119,26 +119,26 @@ void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, 
     uint16_t product[64];
     uint32_t nonce = *((uint32_t *)pdata + 19);
     sha3_256((uint8_t *)hash_first, 32, pdata, pdata_len);
-    printf("nonce:%08x\n", nonce);
+    //printf("nonce:%08x\n", nonce);
     //     if((nonce %1) == 0)
     //     {
 
     
-    printf("=== hash input %d ===\n", pdata_len);
-    for (int i = 0; i < 80; i++)
-    {
-        printf("%02x", *((uint8_t *)pdata + i));
-    }
-    printf("\n");
+    // printf("=== hash input %d ===\n", pdata_len);
+    // for (int i = 0; i < 80; i++)
+    // {
+    //     printf("%02x", *((uint8_t *)pdata + i));
+    // }
+    // printf("\n");
 
     /*===== Added by egoncu to see block header ======*/
-    printf("=== First hash ===\n");
-    for (int i = 0; i < 32; i++)
-    {
-        printf("%02x", hash_first[i]);
-    }
-    printf("\n");
-    printf("==================\n");
+    // printf("=== First hash ===\n");
+    // for (int i = 0; i < 32; i++)
+    // {
+    //     printf("%02x", hash_first[i]);
+    // }
+    // printf("\n");
+    // printf("==================\n");
 
     //     }
     //    /*=================================================*/
@@ -165,13 +165,13 @@ void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, 
         hash_second[i] = (product[2 * i] << 4) | (product[2 * i + 1]);
     }
 
-    printf("====Hash second =====\n");
-    for (int i = 0; i < 32; ++i)
-    {
-       printf("%02x",hash_second[i]);
-        //printf("%02x", hash_xored[i]);
-    }
-    printf("\n====================\n");
+    // printf("====Hash second =====\n");
+    // for (int i = 0; i < 32; ++i)
+    // {
+    //    printf("%02x",hash_second[i]);
+    //     //printf("%02x", hash_xored[i]);
+    // }
+    // printf("\n====================\n");
 
     //printf("=== Hash XORed ===\n");
     for (int i = 0; i < 32; ++i)
@@ -181,17 +181,24 @@ void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, 
     }
     //printf("\n================\n");
     sha3_256(output, 32, hash_xored, 32);
-    // if((nonce % 1) == 0)
-    // {
-    printf("=== First heavyhash ===\n");
     for (int i = 0; i < 32; i++)
     {
-        printf("%02x", *(output + i));
+       fprintf(fileptr, "%02x", *(output + i));
     }
-    printf("\n");
+    fprintf(fileptr,"\n");
+
+
+    // if((nonce % 1) == 0)
+    // {
+    // //printf("=== First heavyhash ===\n");
+    // for (int i = 0; i < 32; i++)
+    // {
+    //     printf("%02x", *(output + i));
+    // }
+    // printf("\n");
 }
 
-int scanhash_heavyhash(work_t *work, uint32_t max_nonce, uint64_t *hashes_done, uint16_t matrix[64][64]) //struct thr_info *mythr)
+int scanhash_heavyhash(work_t *work, uint32_t max_nonce, uint64_t *hashes_done, uint16_t matrix[64][64], FILE * fileptr) //struct thr_info *mythr)
 {
     uint32_t edata[20];
     uint32_t hash[8];
@@ -222,7 +229,7 @@ int scanhash_heavyhash(work_t *work, uint32_t max_nonce, uint64_t *hashes_done, 
     do
     {
         edata[19] = n;
-        heavyhash(matrix, edata, 80, hash);
+        heavyhash(matrix, edata, 80, hash, fileptr);
         //
         /*===== Added by egoncu to see block header ======*/
         // if (n == first_nonce)

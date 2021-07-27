@@ -211,7 +211,9 @@ int main(int argc, char **argv)
     work_t g_work0, g_work1;
     uint16_t matrix[64][64];
 
+
     FILE *fp;
+    fp = fopen("heavy_hash_out.txt","w");
     const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000";
     uint8_t work_byte[100];
     uint32_t work_word[25];
@@ -243,7 +245,8 @@ int main(int argc, char **argv)
         }
     }
 
-    scanhash_heavyhash(&g_work0, 0xc8, &hashes_done, matrix);
+    scanhash_heavyhash(&g_work0, 0xc8, &hashes_done, matrix,fp);
+    fclose(fp);
     printf("=================Matrix============\n");
     for (size_t i = 0; i < 64; i++)
     {
