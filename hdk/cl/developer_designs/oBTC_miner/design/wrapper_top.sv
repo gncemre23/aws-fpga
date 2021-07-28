@@ -13,6 +13,8 @@
 // implied. See the License for the specific language governing permissions and
 // limitations under the License.
 
+//`define VERIF_
+
 module cl_hello_world
 
   (
@@ -22,7 +24,7 @@ module cl_hello_world
 
   // export "DPI-C" function slave_write;
 
-//`include "cl_common_defines.vh"      // CL Defines for all examples
+  //`include "cl_common_defines.vh"      // CL Defines for all examples
 `include "cl_id_defines.vh"          // Defines for ID0 and ID1 (PCI ID's)
 `include "cl_hello_world_defines.vh" // CL Defines for cl_hello_world
 
@@ -65,6 +67,7 @@ module cl_hello_world
 
 
   genvar k;
+
 
 
 
@@ -166,6 +169,36 @@ module cl_hello_world
       .m_axi_rready  (sh_ocl_rready_q)
     );
 
+`ifdef VERIF_
+  // read reference heavy hash values from the file after helloworld register is read
+  logic [255:0] heavy_hash_hex;
+  string line_hash;
+  logic [255:0] heavy_hash_ref[$];
+  int fd_h;
+  logic verif;
+
+  always_comb
+  begin
+    if(verif)
+    begin
+      fd_h = $fopen ("heavy_hash_out.txt","r");
+      if(fd_h == 0)
+        $display("could not open the file named heavy_hash_out.txt");
+      else
+      begin
+        $display("file opened successfully");
+        while (!$feof(fd_h))
+        begin
+          $fgets(line_hash,fd_h);
+          $sscanf(line_hash, "%h", heavy_hash_hex);
+          heavy_hash_ref.push_back(heavy_hash_hex);
+        end
+        $fclose(fd_h);
+      end
+    end
+  end
+`endif
+
   //-------------------------------------------------
   // Wires for oBTCMiner_design
   //-------------------------------------------------
@@ -187,6 +220,7 @@ module cl_hello_world
 
 
 `ifdef DBG_
+
   logic [255:0] hash_out_dbg;
   logic hash_out_we_dbg;
   logic stop_ack_dbg;
@@ -267,10 +301,10 @@ module cl_hello_world
 
 
 
-  
 
 
-  
+
+
 
 
 
@@ -332,7 +366,7 @@ module cl_hello_world
   logic rvalid_heavy_hash[BLK_CNT-1:0];
   logic [31:0] rdata_blk_or[BLK_CNT : 0];
   logic [31:0] rvalid_or[BLK_CNT : 0];
-  
+
   generate
     for (k=0;k<BLK_CNT;k++ )
     begin
@@ -431,6 +465,11 @@ module cl_hello_world
       rdata  <= 0;
       rresp  <= 0;
       hash_re <= 0;
+`ifdef VERIF_
+
+      verif <= 0;
+`endif
+
     end
     else if (rvalid && rready)
     begin
@@ -438,6 +477,11 @@ module cl_hello_world
       rdata  <= 0;
       rresp  <= 0;
       hash_re <= 0;
+`ifdef VERIF_
+
+      verif <= 0;
+`endif
+
     end
     else if (arvalid_q && (araddr_q == `HELLO_WORLD_REG_ADDR || araddr_q == `VLED_REG_ADDR))
     begin
@@ -445,13 +489,26 @@ module cl_hello_world
       rdata  <= (araddr_q == `HELLO_WORLD_REG_ADDR  ) ? hello_world_q_byte_swapped[31:0]:
              (araddr_q == `VLED_REG_ADDR         ) ? {16'b0,vled_q[15:0]            }:
              0;
+`ifdef VERIF_
+
+      if(araddr_q == `HELLO_WORLD_REG_ADDR)
+        verif <= 1;
+      else
+        verif <= 0;
       rresp  <= 0;
+`endif
+
     end
     else if (rvalid_or[BLK_CNT])
     begin
       rvalid <= 1;
       rdata <= rdata_blk_or[BLK_CNT];
       rresp  <= 0;
+`ifdef VERIF_
+
+      verif <= 0;
+`endif
+
     end
 
 

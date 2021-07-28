@@ -188,25 +188,7 @@ int main(int argc, char **argv)
     fail_on(rc, out, "AFI not ready");
 #endif
 
-    /* Accessing the CL registers via AppPF BAR0, which maps to sh_cl_ocl_ AXI-Lite bus between AWS FPGA Shell and the CL*/
-
-    printf("===== Starting with peek_poke_example =====\n");
-    rc = peek_poke_example(value, slot_id, FPGA_APP_PF, APP_PF_BAR0);
-    fail_on(rc, out, "peek-poke example failed");
-
-    printf("Developers are encouraged to modify the Virtual DIP Switch by calling the linux shell command to demonstrate how AWS FPGA Virtual DIP switches can be used to change a CustomLogic functionality:\n");
-    printf("$ fpga-set-virtual-dip-switch -S (slot-id) -D (16 digit setting)\n\n");
-    printf("In this example, setting a virtual DIP switch to zero clears the corresponding LED, even if the peek-poke example would set it to 1.\nFor instance:\n");
-
-    printf(
-        "# sudo fpga-set-virtual-dip-switch -S 0 -D 1111111111111111\n"
-        "# sudo fpga-get-virtual-led  -S 0\n"
-        "FPGA slot id 0 have the following Virtual LED:\n"
-        "1010-1101-1101-1110\n"
-        "# sudo fpga-set-virtual-dip-switch -S 0 -D 0000000000000000\n"
-        "# sudo fpga-get-virtual-led  -S 0\n"
-        "FPGA slot id 0 have the following Virtual LED:\n"
-        "0000-0000-0000-0000\n");
+    
 
     work_t g_work0, g_work1;
     uint16_t matrix[64][64];
@@ -214,7 +196,8 @@ int main(int argc, char **argv)
 
     FILE *fp;
     fp = fopen("heavy_hash_out.txt","w");
-    const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000";
+    // const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000";
+    const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131bFFFFFC18";
     uint8_t work_byte[100];
     uint32_t work_word[25];
     uint64_t hashes_done = 0;
@@ -245,8 +228,16 @@ int main(int argc, char **argv)
         }
     }
 
-    scanhash_heavyhash(&g_work0, 0xc8, &hashes_done, matrix,fp);
+    scanhash_heavyhash(&g_work0, 0xFFFFFFFF, &hashes_done, matrix,fp);
     fclose(fp);
+
+   
+    rc = peek_poke_example(value, slot_id, FPGA_APP_PF, APP_PF_BAR0);
+    fail_on(rc, out, "peek-poke example failed");
+
+    
+
+
     printf("=================Matrix============\n");
     for (size_t i = 0; i < 64; i++)
     {
@@ -427,7 +418,7 @@ void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, in
     fail_on(rc, out, "Unable to write to the fpga !");
 
     //send nonce size to all blocks
-    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG,  1000/BLK_CNT);
+    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG,  1000/BLK_CNT + 1);
     fail_on(rc, out, "Unable to write to the fpga !");
 
     rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 1);

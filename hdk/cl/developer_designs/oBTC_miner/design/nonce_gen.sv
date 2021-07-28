@@ -37,17 +37,17 @@ module nonce_gen
      output logic stop_ack_nonce,
 
      //!debug ports if debug is defined
-     `ifdef DBG_
+`ifdef DBG_
      output logic state_nonce_dbg,
-     `endif
+`endif
 
      //!nonce end
      output logic [31:0] nonce_end
    );
 
   logic stop_ack_reg, stop_ack_next;
-  logic [31:0] nonce_reg, nonce_next;
-  logic [31:0] nonce_end_reg, nonce_end_next;
+  logic [32:0] nonce_reg, nonce_next;
+  logic [32:0] nonce_end_reg, nonce_end_next;
   //80-byte block header
   logic [639:0] block_header_reg, block_header_next;
   logic [639:0] block_header_reg_reg, block_header_reg_next;
@@ -56,10 +56,10 @@ module nonce_gen
   typedef enum { INIT, READ_BLOCK_HEADER, CHECK_NONCE_END, UPDATE_NONCE, WRITE_HASHIN} state_type;
   state_type state_reg, state_next;
 
-  
+
   assign stop_ack_nonce = stop_ack_reg;
-  assign nonce_end = nonce_end_reg;
-  
+  assign nonce_end = nonce_end_reg[31:0];
+
   always_ff @( posedge clk )
   begin : seq
     if(rst)
@@ -68,8 +68,8 @@ module nonce_gen
       state_reg <= INIT;
       block_header_reg <= 640'd0;
       block_header_reg_reg <= 640'd0;
-      nonce_reg <= 32'd0;
-      nonce_end_reg <= 32'd0;
+      nonce_reg <= 33'd0;
+      nonce_end_reg <= 33'd0;
       stop_ack_reg <= 1'b0;
     end
     else
@@ -92,7 +92,7 @@ module nonce_gen
     block_header_next = block_header_reg;
     block_header_reg_next = block_header_reg_reg;
     nonce_next = nonce_reg;
-    nonce_end_next = nonce_end_reg; 
+    nonce_end_next = nonce_end_reg;
     hashin_fifo_in_we = 1'b0;
     hashin_fifo_in_din = 64'd0;
     nonce_fifo_we = 1'b0;
@@ -105,7 +105,7 @@ module nonce_gen
         stop_ack_next = 1'b1;
         block_header_next = 640'd0;
         block_header_reg_next = 640'd0;
-        nonce_next = 32'd0;
+        nonce_next = 33'd0;
         cnt_next = 5'd0;
         if(start)
         begin
@@ -128,20 +128,20 @@ module nonce_gen
         begin
           // $display("block_header_reg = %h",block_header_reg);
           nonce_end_next = block_header_reg[31:0] + nonce_size*NONCE_COEF;
-          nonce_next = block_header_reg[31:0] + nonce_size*(NONCE_COEF-1);
+          nonce_next[31:0] = block_header_reg[31:0] + nonce_size*(NONCE_COEF-1);
           state_next = CHECK_NONCE_END;
         end
       end
 
       CHECK_NONCE_END:
       begin
-        if(nonce_end_reg < block_header_reg[31:0])
-          nonce_end_next = 32'hFFFFFFFF;
-          state_next = UPDATE_NONCE;
+        if(nonce_end_reg > 33'h0FFFFFFFF)
+          nonce_end_next = 33'h100000000;
+        state_next = UPDATE_NONCE;
       end
 
       UPDATE_NONCE:
-      begin      
+      begin
         if(!stop)
           if(nonce_reg < nonce_end_reg)
           begin
@@ -149,10 +149,10 @@ module nonce_gen
             begin
               // $display("block_header_reg = %h",{block_header_reg[639:32],nonce_reg[7:0],nonce_reg[15:8],nonce_reg[23:16],nonce_reg[31:24]});
               block_header_reg_next = {block_header_reg[639:32],nonce_reg[7:0],nonce_reg[15:8],nonce_reg[23:16],nonce_reg[31:24]} ;
-              nonce_next = nonce_reg + 32'd1;
+              nonce_next = nonce_reg + 33'd1;
               hashin_fifo_in_din = 64'h8000000000000280;
               hashin_fifo_in_we = 1'b1;
-              nonce_fifo_din = nonce_reg;
+              nonce_fifo_din = nonce_reg[31:0];
               nonce_fifo_we = 1'b1;
               cnt_next = 5'd0;
               state_next = WRITE_HASHIN;
@@ -196,9 +196,9 @@ module nonce_gen
   end
 
   //debug assingments
-  `ifdef DBG_
+`ifdef DBG_
   assign state_nonce_dbg = state_reg;
-  `endif
+`endif
 
 
 

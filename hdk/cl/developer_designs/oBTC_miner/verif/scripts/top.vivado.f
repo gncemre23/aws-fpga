@@ -65,7 +65,7 @@ ${CL_ROOT}/design/comparator.sv
 ${CL_ROOT}/design/counter.sv
 ${CL_ROOT}/design/fifo_async.sv
 ${CL_ROOT}/design/fifo_in_out.sv
-${CL_ROOT}/design/fsm_64to256.sv
+${CL_ROOT}/design/fsm_sha3_fifo.sv
 ${CL_ROOT}/design/fsm_matrix2hash.sv
 ${CL_ROOT}/design/heavy_hash_blk.sv
 ${CL_ROOT}/design/heavy_hash.sv

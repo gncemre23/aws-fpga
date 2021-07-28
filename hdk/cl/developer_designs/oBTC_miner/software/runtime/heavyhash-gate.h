@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdio.h>
 typedef unsigned __int128 uint128_t;
 
 // inline bool valid_hash( uint32_t *hash, const void *target )
