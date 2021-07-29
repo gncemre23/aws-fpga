@@ -19,6 +19,7 @@
 #include <assert.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>       // for clock_t, clock(), CLOCKS_PER_SEC
 #include "heavyhash-gate.h"
 
 //#define SV_TEST
@@ -195,9 +196,12 @@ int main(int argc, char **argv)
 
 
     FILE *fp;
+    double time_spent = 0.0;
+    clock_t begin, end;
+
     fp = fopen("heavy_hash_out.txt","w");
-    // const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000";
-    const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131bFFFFFC18";
+    const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000";
+    //const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131bFFFFFC18";
     uint8_t work_byte[100];
     uint32_t work_word[25];
     uint64_t hashes_done = 0;
@@ -228,7 +232,7 @@ int main(int argc, char **argv)
         }
     }
 
-    scanhash_heavyhash(&g_work0, 0xFFFFFFFF, &hashes_done, matrix,fp);
+    scanhash_heavyhash(&g_work0, 1000, &hashes_done, matrix,fp);
     fclose(fp);
 
    
@@ -249,14 +253,14 @@ int main(int argc, char **argv)
     }
     printf("===================================\n");
     printf("hashes_done = %d\n", hashes_done);
+
+    begin = clock();
     heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0);
 
     uint32_t status[BLK_CNT] = {0};
     uint32_t hash = 0;
     uint32_t heavy_hash[8];
     uint32_t golden_blk = 255;
-
-    sleep(1);
 
     //wait until status will be other than 2
     wait_status(slot_id, FPGA_APP_PF, APP_PF_BAR0, status);
@@ -285,6 +289,10 @@ int main(int argc, char **argv)
     if (golden_blk == 255)
         printf("all scanned, nothing found\n");
     heavy_hash_fpga_deinit(slot_id, FPGA_APP_PF, APP_PF_BAR0);
+    end = clock();
+    time_spent = (end - begin)/CLOCKS_PER_SEC;
+
+    printf("The elapsed time is %f seconds for scanning all possible nonce values", time_spent);
 
     //run for second time
     for (size_t i = 0; i < BLK_CNT; i++)
@@ -418,7 +426,7 @@ void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, in
     fail_on(rc, out, "Unable to write to the fpga !");
 
     //send nonce size to all blocks
-    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG,  1000/BLK_CNT + 1);
+    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG,  4294967296/BLK_CNT + 1);
     fail_on(rc, out, "Unable to write to the fpga !");
 
     rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 1);

@@ -274,7 +274,7 @@ int scanhash_heavyhash(work_t *work, uint32_t max_nonce, uint64_t *hashes_done, 
         // }
         /* ============================================*/
         n++;
-    } while (n < last_nonce);
+    } while (n < last_nonce && n != 0);
 
     *hashes_done = n - first_nonce;
     pdata[19] = n;

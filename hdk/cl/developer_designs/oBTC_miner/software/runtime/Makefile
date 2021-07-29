@@ -24,9 +24,9 @@ CFLAGS = -DCONFIG_LOGLEVEL=4 -g -Wall $(INCLUDES) -std=c99 -D_POSIX_C_SOURCE=199
 
 LDLIBS = -lfpga_mgmt -lrt -lpthread
 
-SRC = ${SDK_DIR}/userspace/utils/sh_dpi_tasks.c keccak_tiny.c heavyhash-gate.c test_hello_world.c
+SRC = ${SDK_DIR}/userspace/utils/sh_dpi_tasks.c keccak_tiny.c heavyhash-gate.c oBTCminer_fpga.c
 OBJ = $(SRC:.c=.o)
-BIN = test_hello_world
+BIN = oBTCminer_fpga
 
 all: $(BIN) check_env
 
