@@ -43,3 +43,47 @@ New status evaluation logic
     "FpgaImageId": "afi-0c198eeb8611e9daa",
     "FpgaImageGlobalId": "agfi-0edba2c32b1d22556"
 }
+
+-v11 cl_oBTC_v11_axi_400MHz_8blk_woSlack
+{
+    "FpgaImageId": "afi-0c38f23c435b10572",
+    "FpgaImageGlobalId": "agfi-03f61b637b45005a0",
+    
+    Run this core with 400Mhz (max) B clk, 125 Mhz A clk 
+}
+
+-v12 cl_oBTC_v12_axi_400MHz_20blk_withSlack_0_093
+ {
+    "FpgaImageId": "afi-0d15ec2a32856c682",
+    "FpgaImageGlobalId": "agfi-0efd9f5ea900c187b",
+
+    Run this core with 370Mhz (max) B clk, 125 Mhz A clk
+
+ }
+
+
+
+-v13 cl_oBTC_v13_axi_400MHz_12blk_withSlack_0_081
+{
+    "FpgaImageId": "afi-00470714b2ce30e0f",
+    "FpgaImageGlobalId": "agfi-0b1c373f51f660480",
+    Run this core with 370Mhz (max) B clk, 125 Mhz A clk
+}
+
+-v14 cl_oBTC_v14_axi_400MHz_12blk_withSlack_0_070
+{
+    "FpgaImageId": "afi-0b96d3fc568b2a69b",
+    "FpgaImageGlobalId": "agfi-087396f1c131c35c0",
+    Run this core with 370Mhz (max) B clk, 125 Mhz A clk
+}
+
+
+-v15 cl_oBTC_v15_axi_400MHz_12blk_withSlack_0_023
+{
+    "FpgaImageId": "afi-0fcefcc1ff1a069bc",
+    "FpgaImageGlobalId": "agfi-0419d6ae69c6ddbfb",
+    Run this core with 370Mhz (max) B clk, 125 Mhz A clk          
+},
+
+
+
