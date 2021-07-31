@@ -149,30 +149,28 @@ void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, 
     uint32_t nonce = *((uint32_t *)pdata + 19);
     sha3_256((uint8_t *)hash_first, 32, pdata, pdata_len);
 
-    if (nonce == 0)
+    printf("nonce:%08x\n", nonce);
+    printf("=== hash input %d ===\n", pdata_len);
+    for (int i = 0; i < 88; i++)
     {
-        printf("nonce:%08x\n", nonce);
-        printf("=== hash input %d ===\n", pdata_len);
-        for (int i = 0; i < 88; i++)
-        {
-            printf("%02x", *((uint8_t *)pdata + i));
-        }
-        printf("\n");
-
-        /*===== Added by egoncu to see block header ======*/
-        printf("=== First hash ===\n");
-        for (int i = 0; i < 32; i++)
-        {
-            printf("%02x", *((uint8_t *)hash_first_eg + i));
-        }
-        printf("\n");
-        for (int i = 0; i < 32; i++)
-        {
-            printf("%02x", hash_first[i]);
-        }
-        printf("\n");
-        printf("==================\n");
+        printf("%02x", *((uint8_t *)pdata + i));
     }
+    printf("\n");
+
+    // /*===== Added by egoncu to see block header ======*/
+    // printf("=== First hash ===\n");
+    // for (int i = 0; i < 32; i++)
+    // {
+    //     printf("%02x", *((uint8_t *)hash_first_eg + i));
+    // }
+    // printf("\n");
+    // for (int i = 0; i < 32; i++)
+    // {
+    //     printf("%02x", hash_first[i]);
+    // }
+    // printf("\n");
+    // printf("==================\n");
+
     /*=================================================*/
 
     for (int i = 0; i < 32; ++i)
@@ -205,15 +203,13 @@ void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, 
     }
     //printf("\n================\n");
     sha3_256(output, 32, hash_xored, 32);
-    if (nonce  == 0)
+
+    printf("=== First heavyhash ===\n");
+    for (int i = 0; i < 32; i++)
     {
-        printf("=== First heavyhash ===\n");
-        for (int i = 0; i < 32; i++)
-        {
-            printf("%02x", *(output + i));
-        }
-        printf("\n");
+        printf("%02x", *(output + i));
     }
+    printf("\n");
 }
 
 int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
@@ -291,32 +287,31 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
     uint32_t status = 0;
     const uint8_t is_stop = 0XFF;
 
-
     count = -1;
     uint32_t hh = 0;
     while (count == -1)
     {
         count = read(sockfd, &hh, 4);
         //printf("hashes_done = %d\n", count);
-        if(work_restart[thr_id].restart)
+        if (work_restart[thr_id].restart)
         {
             count = -1;
-            while(count == -1)
+            while (count == -1)
                 count = read(sockfd, &hh, 4);
-            printf("Socket is closed\n");
-            close(sockfd);
+            //printf("Socket is closed\n");
+            //close(sockfd);
             return 0;
-        }           
+        }
     }
     *hashes_done = hh;
     printf("hashes_done = %+d\n", *hashes_done);
-    
+
     do
     {
         count = -1;
         while (count == -1)
             count = read(sockfd, &status, 4);
-        printf("status : %d\n",status);
+        printf("status : %d\n", status);
     } while (status == 2);
 
     if (status == 1)
@@ -324,33 +319,31 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
         count = -1;
         while (count == -1)
             count = read(sockfd, &golden_nonce, 4);
-        
-        printf("golden nonce: %d\n", golden_nonce);
-        
+
+        printf("golden nonce: %x\n", golden_nonce);
+
+        edata[19] = golden_nonce;
+        heavyhash(matrix, edata, 80, hash);
+
         count = -1;
         while (count == -1)
             count = read(sockfd, hash, 32);
 
         for (size_t i = 0; i < 8; i++)
         {
-            golden_hash[7-i] = hash[i];
+            golden_hash[7 - i] = hash[i];
         }
-        
-        
+
         printf("hash:");
         for (size_t i = 0; i < 8; i++)
         {
-           printf("%08x",hash[i]);
+            printf("%08x", hash[i]);
         }
         printf("\n");
-        
-        
-        pdata[19] = bswap_32(golden_nonce);
+
+        pdata[19] = golden_nonce;
         submit_solution(work, golden_hash, mythr);
     }
-
-    
-
 
     // printf("=== Matrix(matrix form) ====\n");
     // for (int i = 0; i < 64; i++)
@@ -378,11 +371,11 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
     printf("%08x\n", *((uint32_t *)pdata + 20));
     printf("%08x\n", *((uint32_t *)pdata + 21));
 
-    printf("xnonce2: %d\n", *((uint32_t *)work->xnonce2));
-    printf("xnonce2: %d\n", *((uint32_t *)work->xnonce2 + 1));
-    printf("xnonce_len: %d\n", work->xnonce2_len);
-    
-    heavyhash(matrix, edata, 80, hash);
+    // printf("xnonce2: %d\n", *((uint32_t *)work->xnonce2));
+    // printf("xnonce2: %d\n", *((uint32_t *)work->xnonce2 + 1));
+    // printf("xnonce_len: %d\n", work->xnonce2_len);
+
+    //heavyhash(matrix, edata, 80, hash);
 
     printf("\n");
     printf("=== Target ====\n");
@@ -400,7 +393,7 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
     // printf("\n");
 
     // printf("socket is closed! \n");
-    close(sockfd);
+    //close(sockfd);
     return 0;
 }
 

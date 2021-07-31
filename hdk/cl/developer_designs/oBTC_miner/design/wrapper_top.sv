@@ -13,7 +13,7 @@
 // implied. See the License for the specific language governing permissions and
 // limitations under the License.
 
-//`define VERIF_
+`define VERIF_
 
 module cl_hello_world
 
@@ -50,7 +50,7 @@ module cl_hello_world
 `include "unused_apppf_irq_template.inc"
 
 
-  parameter  BLK_CNT = 40;
+  parameter  BLK_CNT = 2;
   //-------------------------------------------------
   // Wires
   //-------------------------------------------------

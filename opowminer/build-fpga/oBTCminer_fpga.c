@@ -115,12 +115,10 @@ int main(int argc, char **argv)
         printf("last_nonce = %d\n", last_nonce);
         printf("first_nonce = %d\n", first_nonce);
 
-        if (nonce_size > BLK_CNT)
-        {
-            heavy_hash_fpga_init(work_data, matrix_in, nonce_size, target);
-            hashes_done = wait_status(status);
-            printf("work is done %d! \n", hashes_done);
-        }
+        heavy_hash_fpga_init(work_data, matrix_in, nonce_size, target);
+        hashes_done = wait_status(status);
+        printf("work is done %d! \n", hashes_done);
+
         write(client_fd, &hashes_done, 4);
         printf("deadbeef0\n");
         for (size_t i = 0; i < BLK_CNT; i++)
@@ -281,12 +279,13 @@ uint32_t wait_status(uint32_t *status)
 
         //     return hashes_done;
         // }
-        if (k > 0x10000000)
+        if (k > 0x200000)
         {
             heavy_hash_fpga_deinit;
             for (size_t j = 0; j < BLK_CNT; j++)
             {
                 hashes_done += read_hashes_done(j);
+                status[j] = 0;
             }
             fpga_pci_detach(pci_bar_handle);
             printf("Too much time\n");

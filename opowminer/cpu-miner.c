@@ -83,6 +83,9 @@
 
 algo_gate_t algo_gate;
 
+
+bool fpga_busy = false;
+
 bool opt_debug = false;
 bool opt_debug_diff = false;
 bool opt_protocol = false;
@@ -2322,8 +2325,11 @@ static void *miner_thread( void *userdata )
        gettimeofday( (struct timeval *) &tv_start, NULL );
 
        // Scan for nonce
+       while(fpga_busy == true) ;
+       fpga_busy = true;
        nonce_found = algo_gate.scanhash( &work, max_nonce, &hashes_done,
                                          mythr );
+       fpga_busy = false;                 
 
        // record scanhash elapsed time
        gettimeofday( &tv_end, NULL );

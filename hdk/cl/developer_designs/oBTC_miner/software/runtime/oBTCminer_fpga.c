@@ -68,7 +68,7 @@
 #define HASHES_DONE_BASE UINT64_C(0x53C)
 
 #define FPGA_REG_OFFSET 40
-#define BLK_CNT 12
+#define BLK_CNT 2
 /* use the stdout logger for printing debug information  */
 #ifndef SV_TEST
 const struct logger *logger = &logger_stdout;
@@ -200,7 +200,7 @@ int main(int argc, char **argv)
 
     fp = fopen("heavy_hash_out.txt", "w");
     //const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000";
-    const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b7EF245BE";
+    const char *line = "00000020e3d7b2391cb7e78768d8e794fe495ee1d51710e116a12a09a222030000000000609f37fe1b522d80ab1bb54ab3799b0d50f80b229f29465cdd92c8aef17fd0664c0305617c320b1b39f789e0";
     uint8_t work_byte[100];
     uint32_t work_word[25];
     uint64_t hashes_done = 0;
@@ -232,7 +232,7 @@ int main(int argc, char **argv)
         }
     }
 
-    scanhash_heavyhash(&g_work0, 1000, &hashes_done, matrix, fp);
+    scanhash_heavyhash(&g_work0, 0x39f789ff, &hashes_done, matrix, fp);
     fclose(fp);
 
     rc = peek_poke_example(value, slot_id, FPGA_APP_PF, APP_PF_BAR0);
@@ -251,6 +251,7 @@ int main(int argc, char **argv)
     printf("hashes_done = %d\n", hashes_done);
 
     begin = clock();
+    nonce_size = 100;
     heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size);
 
     uint32_t status[BLK_CNT] = {0};
@@ -301,7 +302,7 @@ int main(int argc, char **argv)
         status[i] = 0;
     }
     hash = 0;
-    nonce_size = 1200;
+    nonce_size = 100;
     heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size);
     //wait until status will be other than 2
 
@@ -431,7 +432,7 @@ void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, in
     fail_on(rc, out, "Unable to write to the fpga !");
 
     //send nonce size to all blocks
-    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG, 180430041/*nonce_size / BLK_CNT + 1*/);
+    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG, nonce_size / BLK_CNT + 1);
     fail_on(rc, out, "Unable to write to the fpga !");
 
     

@@ -22,7 +22,7 @@
 `timescale  1ns / 1ps
 //`define DBG_
 
-//`define VERIF_
+`define VERIF_
 `define HEAVYHASH_REG_ADDR      32'h0000_0508
 `define STATUS_REG_ADDR         32'h0000_050C
 `define NONCE_REG_ADDR          32'h0000_0510
