@@ -702,6 +702,7 @@ module heavy_hash_blk
 
   logic [255:0] heavy_hash_dout;
   logic nonce_fifo_re;
+  logic heavy_hash_rdy;
   comparator
     comparator_inst (
       .clk (clk_int ),
@@ -716,7 +717,8 @@ module heavy_hash_blk
       .heavy_hash_dout (heavy_hash_dout ),
       .result  ( result),
       .nonce_fifo_re (nonce_fifo_re),
-      .hashes_done(hashes_done)
+      .hashes_done(hashes_done),
+      .heavy_hash_rdy(heavy_hash_rdy)
     );
 
 
@@ -740,35 +742,53 @@ module heavy_hash_blk
   //-------------------------------------------------
   logic [31:0]  golden_nonce = 32'd0;
   logic [255:0] golden_hash = 256'd0;
-  logic status_old = 2'd0;
+  logic golden_state  = 0;
+  logic [1:0] status_old = 2'd0;
+  logic [1:0] status_reg = 2'd0;
   always_ff @(posedge clk_int )
   begin
-    status_old <= status;
+    status_reg <= status;
+    status_old <= status_reg; 
   end
 
   always_ff @(posedge clk_int )
   begin
-    if(status == 1 && status_old == 0)
+    if(status_reg == 1 && status_old == 2)
     begin
+      golden_state <= 1;
       golden_nonce <= nonce;
+    end
+    else if (heavy_hash_rdy)
+    begin
+      golden_state <= 0;
+      golden_nonce <= golden_nonce;
+    end
+    else
+    begin
+      golden_state <= golden_state;
+      golden_nonce <= golden_nonce;
+    end
+
+
+    if (heavy_hash_rdy & golden_state)
+    begin
       golden_hash  <= heavy_hash_dout;
     end
     else
     begin
-      golden_nonce <= golden_nonce;
       golden_hash  <= golden_hash;
     end
   end
 
 
 
-  
 
 
-  `ifdef VERIF_
+
+`ifdef VERIF_
   //checker part
   logic [31:0] count_m = 0;
-  always_ff @( posedge clk_int ) 
+  always_ff @( posedge clk_int )
   begin
     if (comparator_inst.state_reg == 5)
     begin
@@ -790,7 +810,7 @@ module heavy_hash_blk
         $display("%d --- %h -- %h",(NONCE_COEF - 1) * nonce_size_int + count_m - 1, heavy_hash_dout, cl_hello_world.heavy_hash_ref[(NONCE_COEF - 1) * nonce_size_int + count_m - 1]);
     end
   end
-  `endif
+`endif
 
 
 

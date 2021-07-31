@@ -232,7 +232,7 @@ int main(int argc, char **argv)
         }
     }
 
-    scanhash_heavyhash(&g_work0, 0x39f789ff, &hashes_done, matrix, fp);
+    scanhash_heavyhash(&g_work0, 0x39F78A44, &hashes_done, matrix, fp);
     fclose(fp);
 
     rc = peek_poke_example(value, slot_id, FPGA_APP_PF, APP_PF_BAR0);
