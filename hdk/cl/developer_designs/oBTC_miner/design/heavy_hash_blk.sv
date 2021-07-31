@@ -32,6 +32,7 @@
 `define NONCESIZE_REG_ADDR      32'h0000_0520
 `define START_REG_ADDR          32'h0000_0524
 `define STOP_REG_ADDR           32'h0000_0528
+`define HASHES_DONE_BASE        32'h0000_053C
 module heavy_hash_blk
   #(
      parameter NONCE_COEF = 1,
@@ -248,10 +249,12 @@ module heavy_hash_blk
   logic rvalid_heavy_hash_int_q = 1'b0;
   logic [31:0] rdata_int_q = 32'd0;
   logic [2:0] hold_cnt = 3'd0;
+  logic [31:0] hashes_done;
 
-  const int NONCE_REG_ADDR_BLK = `NONCE_REG_ADDR + (NONCE_COEF-1)*36;
-  const int HEAVYHASH_REG_ADDR_BLK = `HEAVYHASH_REG_ADDR + (NONCE_COEF-1)*36;
-  const int STATUS_REG_ADDR_BLK = `STATUS_REG_ADDR + (NONCE_COEF-1)*36;
+  const int NONCE_REG_ADDR_BLK = `NONCE_REG_ADDR + (NONCE_COEF-1)*40;
+  const int HEAVYHASH_REG_ADDR_BLK = `HEAVYHASH_REG_ADDR + (NONCE_COEF-1)*40;
+  const int STATUS_REG_ADDR_BLK = `STATUS_REG_ADDR + (NONCE_COEF-1)*40;
+  const int HASHES_DONE_ADDR_BLK = `HASHES_DONE_BASE + (NONCE_COEF-1)*40;
   always_ff @(posedge clk_int)
   begin
     arvalid_int_old <= arvalid_int;
@@ -303,6 +306,11 @@ module heavy_hash_blk
     begin
       rvalid_heavy_hash_int = 1'b1;
       rdata_int = {30'd0, status};
+    end
+    else if( araddr_q == HASHES_DONE_ADDR_BLK)
+    begin
+      rvalid_heavy_hash_int = 1'b1;
+      rdata_int = hashes_done;
     end
   end
 
@@ -707,7 +715,8 @@ module heavy_hash_blk
       .heavy_hash_din_we (heavy_hash_out_we ),
       .heavy_hash_dout (heavy_hash_dout ),
       .result  ( result),
-      .nonce_fifo_re (nonce_fifo_re)
+      .nonce_fifo_re (nonce_fifo_re),
+      .hashes_done(hashes_done)
     );
 
 

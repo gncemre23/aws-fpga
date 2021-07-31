@@ -1,4 +1,5 @@
 #include "oBTCminer_fpga.h"
+#include <fcntl.h> /* Added for the nonblocking socket */
 
 const char *books[] = {"War and Peace",
                        "Pride and Prejudice",
@@ -10,20 +11,23 @@ void report(const char *msg, int terminate)
         exit(-1); /* failure */
 }
 
+int fd;
+char buffer[256];
+struct sockaddr_in saddr;
+int client_fd = 0;
+
 int main(int argc, char **argv)
 {
 
-    char buffer[256];
-
     //socket server
-    int fd = socket(AF_INET,     /* network versus AF_LOCAL */
-                    SOCK_STREAM, /* reliable, bidirectional, arbitrary payload size */
-                    0);          /* system picks underlying protocol (TCP) */
+    fd = socket(AF_INET,     /* network versus AF_LOCAL */
+                SOCK_STREAM, /* reliable, bidirectional, arbitrary payload size */
+                0);          /* system picks underlying protocol (TCP) */
     if (fd < 0)
         report("socket", 1); /* terminate */
 
     /* bind the server's local address in memory */
-    struct sockaddr_in saddr;
+
     memset(&saddr, 0, sizeof(saddr));          /* clear the bytes */
     saddr.sin_family = AF_INET;                /* versus AF_LOCAL */
     saddr.sin_addr.s_addr = htonl(INADDR_ANY); /* host-to-network endian */
@@ -32,30 +36,38 @@ int main(int argc, char **argv)
     if (bind(fd, (struct sockaddr *)&saddr, sizeof(saddr)) < 0)
         report("bind", 1); /* terminate */
 
-    /* listen to the socket */
     if (listen(fd, MaxConnects) < 0) /* listen for clients, up to MaxConnects */
         report("listen", 1);         /* terminate */
 
-    fprintf(stderr, "Listening on port %i for clients...\n", PortNumber);
-
-    struct sockaddr_in caddr; /* client address */
-    int len = sizeof(caddr);  /* address length could change */
-
-    int client_fd = accept(fd, (struct sockaddr *)&caddr, &len); /* accept blocks */
-
-    if (client_fd < 0)
-    {
-        report("accept", 0); /* don't terminate, though there's a problem */
-    }
+    //fcntl(fd, F_SETFL, O_NONBLOCK);
 
     while (1)
     {
-        int count = 0;
+        //blocking socket io
+        printf("inf\n");
+        /* listen to the socket */
+
+        fprintf(stderr, "Listening on port %i for clients...\n", PortNumber);
+
+        struct sockaddr_in caddr; /* client address */
+        int len = sizeof(caddr);  /* address length could change */
+
+        client_fd = -1;
+        while (client_fd == -1)
+            client_fd = accept(fd, (struct sockaddr *)&caddr, &len); /* accept blocks */
+
+        printf("client_fd: %d\n", client_fd);
+        if (client_fd < 0)
+        {
+            report("accept", 0); /* don't terminate, though there's a problem */
+        }
+        int count = -1;
         uint32_t work_data[20];
         uint16_t matrix_in[64][64] = {0};
         uint32_t target[8] = {0};
         uint32_t max_nonce = 0;
-        while (count == 0)
+        printf("Waiting for the work\n");
+        while (count == -1)
             count = read(client_fd, work_data, 80);
 
         printf("===== received work =====\n");
@@ -65,9 +77,9 @@ int main(int argc, char **argv)
         }
         printf("\n=======================\n");
 
-        count = 0;
+        count = -1;
 
-        while (count == 0)
+        while (count == -1)
             count = read(client_fd, matrix_in, sizeof(matrix_in));
 
         printf("=== Matrix(matrix form) ====\n");
@@ -80,28 +92,37 @@ int main(int argc, char **argv)
             printf("\n");
         }
 
-        count = 0;
-        while (count == 0)
+        count = -1;
+        while (count == -1)
             count = read(client_fd, target, 32);
 
-        count = 0;
-        while (count == 0)
+        count = -1;
+        while (count == -1)
             count = read(client_fd, &max_nonce, 4);
 
-        printf("max_nonce = %08x", max_nonce);
-
+        uint32_t last_nonce = max_nonce - 1;
         uint32_t first_nonce = work_data[19];
-        uint32_t nonce_size = (max_nonce - first_nonce) / BLK_CNT;
-
+        uint32_t nonce_size = (last_nonce - first_nonce) / BLK_CNT + 1;
         uint32_t status[BLK_CNT] = {0};
         uint32_t hash = 0;
         uint32_t heavy_hash[8];
         uint32_t golden_blk;
         uint32_t golden_nonce;
         uint32_t last_status;
+        uint32_t hashes_done = 0;
 
-        heavy_hash_fpga_init(work_data, matrix_in, nonce_size, target);
-        wait_status(status, &golden_blk);
+        printf("nonce_size = %d\n", nonce_size);
+        printf("last_nonce = %d\n", last_nonce);
+        printf("first_nonce = %d\n", first_nonce);
+
+        if (nonce_size > BLK_CNT)
+        {
+            heavy_hash_fpga_init(work_data, matrix_in, nonce_size, target);
+            hashes_done = wait_status(status);
+            printf("work is done %d! \n", hashes_done);
+        }
+        write(client_fd, &hashes_done, 4);
+        printf("deadbeef0\n");
         for (size_t i = 0; i < BLK_CNT; i++)
         {
             if (status[i] == 1)
@@ -120,19 +141,22 @@ int main(int argc, char **argv)
                     printf("%08x", heavy_hash[j]);
                 }
                 printf("\n");
-                break;
             }
         }
+        printf("deadbeef1\n");
+
         last_status = status[golden_blk];
         heavy_hash_fpga_deinit();
-
+        printf("deadbeef2\n");
         //send the last status (0 or 1)
         write(client_fd, &last_status, 4);
-        if (last_status)
+        printf("deadbeef3\n");
+        if (last_status == 1)
         {
-            write(client_fd, golden_nonce, 4);
+            write(client_fd, &golden_nonce, 4);
             write(client_fd, heavy_hash, 32);
         }
+        printf("deadbeef4\n");
     }
 
     return 0;
@@ -224,35 +248,81 @@ out:
     }
 }
 
-void wait_status(uint32_t *status)
+uint32_t wait_status(uint32_t *status)
 {
     int rc;
     pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
-    uint8_t mine = 0;
 #ifndef SV_TEST
     rc = fpga_pci_attach(0, FPGA_APP_PF, APP_PF_BAR0, 0, &pci_bar_handle);
     fail_on(rc, out, "Unable to attach to the AFI on slot id %d", 0);
 #endif
     //read status registers from all blocks
     //read status registers from all blocks
-    uint32_t status_or = 2;
-    while (status_or != 0)
+    uint32_t status_or = 0;
+    uint32_t status_tmp = 0;
+    uint32_t hashes_done = 0;
+    uint8_t is_stop = 0;
+    uint64_t k = 0;
+    printf("beginning of wait status \n");
+    do
     {
+        if ((k % 100000) == 0)
+            printf("status = ");
+        //read(client_fd, &is_stop, 1);
+        // if (is_stop)
+        // {
+        //     for (size_t i = 0; i < BLK_CNT; i++)
+        //     {
+        //         hashes_done += read_hashes_done(i);
+        //     }
+        //     //send stop to all cores
+        //     heavy_hash_fpga_deinit;
+        //     printf("stop signal is came before all nonce values!\n");
+
+        //     return hashes_done;
+        // }
+        if (k > 0x10000000)
+        {
+            heavy_hash_fpga_deinit;
+            for (size_t j = 0; j < BLK_CNT; j++)
+            {
+                hashes_done += read_hashes_done(j);
+            }
+            fpga_pci_detach(pci_bar_handle);
+            printf("Too much time\n");
+            return hashes_done;
+        }
         for (size_t i = 0; i < BLK_CNT; i++)
         {
             rc = fpga_pci_peek(pci_bar_handle, STATUS_REG_BASE + i * FPGA_REG_OFFSET, &status[i]);
             fail_on(rc, out, "Unable to write to the fpga !");
-            status_or |= status[i];
-            if(status[i] == 1)
+            status_tmp |= status[i];
+            status_or = status_tmp;
+            if ((k % 100000) == 0)
+                printf("%d", status[i]);
+            if (status[i] == 1)
             {
-                mine = 1;
-                break;
+                for (size_t j = 0; j < BLK_CNT; j++)
+                {
+                    hashes_done += read_hashes_done(j);
+                }
+                fpga_pci_detach(pci_bar_handle);
+                return hashes_done;
             }
         }
-        if (mine)
+        status_tmp = 0;
+        if ((k % 100000) == 0)
         {
-            break;
+            printf("\n k: %x\n", k);
         }
+        k++;
+    } while (status_or != 0);
+
+    for (size_t i = 0; i < BLK_CNT; i++)
+    {
+        uint32_t tmp = read_hashes_done(i);
+        printf("hashes_done --%d: %d", i, tmp);
+        hashes_done += tmp;
     }
 
 out:
@@ -265,6 +335,7 @@ out:
             printf("Failure while detaching from the fpga.\n");
         }
     }
+    return hashes_done;
 }
 
 uint32_t read_golden_nonce(uint8_t golden_blk)
@@ -277,6 +348,31 @@ uint32_t read_golden_nonce(uint8_t golden_blk)
     fail_on(rc, out, "Unable to attach to the AFI on slot id %d", 0);
 #endif
     rc = fpga_pci_peek(pci_bar_handle, NONCE_REG_BASE + FPGA_REG_OFFSET * golden_blk, &value);
+out:
+    /* clean up */
+    if (pci_bar_handle >= 0)
+    {
+        rc = fpga_pci_detach(pci_bar_handle);
+        if (rc)
+        {
+            printf("Failure while detaching from the fpga.\n");
+        }
+    }
+
+    /* if there is an error code, exit with status 1 */
+    return value;
+}
+
+uint32_t read_hashes_done(uint8_t blk)
+{
+    int rc;
+    uint32_t value;
+    pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
+#ifndef SV_TEST
+    rc = fpga_pci_attach(0, FPGA_APP_PF, APP_PF_BAR0, 0, &pci_bar_handle);
+    fail_on(rc, out, "Unable to attach to the AFI on slot id %d", 0);
+#endif
+    rc = fpga_pci_peek(pci_bar_handle, HASHES_DONE_BASE + FPGA_REG_OFFSET * blk, &value);
 out:
     /* clean up */
     if (pci_bar_handle >= 0)

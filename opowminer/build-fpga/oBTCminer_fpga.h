@@ -38,17 +38,19 @@
 #define HASH_REG_BASE UINT64_C(0x508)
 #define NONCE_SIZE_REG UINT64_C(0x520)
 #define NONCE_REG_BASE UINT64_C(0x510)
+#define HASHES_DONE_BASE UINT64_C(0x53C)
 
-#define FPGA_REG_OFFSET 36
-#define BLK_CNT 42
+#define FPGA_REG_OFFSET 40
+#define BLK_CNT 12
 
 
 uint32_t byte_swap(uint32_t value);
 int peek_poke_example(uint32_t value);
 void heavy_hash_fpga_init(uint32_t * work_data, uint16_t matrix[64][64], uint32_t nonce_size, uint32_t * target);
 void heavy_hash_fpga_deinit();
-void wait_status(uint32_t * status);
+uint32_t wait_status(uint32_t * status);
 uint32_t read_golden_nonce(uint8_t golden_blk);
 uint32_t read_heavyhash(uint8_t golden_blk);
+uint32_t read_hashes_done(uint8_t blk);
 
 

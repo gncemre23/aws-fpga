@@ -57,7 +57,7 @@ New status evaluation logic
     "FpgaImageId": "afi-0d15ec2a32856c682",
     "FpgaImageGlobalId": "agfi-0efd9f5ea900c187b",
 
-    Run this core with 370Mhz (max) B clk, 125 Mhz A clk
+    Run this core with 375Mhz (max) B clk, 125 Mhz A clk
 
  }
 
@@ -67,14 +67,14 @@ New status evaluation logic
 {
     "FpgaImageId": "afi-00470714b2ce30e0f",
     "FpgaImageGlobalId": "agfi-0b1c373f51f660480",
-    Run this core with 370Mhz (max) B clk, 125 Mhz A clk
+    Run this core with 375Mhz (max) B clk, 125 Mhz A clk
 }
 
 -v14 cl_oBTC_v14_axi_400MHz_12blk_withSlack_0_070
 {
     "FpgaImageId": "afi-0b96d3fc568b2a69b",
     "FpgaImageGlobalId": "agfi-087396f1c131c35c0",
-    Run this core with 370Mhz (max) B clk, 125 Mhz A clk
+    Run this core with 375Mhz (max) B clk, 125 Mhz A clk
 }
 
 
@@ -82,8 +82,19 @@ New status evaluation logic
 {
     "FpgaImageId": "afi-0fcefcc1ff1a069bc",
     "FpgaImageGlobalId": "agfi-0419d6ae69c6ddbfb",
-    Run this core with 370Mhz (max) B clk, 125 Mhz A clk          
+    Run this core with 375Mhz (max) B clk, 125 Mhz A clk          
 },
+
+-v16 cl_oBTC_v16_axi_400MHz_12blk_withSlack_0_060
+{
+    "FpgaImageId": "afi-09b457d1fb2b4be19",
+    "FpgaImageGlobalId": "agfi-0075af7978498ec09"
+    Run this core with 375Mhz (max) B clk, 125 Mhz A clk
+    (hashes done is added)
+}
+
+
+
 
 
 

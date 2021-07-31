@@ -19,7 +19,7 @@
 #include <assert.h>
 #include <string.h>
 #include <unistd.h>
-#include <time.h>       // for clock_t, clock(), CLOCKS_PER_SEC
+#include <time.h> // for clock_t, clock(), CLOCKS_PER_SEC
 #include "heavyhash-gate.h"
 
 //#define SV_TEST
@@ -65,8 +65,9 @@
 #define HASH_REG_BASE UINT64_C(0x508)
 #define NONCE_SIZE_REG UINT64_C(0x520)
 #define NONCE_REG_BASE UINT64_C(0x510)
+#define HASHES_DONE_BASE UINT64_C(0x53C)
 
-#define FPGA_REG_OFFSET 36
+#define FPGA_REG_OFFSET 40
 #define BLK_CNT 12
 /* use the stdout logger for printing debug information  */
 #ifndef SV_TEST
@@ -105,9 +106,10 @@ uint32_t byte_swap(uint32_t value);
  * An example to attach to an arbitrary slot, pf, and bar with register access.
  */
 int peek_poke_example(uint32_t value, int slot_id, int pf_id, int bar_id);
-void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, int pf_id, int bar_id);
+void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, int pf_id, int bar_id, uint32_t nonce_size);
 uint32_t read_golden_nonce(int slot_id, int pf_id, int bar_id, uint8_t golden_blk);
 uint32_t read_heavyhash(int slot_id, int pf_id, int bar_id, uint8_t golden_blk);
+uint32_t read_hashes_done(int slot_id, int pf_id, int bar_id, uint8_t blk);
 void wait_status(int slot_id, int pf_id, int bar_id, uint32_t *status);
 void heavy_hash_fpga_deinit(int slot_id, int pf_id, int bar_id);
 //pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
@@ -189,23 +191,21 @@ int main(int argc, char **argv)
     fail_on(rc, out, "AFI not ready");
 #endif
 
-    
-
     work_t g_work0, g_work1;
     uint16_t matrix[64][64];
-
 
     FILE *fp;
     double time_spent = 0.0;
     clock_t begin, end;
 
-    fp = fopen("heavy_hash_out.txt","w");
-    const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000";
-    //const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131bFFFFFC18";
+    fp = fopen("heavy_hash_out.txt", "w");
+    //const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000";
+    const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b7EF245BE";
     uint8_t work_byte[100];
     uint32_t work_word[25];
     uint64_t hashes_done = 0;
     uint32_t golden_nonce = 0;
+    uint32_t nonce_size = 0;
 
     for (int i = 0; i < 80; i++)
         sscanf(&line[i * 2], "%2x", &work_byte[i]);
@@ -232,15 +232,11 @@ int main(int argc, char **argv)
         }
     }
 
-    scanhash_heavyhash(&g_work0, 1000, &hashes_done, matrix,fp);
+    scanhash_heavyhash(&g_work0, 1000, &hashes_done, matrix, fp);
     fclose(fp);
 
-   
     rc = peek_poke_example(value, slot_id, FPGA_APP_PF, APP_PF_BAR0);
     fail_on(rc, out, "peek-poke example failed");
-
-    
-
 
     printf("=================Matrix============\n");
     for (size_t i = 0; i < 64; i++)
@@ -255,7 +251,7 @@ int main(int argc, char **argv)
     printf("hashes_done = %d\n", hashes_done);
 
     begin = clock();
-    heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0);
+    heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size);
 
     uint32_t status[BLK_CNT] = {0};
     uint32_t hash = 0;
@@ -267,10 +263,15 @@ int main(int argc, char **argv)
 
     for (size_t i = 0; i < BLK_CNT; i++)
     {
+        printf("BLK_%d hashes_done = %d\n", i, read_hashes_done(slot_id, FPGA_APP_PF, APP_PF_BAR0, i));
+    }
+
+    for (size_t i = 0; i < BLK_CNT; i++)
+    {
         if (status[i] == 1)
         {
             golden_blk = i;
-            golden_nonce = read_golden_nonce(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk) - 1;
+            golden_nonce = read_golden_nonce(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk);
             for (size_t j = 0; j < 8; j++)
             {
                 heavy_hash[j] = read_heavyhash(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk);
@@ -290,7 +291,7 @@ int main(int argc, char **argv)
         printf("all scanned, nothing found\n");
     heavy_hash_fpga_deinit(slot_id, FPGA_APP_PF, APP_PF_BAR0);
     end = clock();
-    time_spent = (end - begin)/CLOCKS_PER_SEC;
+    time_spent = (end - begin) / CLOCKS_PER_SEC;
 
     printf("The elapsed time is %f seconds for scanning all possible nonce values", time_spent);
 
@@ -300,12 +301,16 @@ int main(int argc, char **argv)
         status[i] = 0;
     }
     hash = 0;
-
-    heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0);
+    nonce_size = 1200;
+    heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size);
     //wait until status will be other than 2
 
-   
     wait_status(slot_id, FPGA_APP_PF, APP_PF_BAR0, status);
+
+    for (size_t i = 0; i < BLK_CNT; i++)
+    {
+        printf("BLK_%d hashes_done = %d\n", i, read_hashes_done(slot_id, FPGA_APP_PF, APP_PF_BAR0, i));
+    }
 
     for (size_t i = 0; i < BLK_CNT; i++)
     {
@@ -406,7 +411,7 @@ out:
 
 #endif
 
-void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, int pf_id, int bar_id)
+void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, int pf_id, int bar_id, uint32_t nonce_size)
 {
     int rc;
     pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
@@ -426,11 +431,10 @@ void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, in
     fail_on(rc, out, "Unable to write to the fpga !");
 
     //send nonce size to all blocks
-    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG,  4294967296/BLK_CNT + 1);
+    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG, 180430041/*nonce_size / BLK_CNT + 1*/);
     fail_on(rc, out, "Unable to write to the fpga !");
 
-    rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 1);
-    fail_on(rc, out, "Unable to write to the fpga !");
+    
 
     //send target to all blocks
     for (int i = 0; i < 7; i++)
@@ -438,6 +442,9 @@ void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, in
         rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 0);
         fail_on(rc, out, "Unable to write to the fpga !");
     }
+
+    rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 1);
+    fail_on(rc, out, "Unable to write to the fpga !");
 
     //send block header to all blocks
     for (int i = 19; i >= 0; i--)
@@ -560,6 +567,31 @@ uint32_t read_heavyhash(int slot_id, int pf_id, int bar_id, uint8_t golden_blk)
     fail_on(rc, out, "Unable to attach to the AFI on slot id %d", slot_id);
 #endif
     rc = fpga_pci_peek(pci_bar_handle, HASH_REG_BASE + FPGA_REG_OFFSET * golden_blk, &value);
+out:
+    /* clean up */
+    if (pci_bar_handle >= 0)
+    {
+        rc = fpga_pci_detach(pci_bar_handle);
+        if (rc)
+        {
+            printf("Failure while detaching from the fpga.\n");
+        }
+    }
+
+    /* if there is an error code, exit with status 1 */
+    return value;
+}
+
+uint32_t read_hashes_done(int slot_id, int pf_id, int bar_id, uint8_t blk)
+{
+    int rc;
+    uint32_t value;
+    pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
+#ifndef SV_TEST
+    rc = fpga_pci_attach(slot_id, pf_id, bar_id, 0, &pci_bar_handle);
+    fail_on(rc, out, "Unable to attach to the AFI on slot id %d", slot_id);
+#endif
+    rc = fpga_pci_peek(pci_bar_handle, HASHES_DONE_BASE + FPGA_REG_OFFSET * blk, &value);
 out:
     /* clean up */
     if (pci_bar_handle >= 0)

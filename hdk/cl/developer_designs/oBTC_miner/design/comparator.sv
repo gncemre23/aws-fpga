@@ -29,7 +29,8 @@ module comparator
     //! 1 : less than target (objective)
     //! 0 : greater than target
     output logic result,
-    output logic nonce_fifo_re
+    output logic nonce_fifo_re,
+    output [31:0] hashes_done
   );
 
   logic [3:0] cnt_next, cnt_reg;
@@ -37,6 +38,7 @@ module comparator
   logic [255:0] target_reg, target_next;
   logic [255:0] heavy_hash_dout_next, heavy_hash_dout_reg;
   logic equal_next, equal_reg;
+  logic [31:0] hashes_done_next, hashes_done_reg;
   typedef enum { INIT,
                  READ_TARGET,
                  COMPARE_0,
@@ -56,6 +58,7 @@ module comparator
       result_reg <= 1'b0;
       heavy_hash_dout_reg <= 256'd0;
       equal_reg <= 1'b0;
+      hashes_done_reg <= 32'd0;
     end
     else
     begin
@@ -65,6 +68,7 @@ module comparator
       target_reg <= target_next;
       heavy_hash_dout_reg <= heavy_hash_dout_next;
       equal_reg <= equal_next;
+      hashes_done_reg <= hashes_done_next;
     end
   end
 
@@ -80,6 +84,8 @@ module comparator
   heavy_hash_dout_next = heavy_hash_dout_reg;
   equal_next = equal_reg;
   nonce_fifo_re = 1'b0;
+  hashes_done_next = hashes_done_reg;
+
   case (state_reg)
     INIT:
     begin
@@ -87,6 +93,7 @@ module comparator
       cnt_next = 0;
       target_next = 0;
       state_next = READ_TARGET;
+      hashes_done_next = 0;
     end
 
     READ_TARGET:
@@ -195,6 +202,7 @@ module comparator
           state_next = COMPARE_0;
           equal_next = 1'b1;
           nonce_fifo_re = 1'b1;
+          hashes_done_next = hashes_done_reg + 1;
           if(equal_reg == 1'b1 && target_reg[63:0] > heavy_hash_din)
           begin
             result_next = 1'b1;
@@ -211,5 +219,6 @@ module comparator
 
 assign result = result_reg;
 assign heavy_hash_dout = heavy_hash_dout_reg;
+assign hashes_done = hashes_done_reg;
 
 endmodule
