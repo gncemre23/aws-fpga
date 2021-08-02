@@ -200,7 +200,10 @@ int main(int argc, char **argv)
 
     fp = fopen("heavy_hash_out.txt", "w");
     //const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000";
-    const char *line = "00000020e3d7b2391cb7e78768d8e794fe495ee1d51710e116a12a09a222030000000000609f37fe1b522d80ab1bb54ab3799b0d50f80b229f29465cdd92c8aef17fd0664c0305617c320b1b39f789e0";
+    const char *line = "00000020e0a27d28b7e08bebed8de74699264b235d58a0fee0fbebce8ae5060000000000322f6ebf7294d028cc6ff92a53909b55ebded76b9bcee440ea3288f9679edaa4458d06617c320b1bb04a716b";
+
+    
+    
     uint8_t work_byte[100];
     uint32_t work_word[25];
     uint64_t hashes_done = 0;
@@ -232,7 +235,7 @@ int main(int argc, char **argv)
         }
     }
 
-    scanhash_heavyhash(&g_work0, 0x39F78A44, &hashes_done, matrix, fp);
+    scanhash_heavyhash(&g_work0, 0xb04a717f, &hashes_done, matrix, fp);
     fclose(fp);
 
     rc = peek_poke_example(value, slot_id, FPGA_APP_PF, APP_PF_BAR0);
@@ -272,7 +275,7 @@ int main(int argc, char **argv)
         if (status[i] == 1)
         {
             golden_blk = i;
-            golden_nonce = read_golden_nonce(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk);
+            golden_nonce = read_golden_nonce(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk) - 1;
             for (size_t j = 0; j < 8; j++)
             {
                 heavy_hash[j] = read_heavyhash(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk);

@@ -181,7 +181,7 @@ void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, 
     }
     //printf("\n================\n");
     sha3_256(output, 32, hash_xored, 32);
-    for (int i = 0; i < 32; i++)
+    for (int i = 32; i >= 0; i--)
     {
        fprintf(fileptr, "%02x", *(output + i));
     }

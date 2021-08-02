@@ -728,55 +728,86 @@ module heavy_hash_blk
 
   assign nonce_end_1 = nonce_end -1 ;
 
-  always_comb
-  begin : blockName
-    if(result)
-      status = 1;
-    else if(nonce < nonce_end_1)
-      status = 2;
-    else
-      status = 0;
-  end
+  
   //-------------------------------------------------
   // Golden nonce and Golden hash
   //-------------------------------------------------
   logic [31:0]  golden_nonce = 32'd0;
   logic [255:0] golden_hash = 256'd0;
   logic golden_state  = 0;
-  logic [1:0] status_old = 2'd0;
-  logic [1:0] status_reg = 2'd0;
+  logic [1:0] status_old;
+  logic state_status;
+
   always_ff @(posedge clk_int )
   begin
-    status_reg <= status;
-    status_old <= status_reg; 
+    if(rst | stop_int)
+    begin
+      status <= 0;
+      state_status <= 0;
+      status_old <= 0;
+    end
+    else
+    begin
+      status_old <= status;
+      case (state_status)
+        0:
+        begin
+          if(result)
+          begin
+            status <= 1;
+            state_status <= 1;
+          end
+          else
+          begin
+            state_status <= 0;
+            if(nonce < nonce_end_1)
+            begin
+              status <= 2;
+            end
+            else
+              status <= 0;
+          end
+        end
+        1:
+        begin
+          status <= 1;
+          state_status <= 1;
+        end
+      endcase
+    end
   end
 
   always_ff @(posedge clk_int )
   begin
-    if(status_reg == 1 && status_old == 2)
+    if(stop_int)
+      golden_state <= 0;
+    else if(status == 1 && status_old == 2)
     begin
-      golden_state <= 1;
-      golden_nonce <= nonce;
+      golden_state <= 1;   
     end
     else if (heavy_hash_rdy)
     begin
-      golden_state <= 0;
-      golden_nonce <= golden_nonce;
+      golden_state <= 0;   
     end
     else
     begin
       golden_state <= golden_state;
-      golden_nonce <= golden_nonce;
     end
 
-
+    if(stop_int)
+    begin
+      golden_hash  <= 0;
+      golden_nonce <= 0;
+    end
     if (heavy_hash_rdy & golden_state)
     begin
       golden_hash  <= heavy_hash_dout;
+      golden_nonce <= nonce;
     end
     else
     begin
       golden_hash  <= golden_hash;
+      golden_nonce <= golden_nonce;
     end
   end
 
