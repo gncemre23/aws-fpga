@@ -41,7 +41,7 @@
 #define HASHES_DONE_BASE UINT64_C(0x53C)
 
 #define FPGA_REG_OFFSET 40
-#define BLK_CNT 12
+#define BLK_CNT 40
 
 
 uint32_t byte_swap(uint32_t value);

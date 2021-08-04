@@ -119,6 +119,8 @@ int opt_n_threads = 0;
 bool opt_reset_on_stale = false;
 bool opt_sapling = false;
 
+int it = 0;
+
 // Windows doesn't support 128 bit affinity mask.
 // Need compile time and run time test.
 #if defined(__linux) && defined(GCC_INT128)  
@@ -2327,8 +2329,11 @@ static void *miner_thread( void *userdata )
        // Scan for nonce
        while(fpga_busy == true) ;
        fpga_busy = true;
+       printf("it = %d\n",it);
        nonce_found = algo_gate.scanhash( &work, max_nonce, &hashes_done,
                                          mythr );
+       
+       it ++;
        fpga_busy = false;                 
 
        // record scanhash elapsed time

@@ -11,10 +11,29 @@ void report(const char *msg, int terminate)
         exit(-1); /* failure */
 }
 
-int fd;
+int fd, fd1;
 char buffer[256];
-struct sockaddr_in saddr;
+struct sockaddr_in saddr, saddr1;
 int client_fd = 0;
+int client_fd1 = 0;
+uint32_t is_stop = 0;
+//pthread variables
+pthread_t thread_id;
+
+void *restartThread(void *vargp)
+{
+
+    FILE *fp;
+    fp = fopen("interProcessFile", "wr");
+    char buffer[8];
+    fread(buffer, 1, 7, fp);
+    while (buffer[0] != 'r' || buffer[1] != 's' || buffer[2] != 't')
+        ;
+    remove(fp);
+    is_stop = 1;
+    printf("Restart Thread");
+    return NULL;
+}
 
 int main(int argc, char **argv)
 {
@@ -41,8 +60,11 @@ int main(int argc, char **argv)
 
     //fcntl(fd, F_SETFL, O_NONBLOCK);
 
+    int it = 0;
     while (1)
-    {
+    {   
+        printf("it = %d",it);
+        it++;
         //blocking socket io
         printf("inf\n");
         /* listen to the socket */
@@ -102,7 +124,7 @@ int main(int argc, char **argv)
 
         uint32_t last_nonce = max_nonce - 1;
         uint32_t first_nonce = work_data[19];
-        uint32_t nonce_size = (last_nonce - first_nonce) / BLK_CNT + 1;
+        uint32_t nonce_size = (last_nonce - first_nonce) / BLK_CNT + (last_nonce - first_nonce) % BLK_CNT;
         uint32_t status[BLK_CNT] = {0};
         uint32_t hash = 0;
         uint32_t heavy_hash[8];
@@ -126,7 +148,7 @@ int main(int argc, char **argv)
             if (status[i] == 1)
             {
                 golden_blk = i;
-                golden_nonce = read_golden_nonce(golden_blk);
+                golden_nonce = read_golden_nonce(golden_blk) - 1;
                 for (size_t j = 0; j < 8; j++)
                 {
                     heavy_hash[j] = read_heavyhash(golden_blk);
@@ -259,27 +281,30 @@ uint32_t wait_status(uint32_t *status)
     uint32_t status_or = 0;
     uint32_t status_tmp = 0;
     uint32_t hashes_done = 0;
-    uint8_t is_stop = 0;
     uint64_t k = 0;
+
+    FILE *fp;
+    
     printf("beginning of wait status \n");
     do
     {
+        fp = fopen("../interProcessFile", "r+");
         if ((k % 100000) == 0)
             printf("status = ");
         //read(client_fd, &is_stop, 1);
-        // if (is_stop)
-        // {
-        //     for (size_t i = 0; i < BLK_CNT; i++)
-        //     {
-        //         hashes_done += read_hashes_done(i);
-        //     }
-        //     //send stop to all cores
-        //     heavy_hash_fpga_deinit;
-        //     printf("stop signal is came before all nonce values!\n");
+        if (fp != NULL)
+        {   
+            for (size_t i = 0; i < BLK_CNT; i++)
+            {
+                hashes_done += read_hashes_done(i);
+            }
+            //send stop to all cores
+            heavy_hash_fpga_deinit;
+            printf("stop signal is came before all nonce values!\n");
 
-        //     return hashes_done;
-        // }
-        if (k > 0x200000)
+            return hashes_done;
+        }
+        if (k > 0x2000000)
         {
             heavy_hash_fpga_deinit;
             for (size_t j = 0; j < BLK_CNT; j++)

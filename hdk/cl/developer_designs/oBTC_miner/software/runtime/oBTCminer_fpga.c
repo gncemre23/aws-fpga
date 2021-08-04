@@ -68,7 +68,7 @@
 #define HASHES_DONE_BASE UINT64_C(0x53C)
 
 #define FPGA_REG_OFFSET 40
-#define BLK_CNT 2
+#define BLK_CNT 40
 /* use the stdout logger for printing debug information  */
 #ifndef SV_TEST
 const struct logger *logger = &logger_stdout;
