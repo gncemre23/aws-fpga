@@ -93,7 +93,21 @@ New status evaluation logic
     (hashes done is added)
 }
 
+-v17 cl_oBTC_v17_axi_250MHz_2blk_withoutSlack
+{
+    "FpgaImageId": "afi-03619ec1c728c362e",
+    "FpgaImageGlobalId": "agfi-0887d6d313049639d"
+    Run this core with 250Mhz (max) B clk, 125 Mhz A clk
+    (Endianness issue is fixed for hash results)
+}
 
+-v18 cl_oBTC_v18_axi_400MHz_40blk_withNSlack_0.291
+{
+    "FpgaImageId": "afi-0eb507d3f9026129f",
+    "FpgaImageGlobalId": "agfi-02242ecde389dc834"
+    Run this core with 350Mhz (max) B clk, 125 Mhz A clk
+    (Same as v17, just the block count is increased)
+}
 
 
 
