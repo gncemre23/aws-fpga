@@ -43,12 +43,15 @@
 #define FPGA_REG_OFFSET 40
 #define BLK_CNT 40
 
+#define MAX_BUF_LENGTH 5
+
 
 uint32_t byte_swap(uint32_t value);
 int peek_poke_example(uint32_t value);
 void heavy_hash_fpga_init(uint32_t * work_data, uint16_t matrix[64][64], uint32_t nonce_size, uint32_t * target);
 void heavy_hash_fpga_deinit();
 uint32_t wait_status(uint32_t * status);
+void wait_s(uint32_t *status);
 uint32_t read_golden_nonce(uint8_t golden_blk);
 uint32_t read_heavyhash(uint8_t golden_blk);
 uint32_t read_hashes_done(uint8_t blk);
