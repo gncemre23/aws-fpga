@@ -83,31 +83,31 @@ int main(int argc, char **argv)
         uint16_t matrix_in[64][64] = {0};
         uint32_t target[8] = {0};
         uint32_t max_nonce = 0;
-        printf("Waiting for the work\n");
+        //printf("Waiting for the work\n");
         while (count == -1)
             count = read(client_fd, work_data, 80);
 
-        printf("===== received work =====\n");
-        for (size_t i = 0; i < 20; i++)
-        {
-            printf("%08x", work_data[i]);
-        }
-        printf("\n=======================\n");
+        // printf("===== received work =====\n");
+        // for (size_t i = 0; i < 20; i++)
+        // {
+        //     printf("%08x", work_data[i]);
+        // }
+        // printf("\n=======================\n");
 
         count = -1;
 
         while (count == -1)
             count = read(client_fd, matrix_in, sizeof(matrix_in));
 
-        printf("=== Matrix(matrix form) ====\n");
-        for (int i = 0; i < 64; i++)
-        {
-            for (int j = 0; j < 64; j++)
-            {
-                printf("%1x", matrix_in[i][j]);
-            }
-            printf("\n");
-        }
+        // printf("=== Matrix(matrix form) ====\n");
+        // for (int i = 0; i < 64; i++)
+        // {
+        //     for (int j = 0; j < 64; j++)
+        //     {
+        //         printf("%1x", matrix_in[i][j]);
+        //     }
+        //     printf("\n");
+        // }
 
         count = -1;
         while (count == -1)
@@ -129,20 +129,19 @@ int main(int argc, char **argv)
         uint32_t last_status;
         uint32_t hashes_done = 0;
 
-        printf("nonce_size = %d\n", nonce_size);
-        printf("last_nonce = %d\n", last_nonce);
-        printf("first_nonce = %d\n", first_nonce);
+        printf("nonce_size = %08x\n", nonce_size);
+        printf("last_nonce = %08x\n", last_nonce);
+        printf("first_nonce = %08x\n", first_nonce);
 
-        uint32_t wait = 0;
-        wait_s(status_tmp);
-
+        uint32_t exp_hashes_done = max_nonce -first_nonce;
         heavy_hash_fpga_init(work_data, matrix_in, nonce_size, target);
         hashes_done = wait_status(status);
 
-        printf("work is done %d! \n", hashes_done);
-
+        printf("\nwork is done\n %08x! \n", hashes_done);
+        //if(hashes_done > exp_hashes_done)
+        hashes_done = exp_hashes_done;
         write(client_fd, &hashes_done, 4);
-        printf("deadbeef0\n");
+        //printf("deadbeef0\n");
         for (size_t i = 0; i < BLK_CNT; i++)
         {
             if (status[i] == 1)
@@ -172,20 +171,20 @@ int main(int argc, char **argv)
                 }
             }
         }
-        printf("deadbeef1\n");
+        //printf("deadbeef1\n");
 
         last_status = status[golden_blk];
         heavy_hash_fpga_deinit();
-        printf("deadbeef2\n");
+        //printf("deadbeef2\n");
         //send the last status (0 or 1)
         write(client_fd, &last_status, 4);
-        printf("deadbeef3\n");
+        //printf("deadbeef3\n");
         if (last_status == 1)
         {
             write(client_fd, &golden_nonce, 4);
             write(client_fd, heavy_hash, 32);
         }
-        printf("deadbeef4\n");
+        //printf("deadbeef4\n");
     }
 
     return 0;
@@ -298,9 +297,9 @@ uint32_t wait_status(uint32_t *status)
     do
     {
         fp = fopen("../interProcessFile", "r+");
-        if ((k % 10000) == 0)
+        if ((k % 100) == 0)
             printf("status = ");
-        //read(client_fd, &is_stop, 1);
+
         if (fp != NULL)
         {
             for (size_t i = 0; i < BLK_CNT; i++)
@@ -331,7 +330,7 @@ uint32_t wait_status(uint32_t *status)
             fail_on(rc, out, "Unable to write to the fpga !");
             status_tmp |= status[i];
             status_or = status_tmp;
-            if ((k % 10000) == 0)
+            if ((k % 100) == 0)
                 printf("%d", status[i]);
             if (status[i] == 1)
             {
@@ -344,19 +343,25 @@ uint32_t wait_status(uint32_t *status)
             }
         }
         status_tmp = 0;
-        if ((k % 10000) == 0)
+        if ((k % 100) == 0)
         {
             printf("\n k: %x\n", k);
         }
         k++;
     } while (status_or != 0);
-
+    printf("last_st : ");
+    for (size_t i = 0; i < BLK_CNT; i++)
+    {
+        printf("%d", status[i]);
+    }
+    printf("\n");
     for (size_t i = 0; i < BLK_CNT; i++)
     {
         uint32_t tmp = read_hashes_done(i);
         printf("hashes_done --%d: %d", i, tmp);
         hashes_done += tmp;
     }
+    printf("hashes_done : %08x\n", hashes_done);
 
 out:
     /* clean up */
