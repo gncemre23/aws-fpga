@@ -68,7 +68,7 @@
 #define HASHES_DONE_BASE UINT64_C(0x53C)
 
 #define FPGA_REG_OFFSET 40
-#define BLK_CNT 40
+#define BLK_CNT 2
 /* use the stdout logger for printing debug information  */
 #ifndef SV_TEST
 const struct logger *logger = &logger_stdout;
@@ -200,9 +200,11 @@ int main(int argc, char **argv)
 
     fp = fopen("heavy_hash_out.txt", "w");
     //const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000";
-    const char *line = "00000020e0a27d28b7e08bebed8de74699264b235d58a0fee0fbebce8ae5060000000000322f6ebf7294d028cc6ff92a53909b55ebded76b9bcee440ea3288f9679edaa4458d06617c320b1bb04a716b";
+    const char *line = "00000020585d9400cd38bd855ebcbe0c43fab2e8cf2805aa66bb42ed66780300000000001b9219c2bb94e91e51918a31af67443e4706f5bd4b7013295a2835c3267354d76aac0e619d81131b60542250";
 
-    
+
+
+
     
     uint8_t work_byte[100];
     uint32_t work_word[25];
@@ -235,7 +237,7 @@ int main(int argc, char **argv)
         }
     }
 
-    scanhash_heavyhash(&g_work0, 0xb04a717f, &hashes_done, matrix, fp);
+    scanhash_heavyhash(&g_work0, 0x60542280, &hashes_done, matrix, fp);
     fclose(fp);
 
     rc = peek_poke_example(value, slot_id, FPGA_APP_PF, APP_PF_BAR0);

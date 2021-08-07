@@ -181,7 +181,7 @@ void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, 
     }
     //printf("\n================\n");
     sha3_256(output, 32, hash_xored, 32);
-    for (int i = 32; i >= 0; i--)
+    for (int i = 31; i >= 0; i--)
     {
        fprintf(fileptr, "%02x", *(output + i));
     }
@@ -228,7 +228,7 @@ int scanhash_heavyhash(work_t *work, uint32_t max_nonce, uint64_t *hashes_done, 
 
     do
     {
-        edata[19] = n;
+        edata[19] = b_swap_32(n);
         heavyhash(matrix, edata, 80, hash, fileptr);
         //
         /*===== Added by egoncu to see block header ======*/
