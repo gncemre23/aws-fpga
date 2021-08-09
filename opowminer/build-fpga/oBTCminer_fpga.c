@@ -120,8 +120,9 @@ int main(int argc, char **argv)
         uint32_t last_nonce = max_nonce - 1;
         uint32_t first_nonce = work_data[19];
         uint32_t nonce_size = (last_nonce - first_nonce) / BLK_CNT + (last_nonce - first_nonce) % BLK_CNT;
-        uint32_t status[BLK_CNT] = {0};
+        uint32_t status = 0;
         uint32_t status_tmp[BLK_CNT] = {0};
+        uint32_t status_or = 0;
         uint32_t hash = 0;
         uint32_t heavy_hash[8];
         uint32_t golden_blk;
@@ -133,58 +134,46 @@ int main(int argc, char **argv)
         printf("last_nonce = %08x\n", last_nonce);
         printf("first_nonce = %08x\n", first_nonce);
 
-        uint32_t exp_hashes_done = max_nonce -first_nonce;
+        uint32_t exp_hashes_done = max_nonce - first_nonce;
         heavy_hash_fpga_init(work_data, matrix_in, nonce_size, target);
-        hashes_done = wait_status(status);
+        hashes_done = wait_status();
 
         printf("\nwork is done\n %08x! \n", hashes_done);
-        //if(hashes_done > exp_hashes_done)
-        hashes_done = exp_hashes_done;
+        // if(hashes_done > exp_hashes_done)
+        //     hashes_done = exp_hashes_done;
+        status = 0;
+        write(client_fd, &status, 4);
         write(client_fd, &hashes_done, 4);
-        //printf("deadbeef0\n");
-        for (size_t i = 0; i < BLK_CNT; i++)
-        {
-            if (status[i] == 1)
-            {
-                golden_blk = i;
-                golden_nonce = read_golden_nonce(golden_blk) - 1;
-                if (is_found_before(golden_nonce) == false)
-                {
-                    for (size_t j = 0; j < 8; j++)
-                    {
-                        heavy_hash[j] = read_heavyhash(golden_blk);
-                    }
 
-                    printf("Golden nonce is = %08x\n", golden_nonce);
-                    printf("Golden hash is =");
-                    for (size_t j = 0; j < 8; j++)
-                    {
-                        printf("%08x", heavy_hash[j]);
-                    }
-                    printf("\n");
-                    circ_buffer[found_nonce_count % MAX_BUF_LENGTH] = golden_nonce;
-                    found_nonce_count ++;
-                }
-                else
-                {
-                    status[i] = 0;
-                }
-            }
-        }
+        //printf("deadbeef0\n");
+
+        //write(client_fd, status, 4 * BLK_CNT);
+
+        // for (size_t i = 0; i < BLK_CNT; i++)
+        // {
+        //     if (status[i] == 1)
+        //     {
+        //         golden_nonce = read_golden_nonce(golden_blk) - 1;
+        //         //if (is_found_before(golden_nonce) == false)
+        //         //{
+        //         for (size_t j = 0; j < 8; j++)
+        //         {
+        //             heavy_hash[j] = read_heavyhash(golden_blk);
+        //         }
+
+        //         printf("Golden nonce is = %08x\n", golden_nonce);
+        //         printf("Golden hash is =");
+        //         for (size_t j = 0; j < 8; j++)
+        //         {
+        //             printf("%08x", heavy_hash[j]);
+        //         }
+        //         printf("\n");
+        //         write(client_fd, &golden_nonce, 4);
+        //         write(client_fd, heavy_hash, 32);
+        //     }
         //printf("deadbeef1\n");
 
-        last_status = status[golden_blk];
         heavy_hash_fpga_deinit();
-        //printf("deadbeef2\n");
-        //send the last status (0 or 1)
-        write(client_fd, &last_status, 4);
-        //printf("deadbeef3\n");
-        if (last_status == 1)
-        {
-            write(client_fd, &golden_nonce, 4);
-            write(client_fd, heavy_hash, 32);
-        }
-        //printf("deadbeef4\n");
     }
 
     return 0;
@@ -276,7 +265,24 @@ out:
     }
 }
 
-uint32_t wait_status(uint32_t *status)
+uint32_t golden_i[BLK_CNT] = {0};
+bool is_golden_before(uint32_t i)
+{
+    if (golden_i[i] == 0)
+        return false;
+
+    return true;
+}
+
+void clean_golden_i()
+{
+    for (size_t i = 0; i < BLK_CNT; i++)
+    {
+        golden_i[i] = 0;
+    }
+}
+
+uint32_t wait_status()
 {
     int rc;
     pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
@@ -290,15 +296,15 @@ uint32_t wait_status(uint32_t *status)
     uint32_t status_tmp = 0;
     uint32_t hashes_done = 0;
     uint64_t k = 0;
-
+    uint32_t status[BLK_CNT] = {0};
     FILE *fp;
 
     printf("beginning of wait status \n");
     do
     {
         fp = fopen("../interProcessFile", "r+");
-        if ((k % 100) == 0)
-            printf("status = ");
+        // if ((k % 100000) == 0)
+        //     printf("status = ");
 
         if (fp != NULL)
         {
@@ -306,115 +312,85 @@ uint32_t wait_status(uint32_t *status)
             {
                 hashes_done += read_hashes_done(i);
             }
-            //send stop to all cores
-            heavy_hash_fpga_deinit;
             printf("stop signal is came before all nonce values!\n");
-
+            clean_golden_i();
             return hashes_done;
         }
-        if (k > 0x2000000)
-        {
-            heavy_hash_fpga_deinit;
-            for (size_t j = 0; j < BLK_CNT; j++)
-            {
-                hashes_done += read_hashes_done(j);
-                status[j] = 0;
-            }
-            fpga_pci_detach(pci_bar_handle);
-            printf("Too much time\n");
-            return hashes_done;
-        }
+        // if (k > 0x2000000)
+        // {
+        //     //heavy_hash_fpga_deinit;
+        //     for (size_t j = 0; j < BLK_CNT; j++)
+        //     {
+        //         hashes_done += read_hashes_done(j);
+        //         status[j] = 0;
+        //     }
+        //     fpga_pci_detach(pci_bar_handle);
+        //     printf("Too much time\n");
+        //     return hashes_done;
+        // }
+        uint32_t golden_nonce = 0;
+        uint32_t heavy_hash[8] = {0};
         for (size_t i = 0; i < BLK_CNT; i++)
         {
             rc = fpga_pci_peek(pci_bar_handle, STATUS_REG_BASE + i * FPGA_REG_OFFSET, &status[i]);
             fail_on(rc, out, "Unable to write to the fpga !");
             status_tmp |= status[i];
             status_or = status_tmp;
-            if ((k % 100) == 0)
-                printf("%d", status[i]);
-            if (status[i] == 1)
+            // if ((k % 100000) == 0)
+            //     printf("%d", status[i]);
+            if (status[i] == 1 && is_golden_before(i) == false)
             {
+                golden_i[i] = 1;
+                write(client_fd, &status[i], 4);
+                golden_nonce = read_golden_nonce(i) - 1;
+                //if (is_found_before(golden_nonce) == false)
+                //{
+                for (size_t j = 0; j < 8; j++)
+                {
+                    heavy_hash[j] = read_heavyhash(i);
+                }
+                printf("Golden nonce is = %08x\n", golden_nonce);
+                printf("Golden hash is =");
+                for (size_t j = 0; j < 8; j++)
+                {
+                    printf("%08x", heavy_hash[j]);
+                }
+
                 for (size_t j = 0; j < BLK_CNT; j++)
                 {
                     hashes_done += read_hashes_done(j);
                 }
-                fpga_pci_detach(pci_bar_handle);
-                return hashes_done;
+                printf("\n");
+                write(client_fd, &golden_nonce, 4);
+                write(client_fd, heavy_hash, 32);
+                write(client_fd, &hashes_done,4);
+                hashes_done = 0;
             }
         }
         status_tmp = 0;
-        if ((k % 100) == 0)
-        {
-            printf("\n k: %x\n", k);
-        }
-        k++;
-    } while (status_or != 0);
+        // if ((k % 100000) == 0)
+        // {
+        //     printf("\n k: %x\n", k);
+        // }
+        //k++;
+    } while (status_or == 2 || status_or == 3);
     printf("last_st : ");
     for (size_t i = 0; i < BLK_CNT; i++)
     {
         printf("%d", status[i]);
     }
     printf("\n");
+    fpga_pci_detach(pci_bar_handle);
     for (size_t i = 0; i < BLK_CNT; i++)
     {
         uint32_t tmp = read_hashes_done(i);
-        printf("hashes_done --%d: %d", i, tmp);
+        //printf("hashes_done --%d: %d", i, tmp);
         hashes_done += tmp;
     }
     printf("hashes_done : %08x\n", hashes_done);
-
+    clean_golden_i();
 out:
-    /* clean up */
-    if (pci_bar_handle >= 0)
-    {
-        rc = fpga_pci_detach(pci_bar_handle);
-        if (rc)
-        {
-            printf("Failure while detaching from the fpga.\n");
-        }
-    }
     return hashes_done;
-}
-
-void wait_s(uint32_t *status)
-{
-    int rc;
-    pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
-#ifndef SV_TEST
-    rc = fpga_pci_attach(0, FPGA_APP_PF, APP_PF_BAR0, 0, &pci_bar_handle);
-    fail_on(rc, out, "Unable to attach to the AFI on slot id %d", 0);
-#endif
-    //read status registers from all blocks
-    //read status registers from all blocks
-    uint32_t status_or = 0;
-    uint32_t status_tmp = 0;
-    printf("waiting for status = 0\n");
-    do
-    {
-
-        for (size_t i = 0; i < BLK_CNT; i++)
-        {
-            rc = fpga_pci_peek(pci_bar_handle, STATUS_REG_BASE + i * FPGA_REG_OFFSET, &status[i]);
-            fail_on(rc, out, "Unable to write to the fpga !");
-            status_tmp |= status[i];
-            status_or = status_tmp;
-            printf("%d", status[i]);
-        }
-        printf("\n");
-        status_tmp = 0;
-    } while (status_or == 1);
-
-    printf("waiting done\n");
-out:
-    /* clean up */
-    if (pci_bar_handle >= 0)
-    {
-        rc = fpga_pci_detach(pci_bar_handle);
-        if (rc)
-        {
-            printf("Failure while detaching from the fpga.\n");
-        }
-    }
 }
 
 uint32_t read_golden_nonce(uint8_t golden_blk)

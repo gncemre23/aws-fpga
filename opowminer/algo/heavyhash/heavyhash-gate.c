@@ -283,132 +283,79 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
 
     int count = -1;
     uint32_t status = 0;
-    const uint8_t is_stop = 0XFF;
 
     count = -1;
     uint32_t hh = 0;
-    while (count == -1)
-    {
-        count = read(sockfd, &hh, 4);
-        //printf("hashes_done = %d\n", count);
-        if (work_restart[thr_id].restart)
-        {
-            printf("Restart threads!\n");
-            // socket client
-            FILE *fp;
-            int ret;
-            char filename[] = "interProcessFile";
-            fp = fopen(filename, "a+");
-
-            count = -1;
-            while (count == -1)
-                count = read(sockfd, &hh, 4);
-            //printf("Socket is closed\n");
-            fclose(fp);
-
-            ret = remove(filename);
-
-            if (ret == 0)
-            {
-                printf("File deleted successfully");
-            }
-            else
-            {
-                printf("Error: unable to delete the file");
-            }
-            return 0;
-        }
-    }
-    *hashes_done = hh;
-    //printf("hashes_done = %+d\n", *hashes_done);
 
     do
     {
         count = -1;
         while (count == -1)
+        {
             count = read(sockfd, &status, 4);
-        //printf("status : %d\n", status);
-    } while (status == 2);
 
-    if (status == 1)
-    {
-        count = -1;
-        while (count == -1)
-            count = read(sockfd, &golden_nonce, 4);
+            //printf("hashes_done = %d\n", count);
+            if (work_restart[thr_id].restart)
+            {
+                printf("Restart threads!\n");
+                // socket client
+                FILE *fp;
+                int ret;
+                char filename[] = "interProcessFile";
+                fp = fopen(filename, "a+");
 
-        printf("golden nonce: %x\n", golden_nonce);
+                while (count == -1)
+                    count = read(sockfd, &status, 4);
 
-        edata[19] = golden_nonce;
-        heavyhash(matrix, edata, 80, hash);
+                //printf("Socket is closed\n");
+                fclose(fp);
 
-        count = -1;
-        while (count == -1)
-            count = read(sockfd, hash, 32);
+                ret = remove(filename);
 
-        for (size_t i = 0; i < 8; i++)
-        {
-            golden_hash[7 - i] = hash[i];
+                if (ret == 0)
+                {
+                    printf("File deleted successfully");
+                }
+                else
+                {
+                    printf("Error: unable to delete the file");
+                }
+                status = 0;
+                return 0;
+            }
         }
-
-        printf("hash:");
-        for (size_t i = 0; i < 8; i++)
+        if (status == 1)
         {
-            printf("%08x", hash[i]);
+            count = -1;
+            while (count == -1)
+                count = read(sockfd, &golden_nonce, 4);
+
+            count = -1;
+            while (count == -1)
+                count = read(sockfd, hash, 32);
+
+            printf("hash:");
+            for (size_t i = 0; i < 8; i++)
+            {
+                printf("%08x", hash[i]);
+            }
+            printf("\n");
+            pdata[19] = golden_nonce;
+            count = -1;
+            while (count == -1)
+                count = read(sockfd, &hh, 4);
+            *hashes_done = hh;
+            submit_solution(work, hash, mythr);
         }
-        printf("\n");
+    } while (status != 0);
 
-        pdata[19] = bswap_32(golden_nonce);
-        submit_solution(work, hash, mythr);
-    }
+    count = -1;
+    while (count == -1)
+        count = read(sockfd, &hh, 4);
 
-    // printf("=== Matrix(matrix form) ====\n");
-    // for (int i = 0; i < 64; i++)
-    // {
-    //     for (int j = 0; j < 64; j++)
-    //     {
-    //         printf("%1x", matrix[i][j]);
-    //     }
-    //     printf("\n");
-    // }
+    *hashes_done = hh;
+    //printf("hashes_done = %+d\n", *hashes_done);
 
-    // printf("=== Header Block(edata ====\n");
-    // for (int i = 0; i < 20; i++)
-    // {
-    //     printf("%08x\n", *((uint32_t *)edata + i));
-    // }
-    // printf("\n");
-
-    // printf("=== Header Block(pdata ====\n");
-    // for (int i = 0; i < 20; i++)
-    // {
-    //     printf("%08x\n", *((uint32_t *)pdata + i));
-    // }
-    // printf("\n");
-    // printf("%08x\n", *((uint32_t *)pdata + 20));
-    // printf("%08x\n", *((uint32_t *)pdata + 21));
-
-    // printf("xnonce2: %d\n", *((uint32_t *)work->xnonce2));
-    // printf("xnonce2: %d\n", *((uint32_t *)work->xnonce2 + 1));
-    // printf("xnonce_len: %d\n", work->xnonce2_len);
-
-    //heavyhash(matrix, edata, 80, hash);
-
-    // printf("\n");
-    // printf("=== Target ====\n");
-    // for (int i = 0; i < 8; i++)
-    // {
-    //     printf("%08x", ptarget[i]);
-    // }
-    // printf("\n");
-
-    // printf("=== First hash ====\n");
-    // for (int i = 0; i < 8; i++)
-    // {
-    //     printf("%08x", hash[i]);
-    // }
-    // printf("\n");
-
-    // printf("socket is closed! \n");
     close(sockfd);
     return 0;
 }

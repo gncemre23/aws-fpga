@@ -109,6 +109,24 @@ New status evaluation logic
     (Same as v17, just the block count is increased)
 }
 
+-v19 cl_oBTC_v19_axi_250MHz_2blk_withoutSlack
+{
+    "FpgaImageId": "afi-0902e9dfb239811f7",
+    "FpgaImageGlobalId": "agfi-0094e44a9b1b9fa1e"
+    Run this core with 250Mhz (max) B clk, 125 Mhz A clk
+    (change updating nonce endianness)
+}
+
+-v20 cl_oBTC_v20_axi_400MHz_40blk_withSlack_0_428
+{
+    "FpgaImageId": "afi-0adac8636ef29ebec",
+    "FpgaImageGlobalId": "agfi-06dd0d72761f745f0"
+    Run this core with 333Mhz (max) B clk, 125 Mhz A clk
+    (Same as v19, just the block count is increased)
+}
+
+
+
 
 
 
