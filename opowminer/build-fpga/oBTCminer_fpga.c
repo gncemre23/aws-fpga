@@ -299,6 +299,9 @@ uint32_t wait_status()
     uint32_t status[BLK_CNT] = {0};
     FILE *fp;
 
+    uint32_t golden_nonce = 0;
+    uint32_t heavy_hash[8] = {0};
+
     printf("beginning of wait status \n");
     do
     {
@@ -310,7 +313,7 @@ uint32_t wait_status()
         {
             for (size_t i = 0; i < BLK_CNT; i++)
             {
-                hashes_done += read_hashes_done(i);
+                hashes_done += read_hashes_done(&pci_bar_handle, i);
             }
             printf("stop signal is came before all nonce values!\n");
             clean_golden_i();
@@ -328,8 +331,7 @@ uint32_t wait_status()
         //     printf("Too much time\n");
         //     return hashes_done;
         // }
-        uint32_t golden_nonce = 0;
-        uint32_t heavy_hash[8] = {0};
+
         for (size_t i = 0; i < BLK_CNT; i++)
         {
             rc = fpga_pci_peek(pci_bar_handle, STATUS_REG_BASE + i * FPGA_REG_OFFSET, &status[i]);
@@ -341,13 +343,57 @@ uint32_t wait_status()
             if (status[i] == 1 && is_golden_before(i) == false)
             {
                 golden_i[i] = 1;
-                write(client_fd, &status[i], 4);
-                golden_nonce = read_golden_nonce(i) - 1;
-                //if (is_found_before(golden_nonce) == false)
-                //{
+                
+                golden_nonce = read_golden_nonce(&pci_bar_handle, i) - 1;
+                if (is_found_before(golden_nonce) == false)
+                {
+                    write(client_fd, &status[i], 4);
+                    for (size_t j = 0; j < 8; j++)
+                    {
+                        heavy_hash[j] = read_heavyhash(&pci_bar_handle, i);
+                    }
+                    printf("Golden nonce is = %08x\n", golden_nonce);
+                    printf("Golden hash is =");
+                    for (size_t j = 0; j < 8; j++)
+                    {
+                        printf("%08x", heavy_hash[j]);
+                    }
+
+                    for (size_t j = 0; j < BLK_CNT; j++)
+                    {
+                        hashes_done += read_hashes_done(&pci_bar_handle, j);
+                    }
+                    printf("\n");
+                    write(client_fd, &golden_nonce, 4);
+                    write(client_fd, heavy_hash, 32);
+                    write(client_fd, &hashes_done, 4);
+                    hashes_done = 0;
+                    circ_buffer[found_nonce_count % MAX_BUF_LENGTH] = golden_nonce;
+                    found_nonce_count++;
+                }
+            }
+        }
+        status_tmp = 0;
+        // if ((k % 100000) == 0)
+        // {
+        //     printf("\n k: %x\n", k);
+        // }
+        //k++;
+    } while (status_or == 2 || status_or == 3);
+
+    //Send the remaining golden hashes and nonces
+    for (size_t i = 0; i < BLK_CNT; i++)
+    {
+        if (status[i] == 1 && is_golden_before(i) == false)
+        {
+            golden_i[i] = 1;
+            write(client_fd, &status[i], 4);
+            golden_nonce = read_golden_nonce(&pci_bar_handle, i) - 1;
+            if (is_found_before(golden_nonce) == false)
+            {
                 for (size_t j = 0; j < 8; j++)
                 {
-                    heavy_hash[j] = read_heavyhash(i);
+                    heavy_hash[j] = read_heavyhash(&pci_bar_handle, i);
                 }
                 printf("Golden nonce is = %08x\n", golden_nonce);
                 printf("Golden hash is =");
@@ -358,111 +404,77 @@ uint32_t wait_status()
 
                 for (size_t j = 0; j < BLK_CNT; j++)
                 {
-                    hashes_done += read_hashes_done(j);
+                    hashes_done += read_hashes_done(&pci_bar_handle, j);
                 }
                 printf("\n");
                 write(client_fd, &golden_nonce, 4);
                 write(client_fd, heavy_hash, 32);
-                write(client_fd, &hashes_done,4);
+                write(client_fd, &hashes_done, 4);
                 hashes_done = 0;
+                circ_buffer[found_nonce_count % MAX_BUF_LENGTH] = golden_nonce;
+                found_nonce_count++;
             }
         }
-        status_tmp = 0;
-        // if ((k % 100000) == 0)
-        // {
-        //     printf("\n k: %x\n", k);
-        // }
-        //k++;
-    } while (status_or == 2 || status_or == 3);
+    }
+
     printf("last_st : ");
     for (size_t i = 0; i < BLK_CNT; i++)
     {
         printf("%d", status[i]);
     }
     printf("\n");
-    fpga_pci_detach(pci_bar_handle);
+
     for (size_t i = 0; i < BLK_CNT; i++)
     {
-        uint32_t tmp = read_hashes_done(i);
-        //printf("hashes_done --%d: %d", i, tmp);
-        hashes_done += tmp;
+        hashes_done += read_hashes_done(&pci_bar_handle, i);
     }
     printf("hashes_done : %08x\n", hashes_done);
     clean_golden_i();
 out:
+    fpga_pci_detach(pci_bar_handle);
     return hashes_done;
 }
 
-uint32_t read_golden_nonce(uint8_t golden_blk)
+uint32_t read_golden_nonce(pci_bar_handle_t *pci_bar_handle, uint8_t golden_blk)
 {
     int rc;
     uint32_t value;
-    pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
-#ifndef SV_TEST
-    rc = fpga_pci_attach(0, FPGA_APP_PF, APP_PF_BAR0, 0, &pci_bar_handle);
-    fail_on(rc, out, "Unable to attach to the AFI on slot id %d", 0);
-#endif
-    rc = fpga_pci_peek(pci_bar_handle, NONCE_REG_BASE + FPGA_REG_OFFSET * golden_blk, &value);
+    // #ifndef SV_TEST
+    //     rc = fpga_pci_attach(0, FPGA_APP_PF, APP_PF_BAR0, 0, &pci_bar_handle);
+    //     fail_on(rc, out, "Unable to attach to the AFI on slot id %d", 0);
+    // #endif
+    rc = fpga_pci_peek(*pci_bar_handle, NONCE_REG_BASE + FPGA_REG_OFFSET * golden_blk, &value);
 out:
-    /* clean up */
-    if (pci_bar_handle >= 0)
-    {
-        rc = fpga_pci_detach(pci_bar_handle);
-        if (rc)
-        {
-            printf("Failure while detaching from the fpga.\n");
-        }
-    }
+    /* if there is an error code, exit with status 1 */
+    return value;
+}
+
+uint32_t read_hashes_done(pci_bar_handle_t *pci_bar_handle, uint8_t blk)
+{
+    int rc;
+    uint32_t value;
+    // #ifndef SV_TEST
+    //     rc = fpga_pci_attach(0, FPGA_APP_PF, APP_PF_BAR0, 0, &pci_bar_handle);
+    //     fail_on(rc, out, "Unable to attach to the AFI on slot id %d", 0);
+    // #endif
+    rc = fpga_pci_peek(*pci_bar_handle, HASHES_DONE_BASE + FPGA_REG_OFFSET * blk, &value);
+out:
 
     /* if there is an error code, exit with status 1 */
     return value;
 }
 
-uint32_t read_hashes_done(uint8_t blk)
+uint32_t read_heavyhash(pci_bar_handle_t *pci_bar_handle, uint8_t golden_blk)
 {
     int rc;
     uint32_t value;
-    pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
-#ifndef SV_TEST
-    rc = fpga_pci_attach(0, FPGA_APP_PF, APP_PF_BAR0, 0, &pci_bar_handle);
-    fail_on(rc, out, "Unable to attach to the AFI on slot id %d", 0);
-#endif
-    rc = fpga_pci_peek(pci_bar_handle, HASHES_DONE_BASE + FPGA_REG_OFFSET * blk, &value);
-out:
-    /* clean up */
-    if (pci_bar_handle >= 0)
-    {
-        rc = fpga_pci_detach(pci_bar_handle);
-        if (rc)
-        {
-            printf("Failure while detaching from the fpga.\n");
-        }
-    }
 
-    /* if there is an error code, exit with status 1 */
-    return value;
-}
-
-uint32_t read_heavyhash(uint8_t golden_blk)
-{
-    int rc;
-    uint32_t value;
-    pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
-#ifndef SV_TEST
-    rc = fpga_pci_attach(0, FPGA_APP_PF, APP_PF_BAR0, 0, &pci_bar_handle);
-    fail_on(rc, out, "Unable to attach to the AFI on slot id %d", 0);
-#endif
-    rc = fpga_pci_peek(pci_bar_handle, HASH_REG_BASE + FPGA_REG_OFFSET * golden_blk, &value);
+    // #ifndef SV_TEST
+    //     rc = fpga_pci_attach(0, FPGA_APP_PF, APP_PF_BAR0, 0, &pci_bar_handle);
+    //     fail_on(rc, out, "Unable to attach to the AFI on slot id %d", 0);
+    // #endif
+    rc = fpga_pci_peek(*pci_bar_handle, HASH_REG_BASE + FPGA_REG_OFFSET * golden_blk, &value);
 out:
-    /* clean up */
-    if (pci_bar_handle >= 0)
-    {
-        rc = fpga_pci_detach(pci_bar_handle);
-        if (rc)
-        {
-            printf("Failure while detaching from the fpga.\n");
-        }
-    }
 
     /* if there is an error code, exit with status 1 */
     return value;

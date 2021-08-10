@@ -340,7 +340,7 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
                 printf("%08x", hash[i]);
             }
             printf("\n");
-            pdata[19] = golden_nonce;
+            pdata[19] = bswap_32(golden_nonce);
             count = -1;
             while (count == -1)
                 count = read(sockfd, &hh, 4);

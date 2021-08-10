@@ -52,8 +52,8 @@ void heavy_hash_fpga_init(uint32_t * work_data, uint16_t matrix[64][64], uint32_
 void heavy_hash_fpga_deinit();
 uint32_t wait_status();
 void wait_s(uint32_t *status);
-uint32_t read_golden_nonce(uint8_t golden_blk);
-uint32_t read_heavyhash(uint8_t golden_blk);
-uint32_t read_hashes_done(uint8_t blk);
+uint32_t read_golden_nonce(pci_bar_handle_t *pci_bar_handle, uint8_t golden_blk);
+uint32_t read_heavyhash(pci_bar_handle_t *pci_bar_handle, uint8_t golden_blk);
+uint32_t read_hashes_done(pci_bar_handle_t *pci_bar_handle, uint8_t golden_blk);
 
 
