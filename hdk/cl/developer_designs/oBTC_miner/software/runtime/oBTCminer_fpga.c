@@ -56,18 +56,20 @@
 //0x524 + 36*2 = 0x56C
 #define HELLO_WORLD_REG_ADDR UINT64_C(0x500)
 #define VLED_REG_ADDR UINT64_C(0x504)
-#define BLOCK_HEADER_REG UINT64_C(0x514)
-#define MATRIX_REG UINT64_C(0x518)
-#define TARGET_REG UINT64_C(0x51C)
-#define START_REG UINT64_C(0x524)
-#define STOP_REG UINT64_C(0x528)
-#define STATUS_REG_BASE UINT64_C(0x50C)
 #define HASH_REG_BASE UINT64_C(0x508)
-#define NONCE_SIZE_REG UINT64_C(0x520)
+#define STATUS_REG_BASE UINT64_C(0x50C)
 #define NONCE_REG_BASE UINT64_C(0x510)
+#define BLOCK_HEADER_REG_BASE UINT64_C(0x514)
+#define MATRIX_REG_BASE UINT64_C(0x518)
+#define TARGET_REG_BASE UINT64_C(0x51C)
+#define NONCE_SIZE_REG_BASE UINT64_C(0x520)
+#define START_REG_BASE UINT64_C(0x524)
+#define STOP_REG_BASE UINT64_C(0x528)
 #define HASHES_DONE_BASE UINT64_C(0x53C)
+#define ACK_REG_BASE UINT64_C(0x540)
 
-#define FPGA_REG_OFFSET 40
+
+#define FPGA_REG_OFFSET 44
 #define BLK_CNT 2
 /* use the stdout logger for printing debug information  */
 #ifndef SV_TEST
@@ -106,12 +108,12 @@ uint32_t byte_swap(uint32_t value);
  * An example to attach to an arbitrary slot, pf, and bar with register access.
  */
 int peek_poke_example(uint32_t value, int slot_id, int pf_id, int bar_id);
-void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, int pf_id, int bar_id, uint32_t nonce_size);
+void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, int pf_id, int bar_id, uint32_t nonce_size, uint8_t blk);
 uint32_t read_golden_nonce(int slot_id, int pf_id, int bar_id, uint8_t golden_blk);
 uint32_t read_heavyhash(int slot_id, int pf_id, int bar_id, uint8_t golden_blk);
 uint32_t read_hashes_done(int slot_id, int pf_id, int bar_id, uint8_t blk);
 void wait_status(int slot_id, int pf_id, int bar_id, uint32_t *status);
-void heavy_hash_fpga_deinit(int slot_id, int pf_id, int bar_id);
+void heavy_hash_fpga_deinit(int slot_id, int pf_id, int bar_id, uint8_t blk);
 //pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
 
 uint32_t byte_swap(uint32_t value)
@@ -194,18 +196,15 @@ int main(int argc, char **argv)
     work_t g_work0, g_work1;
     uint16_t matrix[64][64];
 
-    FILE *fp;
+    FILE *fp0, *fp1;
     double time_spent = 0.0;
     clock_t begin, end;
 
-    fp = fopen("heavy_hash_out.txt", "w");
-    //const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000";
-    const char *line = "00000020585d9400cd38bd855ebcbe0c43fab2e8cf2805aa66bb42ed66780300000000001b9219c2bb94e91e51918a31af67443e4706f5bd4b7013295a2835c3267354d76aac0e619d81131b60542250";
+    fp0 = fopen("heavy_hash_out0.txt", "w");
+    fp1 = fopen("heavy_hash_out1.txt", "w");
+    const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000";
+    //const char *line = "00000020585d9400cd38bd855ebcbe0c43fab2e8cf2805aa66bb42ed66780300000000001b9219c2bb94e91e51918a31af67443e4706f5bd4b7013295a2835c3267354d76aac0e619d81131b60542250";
 
-
-
-
-    
     uint8_t work_byte[100];
     uint32_t work_word[25];
     uint64_t hashes_done = 0;
@@ -237,8 +236,11 @@ int main(int argc, char **argv)
         }
     }
 
-    scanhash_heavyhash(&g_work0, 0x60542280, &hashes_done, matrix, fp);
-    fclose(fp);
+    scanhash_heavyhash(&g_work0, 0x00000063, &hashes_done, matrix, fp0);
+    scanhash_heavyhash(&g_work0, 0x000000C7, &hashes_done, matrix, fp1);
+
+    fclose(fp0);
+    fclose(fp1);
 
     rc = peek_poke_example(value, slot_id, FPGA_APP_PF, APP_PF_BAR0);
     fail_on(rc, out, "peek-poke example failed");
@@ -257,13 +259,15 @@ int main(int argc, char **argv)
 
     begin = clock();
     nonce_size = 100;
-    heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size);
+
+    //initializiation of all blocks (for now 2 blocks)
+    heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size, 0);
+    g_work1.data[19] = 100;
+    heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size, 1);
 
     uint32_t status[BLK_CNT] = {0};
     uint32_t hash = 0;
-    uint32_t heavy_hash[8];
-    uint32_t golden_blk = 255;
-
+    
     //wait until status will be other than 2
     wait_status(slot_id, FPGA_APP_PF, APP_PF_BAR0, status);
 
@@ -272,76 +276,35 @@ int main(int argc, char **argv)
         printf("BLK_%d hashes_done = %d\n", i, read_hashes_done(slot_id, FPGA_APP_PF, APP_PF_BAR0, i));
     }
 
-    for (size_t i = 0; i < BLK_CNT; i++)
-    {
-        if (status[i] == 1)
-        {
-            golden_blk = i;
-            golden_nonce = read_golden_nonce(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk) - 1;
-            for (size_t j = 0; j < 8; j++)
-            {
-                heavy_hash[j] = read_heavyhash(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk);
-            }
+    
+    
+    heavy_hash_fpga_deinit(slot_id, FPGA_APP_PF, APP_PF_BAR0, 0);
+    heavy_hash_fpga_deinit(slot_id, FPGA_APP_PF, APP_PF_BAR0, 1);
 
-            printf("Golden nonce is = %08x\n", golden_nonce);
-            printf("Golden hash is =");
-            for (size_t j = 0; j < 8; j++)
-            {
-                printf("%08x", heavy_hash[j]);
-            }
-            printf("\n");
-            break;
-        }
-    }
-    if (golden_blk == 255)
-        printf("all scanned, nothing found\n");
-    heavy_hash_fpga_deinit(slot_id, FPGA_APP_PF, APP_PF_BAR0);
     end = clock();
     time_spent = (end - begin) / CLOCKS_PER_SEC;
 
     printf("The elapsed time is %f seconds for scanning all possible nonce values", time_spent);
 
-    //run for second time
-    for (size_t i = 0; i < BLK_CNT; i++)
-    {
-        status[i] = 0;
-    }
-    hash = 0;
-    nonce_size = 100;
-    heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size);
-    //wait until status will be other than 2
+    // //run for second time
+    // for (size_t i = 0; i < BLK_CNT; i++)
+    // {
+    //     status[i] = 0;
+    // }
+    // hash = 0;
+    // nonce_size = 100;
+    // heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size);
+    // //wait until status will be other than 2
 
-    wait_status(slot_id, FPGA_APP_PF, APP_PF_BAR0, status);
+    // wait_status(slot_id, FPGA_APP_PF, APP_PF_BAR0, status);
 
-    for (size_t i = 0; i < BLK_CNT; i++)
-    {
-        printf("BLK_%d hashes_done = %d\n", i, read_hashes_done(slot_id, FPGA_APP_PF, APP_PF_BAR0, i));
-    }
+    // for (size_t i = 0; i < BLK_CNT; i++)
+    // {
+    //     printf("BLK_%d hashes_done = %d\n", i, read_hashes_done(slot_id, FPGA_APP_PF, APP_PF_BAR0, i));
+    // }
 
-    for (size_t i = 0; i < BLK_CNT; i++)
-    {
-        if (status[i] == 1)
-        {
-            golden_blk = i;
-            golden_nonce = read_golden_nonce(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk) - 1;
-            for (size_t j = 0; j < 8; j++)
-            {
-                heavy_hash[j] = read_heavyhash(slot_id, FPGA_APP_PF, APP_PF_BAR0, golden_blk);
-            }
-
-            printf("Golden nonce is = %08x\n", golden_nonce);
-            printf("Golden hash is =");
-            for (size_t j = 0; j < 8; j++)
-            {
-                printf("%08x", heavy_hash[j]);
-            }
-            printf("\n");
-            break;
-        }
-    }
-    if (golden_blk == 255)
-        printf("all scanned, nothing found\n");
-    heavy_hash_fpga_deinit(slot_id, FPGA_APP_PF, APP_PF_BAR0);
+    
+    // heavy_hash_fpga_deinit(slot_id, FPGA_APP_PF, APP_PF_BAR0);
 
 #ifndef SV_TEST
     return 0;
@@ -417,7 +380,7 @@ out:
 
 #endif
 
-void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, int pf_id, int bar_id, uint32_t nonce_size)
+void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, int pf_id, int bar_id, uint32_t nonce_size, uint8_t blk)
 {
     int rc;
     pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
@@ -429,33 +392,31 @@ void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, in
     printf("init begin\n");
 
     //send stop to all blocks
-    rc = fpga_pci_poke(pci_bar_handle, STOP_REG, 1);
+    rc = fpga_pci_poke(pci_bar_handle, STOP_REG_BASE + blk * FPGA_REG_OFFSET, 1);
     fail_on(rc, out, "Unable to write to the fpga !");
 
     //send start to all blocks
-    rc = fpga_pci_poke(pci_bar_handle, START_REG, 1);
+    rc = fpga_pci_poke(pci_bar_handle, START_REG_BASE + blk * FPGA_REG_OFFSET, 1);
     fail_on(rc, out, "Unable to write to the fpga !");
 
     //send nonce size to all blocks
-    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG, nonce_size / BLK_CNT + 1);
+    rc = fpga_pci_poke(pci_bar_handle, NONCE_SIZE_REG_BASE + blk * FPGA_REG_OFFSET, nonce_size);
     fail_on(rc, out, "Unable to write to the fpga !");
-
-    
 
     //send target to all blocks
     for (int i = 0; i < 7; i++)
     {
-        rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 0);
+        rc = fpga_pci_poke(pci_bar_handle, TARGET_REG_BASE + blk * FPGA_REG_OFFSET, 0);
         fail_on(rc, out, "Unable to write to the fpga !");
     }
 
-    rc = fpga_pci_poke(pci_bar_handle, TARGET_REG, 1);
+    rc = fpga_pci_poke(pci_bar_handle, TARGET_REG_BASE + blk * FPGA_REG_OFFSET, 1);
     fail_on(rc, out, "Unable to write to the fpga !");
 
     //send block header to all blocks
     for (int i = 19; i >= 0; i--)
     {
-        rc = fpga_pci_poke(pci_bar_handle, BLOCK_HEADER_REG, work->data[i]);
+        rc = fpga_pci_poke(pci_bar_handle, BLOCK_HEADER_REG_BASE + blk * FPGA_REG_OFFSET, work->data[i]);
         fail_on(rc, out, "Unable to write to the fpga !");
     }
 
@@ -465,7 +426,7 @@ void heavy_hash_fpga_init(work_t *work, uint16_t matrix[64][64], int slot_id, in
         for (int j = 63; j > 0; j = j - 8)
         {
             value = ((uint32_t)matrix[i][j - 7] << 28) | ((uint32_t)matrix[i][j - 6] << 24) | ((uint32_t)matrix[i][j - 5] << 20) | ((uint32_t)matrix[i][j - 4] << 16) | ((uint32_t)matrix[i][j - 3] << 12) | ((uint32_t)matrix[i][j - 2] << 8) | ((uint32_t)matrix[i][j - 1] << 4) | (uint32_t)matrix[i][j];
-            rc = fpga_pci_poke(pci_bar_handle, MATRIX_REG, value);
+            rc = fpga_pci_poke(pci_bar_handle, MATRIX_REG_BASE + blk * FPGA_REG_OFFSET, value);
             fail_on(rc, out, "Unable to write to the fpga !");
         }
     }
@@ -484,7 +445,7 @@ out:
     }
 }
 
-void heavy_hash_fpga_deinit(int slot_id, int pf_id, int bar_id)
+void heavy_hash_fpga_deinit(int slot_id, int pf_id, int bar_id ,uint8_t blk)
 {
     int rc;
     pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
@@ -494,7 +455,31 @@ void heavy_hash_fpga_deinit(int slot_id, int pf_id, int bar_id)
     fail_on(rc, out, "Unable to write to the fpga !");
 #endif
     //send stop to all blocks
-    rc = fpga_pci_poke(pci_bar_handle, STOP_REG, 1);
+    rc = fpga_pci_poke(pci_bar_handle, STOP_REG_BASE + blk * FPGA_REG_OFFSET, 1);
+    fail_on(rc, out, "Unable to write to the fpga !");
+out:
+    /* clean up */
+    if (pci_bar_handle >= 0)
+    {
+        rc = fpga_pci_detach(pci_bar_handle);
+        if (rc)
+        {
+            printf("Failure while detaching from the fpga.\n");
+        }
+    }
+}
+
+void send_ack(int slot_id, int pf_id, int bar_id ,uint8_t blk)
+{
+    int rc;
+    pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
+    uint32_t value;
+#ifndef SV_TEST
+    rc = fpga_pci_attach(slot_id, pf_id, bar_id, 0, &pci_bar_handle);
+    fail_on(rc, out, "Unable to write to the fpga !");
+#endif
+    //send stop to all blocks
+    rc = fpga_pci_poke(pci_bar_handle, ACK_REG_BASE + blk * FPGA_REG_OFFSET, 1);
     fail_on(rc, out, "Unable to write to the fpga !");
 out:
     /* clean up */
@@ -521,6 +506,8 @@ void wait_status(int slot_id, int pf_id, int bar_id, uint32_t *status)
     //read status registers from all blocks
     uint32_t status_or = 0;
     uint32_t status_tmp = 0;
+    uint32_t golden_nonce = 0;
+    uint32_t heavy_hash[8] = {0};
     int k = 0;
     do
     {
@@ -537,15 +524,25 @@ void wait_status(int slot_id, int pf_id, int bar_id, uint32_t *status)
 
             if (status[i] == 1)
             {
-                mine = 1;
-                break;
+                golden_nonce = read_golden_nonce(slot_id, FPGA_APP_PF, APP_PF_BAR0, i) - 1;
+                for (size_t j = 0; j < 8; j++)
+                {
+                    heavy_hash[j] = read_heavyhash(slot_id, FPGA_APP_PF, APP_PF_BAR0, i);
+                }
+
+                printf("Golden nonce is = %08x\n", golden_nonce);
+                printf("Golden hash is =");
+                for (size_t j = 0; j < 8; j++)
+                {
+                    printf("%08x", heavy_hash[j]);
+                }
+                printf("\n");
+                // inform the core that golden nonce is read
+                send_ack(slot_id, FPGA_APP_PF, APP_PF_BAR0, i);
+                status[i] = 0;
             }
         }
         status_tmp = 0;
-        if (mine)
-        {
-            break;
-        }
         if ((k % 100000) == 0)
             printf("\n");
         k++;

@@ -35,6 +35,7 @@
 `define START_REG_ADDR          32'h0000_0524
 `define STOP_REG_ADDR           32'h0000_0528
 `define HASHES_DONE_BASE        32'h0000_053C
+`define ACK_BASE_ADDR           32'h0000_0540
 
 // Value to return for PCIS access to unimplemented register address
 `define UNIMPLEMENTED_REG_VALUE 32'hdeaddead

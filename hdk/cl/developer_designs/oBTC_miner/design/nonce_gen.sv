@@ -127,8 +127,8 @@ module nonce_gen
         else
         begin
           // $display("block_header_reg = %h",block_header_reg);
-          nonce_end_next = block_header_reg[31:0] + nonce_size*NONCE_COEF;
-          nonce_next[31:0] = block_header_reg[31:0] + nonce_size*(NONCE_COEF-1);
+          nonce_end_next = block_header_reg[31:0] + nonce_size;
+          nonce_next[31:0] = block_header_reg[31:0];
           state_next = CHECK_NONCE_END;
         end
       end
@@ -148,7 +148,7 @@ module nonce_gen
             if(!nonce_fifo_full & !hashin_fifo_in_full )
             begin
               // $display("block_header_reg = %h",{block_header_reg[639:32],nonce_reg[7:0],nonce_reg[15:8],nonce_reg[23:16],nonce_reg[31:24]});
-              block_header_reg_next = {block_header_reg[639:32],nonce_reg[31:0]} ;
+              block_header_reg_next = {block_header_reg[639:32],nonce_reg[7:0],nonce_reg[15:8],nonce_reg[23:16],nonce_reg[31:24]} ;
               nonce_next = nonce_reg + 33'd1;
               hashin_fifo_in_din = 64'h8000000000000280;
               hashin_fifo_in_we = 1'b1;

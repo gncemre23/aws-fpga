@@ -33,6 +33,7 @@
 `define START_REG_ADDR          32'h0000_0524
 `define STOP_REG_ADDR           32'h0000_0528
 `define HASHES_DONE_BASE        32'h0000_053C
+`define ACK_REG_ADDR            32'h0000_0540
 module heavy_hash_blk
   #(
      parameter NONCE_COEF = 1,
@@ -88,6 +89,9 @@ module heavy_hash_blk
 
   //! start signal for new block operations
   logic start_axi, start_int;
+
+  //! ack signal to inform core that nonce is read
+  logic ack_axi, ack_int;
 
   //! stop signal
   logic stop_axi, stop_int;
@@ -161,6 +165,14 @@ module heavy_hash_blk
   logic [31:0] wr_addr;
   logic awready;
   logic wready;
+  const int BLOCKHEADER_REG_ADDR_BLK = `BLOCKHEADER_REG_ADDR + (NONCE_COEF-1)*44;
+  const int MATRIX_REG_ADDR_BLK = `MATRIX_REG_ADDR + (NONCE_COEF-1)*44;
+  const int TARGET_REG_ADDR_BLK = `TARGET_REG_ADDR + (NONCE_COEF-1)*44;
+  const int NONCESIZE_REG_ADDR_BLK = `NONCESIZE_REG_ADDR + (NONCE_COEF-1)*44;
+  const int START_REG_ADDR_BLK = `START_REG_ADDR + (NONCE_COEF-1)*44;
+  const int STOP_REG_ADDR_BLK = `STOP_REG_ADDR + (NONCE_COEF-1)*44;
+  const int START_REG_ADDR_BLK = `START_REG_ADDR + (NONCE_COEF-1)*44;
+  const int ACK_REG_ADDR_BLK = `ACK_REG_ADDR + (NONCE_COEF-1)*44;
 
 
   always_ff @(posedge clk_axi)
@@ -193,33 +205,38 @@ module heavy_hash_blk
       target_we_axi <= 1'b0;
       block_header_we_axi <= 1'b0;
       matrix_we_axi <= 1'b0;
+      ack_axi <= 1'b0;
     end
-    else if (wready & (wr_addr == `BLOCKHEADER_REG_ADDR))
+    else if (wready & (wr_addr == BLOCKHEADER_REG_ADDR_BLK))
     begin
       block_header_axi <= wdata[31:0];
       block_header_we_axi <= 1'b1;
     end
-    else if (wready & (wr_addr == `MATRIX_REG_ADDR))
+    else if (wready & (wr_addr == MATRIX_REG_ADDR_BLK))
     begin
       matrix_in_axi <= wdata[31:0];
       matrix_we_axi <= 1'b1;
     end
-    else if (wready & (wr_addr == `TARGET_REG_ADDR))
+    else if (wready & (wr_addr == TARGET_REG_ADDR_BLK))
     begin
       target_axi <= wdata[31:0];
       target_we_axi <= 1'b1;
     end
-    else if (wready & (wr_addr == `NONCESIZE_REG_ADDR))
+    else if (wready & (wr_addr == NONCESIZE_REG_ADDR_BLK))
     begin
       nonce_size_axi <= wdata[31:0];
     end
-    else if (wready & (wr_addr == `START_REG_ADDR))
+    else if (wready & (wr_addr == START_REG_ADDR_BLK))
     begin
       start_axi <= 1'b1;
     end
-    else if (wready & (wr_addr == `STOP_REG_ADDR))
+    else if (wready & (wr_addr == STOP_REG_ADDR_BLK))
     begin
       stop_axi <= 1'b1;
+    end
+    else if (wready & (wr_addr == ACK_REG_ADDR_BLK))
+    begin
+      ack_axi <= 1'b1;
     end
     else
     begin
@@ -232,6 +249,7 @@ module heavy_hash_blk
       nonce_size_axi <= nonce_size_axi;
       start_axi <= 1'b0;
       stop_axi <= 1'b0;
+      ack_axi <= 1'b0;
     end
 
   //-------------------------------------------------
@@ -565,6 +583,20 @@ module heavy_hash_blk
                    .DEST_SYNC_FF(4),   // DECIMAL; range: 2-10
                    .INIT_SYNC_FF(0),   // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
                    .SIM_ASSERT_CHK(0), // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
+                   .SRC_INPUT_REG(0)   // DECIMAL; 0=do not register input, 1=register input
+                 )
+                 sync_ack (
+                   .dest_out(ack_int), // 1-bit output: src_in synchronized to the destination clock domain. This output is
+                   // registered.
+                   .dest_clk(clk_int), // 1-bit input: Clock signal for the destination clock domain.
+                   .src_clk(clk_axi),   // 1-bit input: optional; required when SRC_INPUT_REG = 1
+                   .src_in(ack_axi)      // 1-bit input: Input signal to be synchronized to dest_clk domain.
+                 );
+
+  xpm_cdc_single #(
+                   .DEST_SYNC_FF(4),   // DECIMAL; range: 2-10
+                   .INIT_SYNC_FF(0),   // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
+                   .SIM_ASSERT_CHK(0), // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
                    .SRC_INPUT_REG(1)   // DECIMAL; 0=do not register input, 1=register input
                  )
                  sync_rdata_valid_heavyhash_int (
@@ -770,8 +802,16 @@ module heavy_hash_blk
         end
         1:
         begin
-          status <= 1;
-          state_status <= 1;
+          if(ack_int)
+          begin
+            status <= 0;
+            state_status <= 0;
+          end
+          else
+          begin
+            status <= 1;
+            state_status <= 1;
+          end
         end
       endcase
     end
@@ -837,8 +877,12 @@ module heavy_hash_blk
     //   $display("Error -- blk[%d]-- heavy_hash : %h", NONCE_COEF - 1, heavy_hash_dout);
     if(comparator_inst.state_reg == 2 && count_m > 0)
     begin
-      if(heavy_hash_dout != cl_hello_world.heavy_hash_ref[(NONCE_COEF - 1) * nonce_size_int + count_m - 1])
-        $display("%d --- %h -- %h",(NONCE_COEF - 1) * nonce_size_int + count_m - 1, heavy_hash_dout, cl_hello_world.heavy_hash_ref[(NONCE_COEF - 1) * nonce_size_int + count_m - 1]);
+      if(NONCE_COEF == 1)
+        if(heavy_hash_dout == cl_hello_world.heavy_hash_ref0[count_m - 1])
+          $display("%d --- %h -- %h", count_m - 1, heavy_hash_dout, cl_hello_world.heavy_hash_ref0[count_m - 1]);
+      else
+        if(heavy_hash_dout == cl_hello_world.heavy_hash_ref1[count_m - 1])
+          $display("%d --- %h -- %h", count_m - 1, heavy_hash_dout, cl_hello_world.heavy_hash_ref1[count_m - 1]);
     end
   end
 `endif

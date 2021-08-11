@@ -173,28 +173,45 @@ module cl_hello_world
   // read reference heavy hash values from the file after helloworld register is read
   logic [255:0] heavy_hash_hex;
   string line_hash;
-  logic [255:0] heavy_hash_ref[$];
-  int fd_h;
+  logic [255:0] heavy_hash_ref0[$];
+  logic [255:0] heavy_hash_ref1[$];
+  int fd_h0, fd_h1;
   logic verif;
 
   always_comb
   begin
     if(verif)
     begin
-      fd_h = $fopen ("heavy_hash_out.txt","r");
-      if(fd_h == 0)
+      fd_h0 = $fopen ("heavy_hash_out.txt0","r");
+      if(fd_h0 == 0)
         $display("could not open the file named heavy_hash_out.txt");
       else
       begin
         $display("file opened successfully");
-        while (!$feof(fd_h))
+        while (!$feof(fd_h0))
         begin
-          $fgets(line_hash,fd_h);
+          $fgets(line_hash,fd_h0);
           $sscanf(line_hash, "%h", heavy_hash_hex);
-          heavy_hash_ref.push_back(heavy_hash_hex);
+          heavy_hash_ref0.push_back(heavy_hash_hex);
         end
-        $fclose(fd_h);
+        $fclose(fd_h0);
       end
+
+      fd_h1 = $fopen ("heavy_hash_out.txt1","r");
+      if(fd_h1 == 0)
+        $display("could not open the file named heavy_hash_out.txt");
+      else
+      begin
+        $display("file opened successfully");
+        while (!$feof(fd_h1))
+        begin
+          $fgets(line_hash,fd_h1);
+          $sscanf(line_hash, "%h", heavy_hash_hex);
+          heavy_hash_ref1.push_back(heavy_hash_hex);
+        end
+        $fclose(fd_h1);
+      end
+
     end
   end
 `endif
