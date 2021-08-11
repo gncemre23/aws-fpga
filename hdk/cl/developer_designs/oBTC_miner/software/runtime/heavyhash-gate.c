@@ -228,7 +228,7 @@ int scanhash_heavyhash(work_t *work, uint32_t max_nonce, uint64_t *hashes_done, 
 
     do
     {
-        edata[19] = b_swap_32(n);
+        edata[19] = n;
         heavyhash(matrix, edata, 80, hash, fileptr);
         //
         /*===== Added by egoncu to see block header ======*/

@@ -182,7 +182,7 @@ module cl_hello_world
   begin
     if(verif)
     begin
-      fd_h0 = $fopen ("heavy_hash_out.txt0","r");
+      fd_h0 = $fopen ("heavy_hash_out0.txt","r");
       if(fd_h0 == 0)
         $display("could not open the file named heavy_hash_out.txt");
       else
@@ -197,7 +197,7 @@ module cl_hello_world
         $fclose(fd_h0);
       end
 
-      fd_h1 = $fopen ("heavy_hash_out.txt1","r");
+      fd_h1 = $fopen ("heavy_hash_out1.txt","r");
       if(fd_h1 == 0)
         $display("could not open the file named heavy_hash_out.txt");
       else

@@ -202,9 +202,8 @@ int main(int argc, char **argv)
 
     fp0 = fopen("heavy_hash_out0.txt", "w");
     fp1 = fopen("heavy_hash_out1.txt", "w");
-    const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000";
-    //const char *line = "00000020585d9400cd38bd855ebcbe0c43fab2e8cf2805aa66bb42ed66780300000000001b9219c2bb94e91e51918a31af67443e4706f5bd4b7013295a2835c3267354d76aac0e619d81131b60542250";
-
+    //const char *line = "000000200c221d3dc065da14a1a6b6871eb489fbe94591053792425f3f170f0000000000a1fccbee670ba770ccced5fa1bb8014fd671d4dcfce1b7dd79bd633d244df90f870aba60d3ed131b00000000";
+    const char *line = "00000020e2e9de054284ff194a6ad9c8c7fc81d3f39d31aa9aaea1aabacd0500000000005e9f3d292cb20aabea10fbc440e210aae6597256c1030662cc6780c567a46829a5a913619d81131b3018f780"; //golden nonce:90f71830
     uint8_t work_byte[100];
     uint32_t work_word[25];
     uint64_t hashes_done = 0;
@@ -236,8 +235,8 @@ int main(int argc, char **argv)
         }
     }
 
-    scanhash_heavyhash(&g_work0, 0x00000063, &hashes_done, matrix, fp0);
-    scanhash_heavyhash(&g_work0, 0x000000C7, &hashes_done, matrix, fp1);
+    scanhash_heavyhash(&g_work0, 0x3018f7a0, &hashes_done, matrix, fp0);
+    scanhash_heavyhash(&g_work0, 0x3018f7b0, &hashes_done, matrix, fp1);
 
     fclose(fp0);
     fclose(fp1);
@@ -258,11 +257,11 @@ int main(int argc, char **argv)
     printf("hashes_done = %d\n", hashes_done);
 
     begin = clock();
-    nonce_size = 100;
+    nonce_size = 32;
 
     //initializiation of all blocks (for now 2 blocks)
     heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size, 0);
-    g_work1.data[19] = 100;
+    g_work1.data[19] = 0x3018f79f;
     heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size, 1);
 
     uint32_t status[BLK_CNT] = {0};

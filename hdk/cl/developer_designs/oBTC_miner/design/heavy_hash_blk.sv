@@ -165,13 +165,15 @@ module heavy_hash_blk
   logic [31:0] wr_addr;
   logic awready;
   logic wready;
+  logic [31:0]  golden_nonce = 32'd0;
+  logic [255:0] golden_hash = 256'd0;
+
   const int BLOCKHEADER_REG_ADDR_BLK = `BLOCKHEADER_REG_ADDR + (NONCE_COEF-1)*44;
   const int MATRIX_REG_ADDR_BLK = `MATRIX_REG_ADDR + (NONCE_COEF-1)*44;
   const int TARGET_REG_ADDR_BLK = `TARGET_REG_ADDR + (NONCE_COEF-1)*44;
   const int NONCESIZE_REG_ADDR_BLK = `NONCESIZE_REG_ADDR + (NONCE_COEF-1)*44;
   const int START_REG_ADDR_BLK = `START_REG_ADDR + (NONCE_COEF-1)*44;
   const int STOP_REG_ADDR_BLK = `STOP_REG_ADDR + (NONCE_COEF-1)*44;
-  const int START_REG_ADDR_BLK = `START_REG_ADDR + (NONCE_COEF-1)*44;
   const int ACK_REG_ADDR_BLK = `ACK_REG_ADDR + (NONCE_COEF-1)*44;
 
 
@@ -356,32 +358,7 @@ module heavy_hash_blk
 
 
 
-  //-------------------------------------------------
-  // MUX for Heavyhash 32-bit output
-  //-------------------------------------------------
-  logic [31:0] heavy_hash_32;
-  always_comb
-  begin
-    case (counter_i)
-      0:
-        heavy_hash_32 = golden_hash[255:224];
-      1:
-        heavy_hash_32 = golden_hash[223:192];
-      2:
-        heavy_hash_32 = golden_hash[191:160];
-      3:
-        heavy_hash_32 = golden_hash[159:128];
-      4:
-        heavy_hash_32 = golden_hash[127: 96];
-      5:
-        heavy_hash_32 = golden_hash[ 95: 64];
-      6:
-        heavy_hash_32 = golden_hash[ 63: 32];
-      7:
-        heavy_hash_32 = golden_hash[ 31:  0];
-    endcase
-  end
-
+  
   //-------------------------------------------------
   // Synchronizations for bus (multi-bit) signals
   //-------------------------------------------------
@@ -764,8 +741,7 @@ module heavy_hash_blk
   //-------------------------------------------------
   // Golden nonce and Golden hash
   //-------------------------------------------------
-  logic [31:0]  golden_nonce = 32'd0;
-  logic [255:0] golden_hash = 256'd0;
+  
   logic golden_state  = 0;
   logic [1:0] status_old;
   logic state_status;
@@ -852,6 +828,34 @@ module heavy_hash_blk
   end
 
 
+  //-------------------------------------------------
+  // MUX for Heavyhash 32-bit output
+  //-------------------------------------------------
+  logic [31:0] heavy_hash_32;
+  always_comb
+  begin
+    case (counter_i)
+      0:
+        heavy_hash_32 = golden_hash[255:224];
+      1:
+        heavy_hash_32 = golden_hash[223:192];
+      2:
+        heavy_hash_32 = golden_hash[191:160];
+      3:
+        heavy_hash_32 = golden_hash[159:128];
+      4:
+        heavy_hash_32 = golden_hash[127: 96];
+      5:
+        heavy_hash_32 = golden_hash[ 95: 64];
+      6:
+        heavy_hash_32 = golden_hash[ 63: 32];
+      7:
+        heavy_hash_32 = golden_hash[ 31:  0];
+    endcase
+  end
+
+
+
 
 
 
@@ -877,12 +881,19 @@ module heavy_hash_blk
     //   $display("Error -- blk[%d]-- heavy_hash : %h", NONCE_COEF - 1, heavy_hash_dout);
     if(comparator_inst.state_reg == 2 && count_m > 0)
     begin
+      
       if(NONCE_COEF == 1)
-        if(heavy_hash_dout == cl_hello_world.heavy_hash_ref0[count_m - 1])
+      begin
+        //$display(cl_hello_world.heavy_hash_ref0[count_m - 1]);
+        if(heavy_hash_dout != cl_hello_world.heavy_hash_ref0[count_m - 1]) begin
           $display("%d --- %h -- %h", count_m - 1, heavy_hash_dout, cl_hello_world.heavy_hash_ref0[count_m - 1]);
+        end
+      end
       else
-        if(heavy_hash_dout == cl_hello_world.heavy_hash_ref1[count_m - 1])
+      begin
+        if(heavy_hash_dout != cl_hello_world.heavy_hash_ref1[count_m - 1])
           $display("%d --- %h -- %h", count_m - 1, heavy_hash_dout, cl_hello_world.heavy_hash_ref1[count_m - 1]);
+      end
     end
   end
 `endif
