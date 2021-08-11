@@ -114,7 +114,7 @@ typedef struct
 // is used a custom hash function must be registered, with a custom scanhash
 // the custom hash function can be called directly and doesn't need to be
 // registered in the gate. 
-int ( *scanhash ) ( struct work*, uint32_t, uint64_t*, struct thr_info* );
+int ( *scanhash ) ( struct work*, uint32_t, uint64_t*, struct thr_info*, uint32_t *  golden_i, uint32_t * circ_buffer,  uint32_t *found_nonce_count );
 
 int ( *hash )     ( void*, const void*, int );
 
@@ -224,7 +224,7 @@ int null_scanhash();
 //    256: output only, not interleaved, contiguous serial 256 bit lanes.
 
 int scanhash_generic( struct work *work, uint32_t max_nonce,
-                      uint64_t *hashes_done, struct thr_info *mythr );
+                      uint64_t *hashes_done, struct thr_info *mythr ,uint32_t *  golden_i, uint32_t * circ_buffer,  uint32_t *found_nonce_count);
 
 #if defined(__AVX2__)
 

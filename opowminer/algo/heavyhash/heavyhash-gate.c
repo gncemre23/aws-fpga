@@ -20,6 +20,12 @@
 #include <netdb.h>
 #include <fcntl.h> /* Added for the nonblocking socket */
 
+#include <fpga_pci.h>
+#include <fpga_mgmt.h>
+#include <utils/lcd.h>
+
+#include <utils/sh_dpi_tasks.h>
+
 //definitions for socket
 #define PortNumber 9876
 #define MaxConnects 8
@@ -28,6 +34,32 @@
 #define Host "localhost"
 
 #define EPS 1e-9
+
+bool is_found_before(uint32_t *circ_buffer, uint32_t nonce)
+{
+    for (size_t i = 0; i < MAX_BUF_LENGTH; i++)
+    {
+        if (nonce == circ_buffer[i])
+            return true;
+    }
+    return false;
+}
+
+bool is_golden_before(uint32_t *golden_i, uint32_t i)
+{
+    if (golden_i[i] == 0)
+        return false;
+
+    return true;
+}
+
+void clean_golden_i(uint32_t *golden_i)
+{
+    for (size_t i = 0; i < BLK_CNT; i++)
+    {
+        golden_i[i] = 0;
+    }
+}
 
 void report(const char *msg, int terminate)
 {
@@ -213,7 +245,7 @@ void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, 
 }
 
 int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
-                       uint64_t *hashes_done, struct thr_info *mythr)
+                       uint64_t *hashes_done, struct thr_info *mythr, uint32_t *golden_i, uint32_t *circ_buffer, uint32_t *found_nonce_count)
 {
     uint32_t edata[20] __attribute__((aligned(64)));
     uint32_t hash[8] __attribute__((aligned(64)));
@@ -224,39 +256,17 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
     uint32_t *ptarget = work->target;
     const uint32_t first_nonce = pdata[19];
     const uint32_t last_nonce = max_nonce - 1;
+    uint32_t nonce_size = (last_nonce - first_nonce) / BLK_CNT + (last_nonce - first_nonce) % BLK_CNT;
+
+    printf("last_nonce_hh : %08x\n", last_nonce);
+    printf("first_nonce_hh : %08x\n", first_nonce);
+    printf("nonce_size_hh : %08x\n", nonce_size);
     uint32_t n = first_nonce;
     const int thr_id = mythr->id;
     const bool bench = opt_benchmark;
 
     uint16_t matrix[64][64];
     struct xoshiro_state state;
-
-    // socket client
-    int sockfd = socket(AF_INET,     /* versus AF_LOCAL */
-                        SOCK_STREAM, /* reliable, bidirectional */
-                        0);          /* system picks protocol (TCP) */
-    if (sockfd < 0)
-        report("socket", 1); /* terminate */
-
-    /* get the address of the host */
-    struct hostent *hptr = gethostbyname(Host); /* localhost: 127.0.0.1 */
-    if (!hptr)
-        report("gethostbyname", 1);  /* is hptr NULL? */
-    if (hptr->h_addrtype != AF_INET) /* versus AF_LOCAL */
-        report("bad address family", 1);
-
-    /* connect to the server: configure server's address 1st */
-    struct sockaddr_in saddr;
-    memset(&saddr, 0, sizeof(saddr));
-    saddr.sin_family = AF_INET;
-    saddr.sin_addr.s_addr =
-        ((struct in_addr *)hptr->h_addr_list[0])->s_addr;
-    saddr.sin_port = htons(PortNumber); /* port number in big-endian */
-
-    if (connect(sockfd, (struct sockaddr *)&saddr, sizeof(saddr)) < 0)
-        report("connect", 1);
-
-    fcntl(sockfd, F_SETFL, O_NONBLOCK);
 
     mm128_bswap32_80(edata, pdata);
 
@@ -269,94 +279,152 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
 
     generate_matrix(matrix, &state);
 
-    write(sockfd, work->data, 80);
+    heavy_hash_fpga_init(pdata, matrix, nonce_size, ptarget);
 
-    write(sockfd, matrix, sizeof(matrix));
+    int rc;
+    pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
 
-    write(sockfd, ptarget, 32);
-
-    write(sockfd, &max_nonce, 4);
+    rc = fpga_pci_attach(0, FPGA_APP_PF, APP_PF_BAR0, 0, &pci_bar_handle);
+    fail_on(rc, out, "Unable to attach to the AFI on slot id %d", 0);
+    //read status registers from all blocks
+    //read status registers from all blocks
+    uint32_t status_or = 0;
+    uint32_t status_tmp = 0;
+    uint64_t k = 0;
+    uint32_t status[BLK_CNT] = {0};
+    FILE *fp;
 
     uint32_t golden_nonce = 0;
+    uint32_t heavy_hash[8] = {0};
 
-    printf("Thread id = %d \n", thr_id);
-
-    int count = -1;
-    uint32_t status = 0;
-
-    count = -1;
-    uint32_t hh = 0;
+    printf("beginning of wait status \n");
 
     do
     {
-        count = -1;
-        while (count == -1)
+        if ((k % 100000) == 0)
+            printf("status = ");
+
+        // if (work_restart[thr_id].restart)
+        // {
+        //     for (size_t i = 0; i < BLK_CNT; i++)
+        //     {
+        //         *hashes_done += read_hashes_done(&pci_bar_handle, i);
+        //     }
+        //     printf("stop signal is came before all nonce values!\n");
+        //     clean_golden_i(golden_i);
+        //     fpga_pci_detach(pci_bar_handle);
+        //     return 0;
+        // }
+        // if (k > 0x2000000)
+        // {
+        //     //heavy_hash_fpga_deinit;
+        //     for (size_t j = 0; j < BLK_CNT; j++)
+        //     {
+        //         *hashes_done += read_hashes_done(&pci_bar_handle, j);
+        //     }
+        //     fpga_pci_detach(pci_bar_handle);
+        //     printf("Too much time\n");
+        //     return 0;
+        // }
+
+        for (size_t i = 0; i < BLK_CNT; i++)
         {
-            count = read(sockfd, &status, 4);
-
-            //printf("hashes_done = %d\n", count);
-            if (work_restart[thr_id].restart)
+            rc = fpga_pci_peek(pci_bar_handle, STATUS_REG_BASE + i * FPGA_REG_OFFSET, &status[i]);
+            fail_on(rc, out, "Unable to write to the fpga !");
+            status_tmp |= status[i];
+            status_or = status_tmp;
+            if ((k % 100000) == 0)
+                printf("%d", status[i]);
+            if (status[i] == 1 && is_golden_before(golden_i, i) == false)
             {
-                printf("Restart threads!\n");
-                // socket client
-                FILE *fp;
-                int ret;
-                char filename[] = "interProcessFile";
-                fp = fopen(filename, "a+");
+                golden_i[i] = 1;
 
-                while (count == -1)
-                    count = read(sockfd, &status, 4);
-
-                //printf("Socket is closed\n");
-                fclose(fp);
-
-                ret = remove(filename);
-
-                if (ret == 0)
+                golden_nonce = read_golden_nonce(&pci_bar_handle, i) - 1;
+                if (is_found_before(circ_buffer, golden_nonce) == false)
                 {
-                    printf("File deleted successfully");
+                    for (size_t j = 0; j < 8; j++)
+                    {
+                        heavy_hash[j] = read_heavyhash(&pci_bar_handle, i);
+                    }
+                    printf("Golden nonce is = %08x\n", golden_nonce);
+                    printf("Golden hash is =");
+                    for (size_t j = 0; j < 8; j++)
+                    {
+                        printf("%08x", heavy_hash[j]);
+                    }
+
+                    for (size_t j = 0; j < BLK_CNT; j++)
+                    {
+                        *hashes_done += read_hashes_done(&pci_bar_handle, j);
+                    }
+                    printf("\n");
+
+                    pdata[19] = bswap_32(golden_nonce);
+                    submit_solution(work, heavy_hash, mythr);
+                    *hashes_done = 0;
+                    circ_buffer[*found_nonce_count % MAX_BUF_LENGTH] = golden_nonce;
+                    (*found_nonce_count)++;
                 }
-                else
-                {
-                    printf("Error: unable to delete the file");
-                }
-                status = 0;
-                return 0;
             }
         }
-        if (status == 1)
+        status_tmp = 0;
+        if ((k % 100000) == 0)
         {
-            count = -1;
-            while (count == -1)
-                count = read(sockfd, &golden_nonce, 4);
-
-            count = -1;
-            while (count == -1)
-                count = read(sockfd, hash, 32);
-
-            printf("hash:");
-            for (size_t i = 0; i < 8; i++)
-            {
-                printf("%08x", hash[i]);
-            }
-            printf("\n");
-            pdata[19] = bswap_32(golden_nonce);
-            count = -1;
-            while (count == -1)
-                count = read(sockfd, &hh, 4);
-            *hashes_done = hh;
-            submit_solution(work, hash, mythr);
+            printf("\n k: %x\n", k);
         }
-    } while (status != 0);
+        k++;
+    } while (status_or == 2 || status_or == 3);
 
-    count = -1;
-    while (count == -1)
-        count = read(sockfd, &hh, 4);
+    //Send the remaining golden hashes and nonces
+    for (size_t i = 0; i < BLK_CNT; i++)
+    {
+        if (status[i] == 1 && is_golden_before(golden_i, i) == false)
+        {
+            golden_i[i] = 1;
+            golden_nonce = read_golden_nonce(&pci_bar_handle, i) - 1;
+            if (is_found_before(circ_buffer, golden_nonce) == false)
+            {
+                for (size_t j = 0; j < 8; j++)
+                {
+                    heavy_hash[j] = read_heavyhash(&pci_bar_handle, i);
+                }
+                printf("Golden nonce is = %08x\n", golden_nonce);
+                printf("Golden hash is =");
+                for (size_t j = 0; j < 8; j++)
+                {
+                    printf("%08x", heavy_hash[j]);
+                }
 
-    *hashes_done = hh;
-    //printf("hashes_done = %+d\n", *hashes_done);
+                for (size_t j = 0; j < BLK_CNT; j++)
+                {
+                    *hashes_done += read_hashes_done(&pci_bar_handle, j);
+                }
 
-    close(sockfd);
+                pdata[19] = bswap_32(golden_nonce);
+                submit_solution(work, heavy_hash, mythr);
+                *hashes_done = 0;
+                circ_buffer[*found_nonce_count % MAX_BUF_LENGTH] = golden_nonce;
+                (*found_nonce_count)++;
+            }
+        }
+    }
+
+    printf("last_st : ");
+    for (size_t i = 0; i < BLK_CNT; i++)
+    {
+        printf("%d", status[i]);
+    }
+    printf("\n");
+
+    for (size_t i = 0; i < BLK_CNT; i++)
+    {
+        *hashes_done += read_hashes_done(&pci_bar_handle, i);
+    }
+    printf("hashes_done : %08x\n", *hashes_done);
+    clean_golden_i(golden_i);
+out:
+    fpga_pci_detach(pci_bar_handle);
+
     return 0;
 }
 

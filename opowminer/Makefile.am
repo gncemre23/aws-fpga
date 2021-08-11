@@ -280,7 +280,11 @@ cpuminer_SOURCES = \
   algo/yespower/yespower-blake2b.c \
   algo/yespower/crypto/blake2b-yp.c \
   algo/yespower/yescrypt-r8g.c \
-  algo/yespower/yespower-opt.c
+  algo/yespower/yespower-opt.c \
+  build-fpga/oBTCminer_fpga.c
+
+
+cpuminer_SOURCES += $(HDK_DIR)/common/software/src
 
 disable_flags =
 
@@ -304,9 +308,14 @@ if HAVE_WINDOWS
 endif
 
 cpuminer_LDFLAGS	= @LDFLAGS@
-cpuminer_LDADD	= @LIBCURL@ @JANSSON_LIBS@ @PTHREAD_LIBS@ @WS2_LIBS@ -lssl -lcrypto -lgmp
+cpuminer_LDADD	= @LIBCURL@ @JANSSON_LIBS@ @PTHREAD_LIBS@ @WS2_LIBS@ -lssl -lcrypto -lgmp -lfpga_mgmt -lrt -lpthread
 cpuminer_CPPFLAGS = @LIBCURL_CPPFLAGS@ $(ALL_INCLUDES)
 cpuminer_CFLAGS   = -Wno-pointer-sign -Wno-pointer-to-int-cast $(disable_flags)
+
+
+INCLUDES = -I$(SDK_DIR)/userspace/include
+INCLUDES += -I $(HDK_DIR)/common/software/include
+INCLUDES += -I build-fpga/
 
 if HAVE_WINDOWS
 cpuminer_CFLAGS += -Wl,--stack,10485760
@@ -316,10 +325,10 @@ if HAVE_WINDOWS
 # use to profile an object
 # gprof_cflags = -pg -g3
 # cpuminer_LDFLAGS += -pg
-# cpuminer_CFLAGS += -fno-inline-functions -static
+# cpuminer_CFLAGS += -fno-inline-functions -static 
 
 # copy/paste from generated Makefile
-common_ccflags = $(DEFS) $(ALL_INCLUDES) $(cpuminer_CPPFLAGS) $(CPPFLAGS) $(cpuminer_CFLAGS) $(CFLAGS)
+common_ccflags = $(DEFS) $(ALL_INCLUDES) $(INCLUDES) $(cpuminer_CPPFLAGS) $(CPPFLAGS) $(cpuminer_CFLAGS) $(CFLAGS)
 
 # special CFLAGS (if you find a simpler way to do that tell me ;)
 cpuminer-neoscrypt.o: neoscrypt.c

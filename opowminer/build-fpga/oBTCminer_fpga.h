@@ -1,3 +1,5 @@
+#ifndef OBTC_MINER_FPGA_H__
+#define OBTC_MINER_FPGA_H__ 
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdarg.h>
@@ -43,7 +45,8 @@
 #define FPGA_REG_OFFSET 40
 #define BLK_CNT 40
 
-#define MAX_BUF_LENGTH 5
+
+
 
 
 uint32_t byte_swap(uint32_t value);
@@ -55,5 +58,4 @@ void wait_s(uint32_t *status);
 uint32_t read_golden_nonce(pci_bar_handle_t *pci_bar_handle, uint8_t golden_blk);
 uint32_t read_heavyhash(pci_bar_handle_t *pci_bar_handle, uint8_t golden_blk);
 uint32_t read_hashes_done(pci_bar_handle_t *pci_bar_handle, uint8_t golden_blk);
-
-
+#endif
