@@ -135,7 +135,7 @@ static bool affinity_uses_uint128 = false;
 #endif
 
 int opt_priority = 0;
-int num_cpus = 1;
+int num_cpus = 2;
 int num_cpugroups = 1;
 char *rpc_url = NULL;
 ;
@@ -196,6 +196,7 @@ int default_api_listen = 4048;
 
 pthread_mutex_t applog_lock;
 pthread_mutex_t stats_lock;
+pthread_mutex_t fpga_lock;
 
 static struct timeval session_start;
 static struct timeval five_min_start;
@@ -2397,12 +2398,12 @@ static void *miner_thread(void *userdata)
       // Scan for nonce
       printf("it = %d\n", it);
       nonce_found = algo_gate.scanhash(&work, max_nonce, &hashes_done,
-                                       mythr, golden_i, circ_buffer, &found_nonce_count);
+                                       mythr, golden_i, circ_buffer, &found_nonce_count, &fpga_lock);
       it++;
-      for (size_t i = 0; i < 5; i++)
-      {
-         printf("circ_buffer[%d] = %08x\n", i, circ_buffer[i]);
-      }
+      // for (size_t i = 0; i < 5; i++)
+      // {
+      //    printf("circ_buffer[%d] = %08x\n", i, circ_buffer[i]);
+      // }
       
       // record scanhash elapsed time
       gettimeofday(&tv_end, NULL);
@@ -3667,6 +3668,7 @@ int main(int argc, char *argv[])
    int i, err;
 
    pthread_mutex_init(&applog_lock, NULL);
+   pthread_mutex_init(&fpga_lock, NULL);
 
    show_credits();
 
@@ -3702,7 +3704,7 @@ int main(int argc, char *argv[])
 
 #elif defined(_SC_NPROCESSORS_CONF)
    //num_cpus = sysconf(_SC_NPROCESSORS_CONF);
-   num_cpus = 1;
+   num_cpus = 2;
 #elif defined(CTL_HW) && defined(HW_NCPU)
    int req[] = {CTL_HW, HW_NCPU};
    size_t len = sizeof(num_cpus);
