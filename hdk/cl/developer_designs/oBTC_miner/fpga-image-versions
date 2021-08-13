@@ -125,6 +125,24 @@ New status evaluation logic
     (Same as v19, just the block count is increased)
 }
 
+-V21 cl_oBTC_v21_axi_250MHz_2blk_withoutSlack
+{
+    "FpgaImageId": "afi-0404c6f0c68089172",
+    "FpgaImageGlobalId": "agfi-08923b96eb849d1f4"
+    (Seperate arch commit:3e7322f7333148e8e94cbd63adc497b12e8b4631)
+}
+
+-v22 cl_oBTC_v22_axi_400MHz_40blk_withSlack_0_343
+{
+    "FpgaImageId": "afi-03e1f835ac17a3009",
+    "FpgaImageGlobalId": "agfi-049960eb51eb2f866"
+    Run this core with 343Mhz (max) B clk, 125 Mhz A clk
+    (Same as v21, just the block count is increased)
+
+}
+
+
+
 
 
 
