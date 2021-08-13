@@ -355,7 +355,7 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
 
                     for (size_t j = 0; j < BLK_CNT; j++)
                     {
-                        *hashes_done += read_hashes_done(&pci_bar_handle, j);
+                        (*hashes_done) += read_hashes_done(&pci_bar_handle, j);
                     }
                     printf("\n");
 
@@ -397,7 +397,7 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
 
                 for (size_t j = 0; j < BLK_CNT; j++)
                 {
-                    *hashes_done += read_hashes_done(&pci_bar_handle, j);
+                    (*hashes_done) += read_hashes_done(&pci_bar_handle, j);
                 }
 
                 pdata[19] = bswap_32(golden_nonce);
@@ -418,7 +418,7 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
 
     for (size_t i = 0; i < BLK_CNT; i++)
     {
-        *hashes_done += read_hashes_done(&pci_bar_handle, i);
+        (*hashes_done) += read_hashes_done(&pci_bar_handle, i);
     }
     printf("hashes_done : %08x\n", *hashes_done);
     clean_golden_i(golden_i);
