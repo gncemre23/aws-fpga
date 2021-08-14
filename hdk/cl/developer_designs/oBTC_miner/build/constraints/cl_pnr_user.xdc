@@ -28,49 +28,49 @@ add_cells_to_pblock [get_pblocks pblock_SLR0] [get_cells -quiet -hierarchical -f
 resize_pblock [get_pblocks pblock_SLR0] -add {CLOCKREGION_X0Y0:CLOCKREGION_X3Y4}
 set_property PARENT pblock_CL [get_pblocks pblock_SLR0]
 
-# create_pblock pblock_SLR1
-# add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[12].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[13].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[14].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[15].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[16].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[17].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[18].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[19].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[20].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[21].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[22].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[23].heavy_hash_blk_dut}]
-# # add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[26].heavy_hash_blk_dut}]
-# # add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[27].heavy_hash_blk_dut}]
-# resize_pblock [get_pblocks pblock_SLR1] -add {CLOCKREGION_X0Y5:CLOCKREGION_X3Y9}
-# set_property PARENT pblock_CL [get_pblocks pblock_SLR1]
+create_pblock pblock_SLR1
+add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[12].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[13].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[14].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[15].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[16].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[17].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[18].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[19].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[20].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[21].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[22].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[23].heavy_hash_blk_dut}]
+# add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[26].heavy_hash_blk_dut}]
+# add_cells_to_pblock [get_pblocks pblock_SLR1] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[27].heavy_hash_blk_dut}]
+resize_pblock [get_pblocks pblock_SLR1] -add {CLOCKREGION_X0Y5:CLOCKREGION_X3Y9}
+set_property PARENT pblock_CL [get_pblocks pblock_SLR1]
 
-# create_pblock pblock_SLR2
-# add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[24].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[25].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[26].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[27].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[28].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[29].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[30].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[31].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[32].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[33].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[34].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[35].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[36].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[37].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[38].heavy_hash_blk_dut}]
-# add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[39].heavy_hash_blk_dut}]
+create_pblock pblock_SLR2
+add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[24].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[25].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[26].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[27].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[28].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[29].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[30].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[31].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[32].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[33].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[34].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[35].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[36].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[37].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[38].heavy_hash_blk_dut}]
+add_cells_to_pblock [get_pblocks pblock_SLR2] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/genblk1[39].heavy_hash_blk_dut}]
 
-# resize_pblock [get_pblocks pblock_SLR2] -add {SLICE_X0Y600:SLICE_X168Y899}
-# resize_pblock [get_pblocks pblock_SLR2] -add {DSP48E2_X0Y240:DSP48E2_X18Y359}
-# resize_pblock [get_pblocks pblock_SLR2] -add {LAGUNA_X0Y480:LAGUNA_X23Y719}
-# resize_pblock [get_pblocks pblock_SLR2] -add {RAMB18_X0Y240:RAMB18_X11Y359}
-# resize_pblock [get_pblocks pblock_SLR2] -add {RAMB36_X0Y120:RAMB36_X11Y179}
-# resize_pblock [get_pblocks pblock_SLR2] -add {URAM288_X0Y160:URAM288_X3Y239}
-# set_property PARENT pblock_CL [get_pblocks pblock_SLR2]
+resize_pblock [get_pblocks pblock_SLR2] -add {SLICE_X0Y600:SLICE_X168Y899}
+resize_pblock [get_pblocks pblock_SLR2] -add {DSP48E2_X0Y240:DSP48E2_X18Y359}
+resize_pblock [get_pblocks pblock_SLR2] -add {LAGUNA_X0Y480:LAGUNA_X23Y719}
+resize_pblock [get_pblocks pblock_SLR2] -add {RAMB18_X0Y240:RAMB18_X11Y359}
+resize_pblock [get_pblocks pblock_SLR2] -add {RAMB36_X0Y120:RAMB36_X11Y179}
+resize_pblock [get_pblocks pblock_SLR2] -add {URAM288_X0Y160:URAM288_X3Y239}
+set_property PARENT pblock_CL [get_pblocks pblock_SLR2]
 
 # create_pblock pblock_SLR3
 # add_cells_to_pblock [get_pblocks pblock_SLR3] [get_cells -quiet -hierarchical -filter {NAME =~ WRAPPER_INST/CL/top_ins/genblk1[12].heavy_hash_blk_dut}]

@@ -65,9 +65,8 @@
 #define NONCE_SIZE_REG_BASE UINT64_C(0x520)
 #define START_REG_BASE UINT64_C(0x524)
 #define STOP_REG_BASE UINT64_C(0x528)
-#define HASHES_DONE_BASE UINT64_C(0x53C)
-#define ACK_REG_BASE UINT64_C(0x540)
-
+#define HASHES_DONE_BASE UINT64_C(0x530)
+#define ACK_REG_BASE UINT64_C(0x534)
 
 #define FPGA_REG_OFFSET 44
 #define BLK_CNT 2
@@ -256,7 +255,7 @@ int main(int argc, char **argv)
     printf("===================================\n");
     printf("hashes_done = %d\n", hashes_done);
 
-    begin = clock();
+    //begin = clock();
     nonce_size = 32;
 
     //initializiation of all blocks (for now 2 blocks)
@@ -266,7 +265,7 @@ int main(int argc, char **argv)
 
     uint32_t status[BLK_CNT] = {0};
     uint32_t hash = 0;
-    
+
     //wait until status will be other than 2
     wait_status(slot_id, FPGA_APP_PF, APP_PF_BAR0, status);
 
@@ -275,36 +274,31 @@ int main(int argc, char **argv)
         printf("BLK_%d hashes_done = %d\n", i, read_hashes_done(slot_id, FPGA_APP_PF, APP_PF_BAR0, i));
     }
 
-    
-    
     heavy_hash_fpga_deinit(slot_id, FPGA_APP_PF, APP_PF_BAR0, 0);
     heavy_hash_fpga_deinit(slot_id, FPGA_APP_PF, APP_PF_BAR0, 1);
 
-    end = clock();
-    time_spent = (end - begin) / CLOCKS_PER_SEC;
+    //end = clock();
+    //time_spent = (end - begin) / CLOCKS_PER_SEC;
 
-    printf("The elapsed time is %f seconds for scanning all possible nonce values", time_spent);
+    //printf("The elapsed time is %f seconds for scanning all possible nonce values", time_spent);
 
-    // //run for second time
-    // for (size_t i = 0; i < BLK_CNT; i++)
-    // {
-    //     status[i] = 0;
-    // }
-    // hash = 0;
-    // nonce_size = 100;
-    // heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size);
-    // //wait until status will be other than 2
+    //initializiation of all blocks (for now 2 blocks)
+    g_work1.data[19] = 0x3018f780;
+    heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size, 0);
+    g_work1.data[19] = 0x3018f79f;
+    heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size, 1);
 
-    // wait_status(slot_id, FPGA_APP_PF, APP_PF_BAR0, status);
 
-    // for (size_t i = 0; i < BLK_CNT; i++)
-    // {
-    //     printf("BLK_%d hashes_done = %d\n", i, read_hashes_done(slot_id, FPGA_APP_PF, APP_PF_BAR0, i));
-    // }
+    //wait until status will be other than 2
+    wait_status(slot_id, FPGA_APP_PF, APP_PF_BAR0, status);
 
-    
-    // heavy_hash_fpga_deinit(slot_id, FPGA_APP_PF, APP_PF_BAR0);
+    for (size_t i = 0; i < BLK_CNT; i++)
+    {
+        printf("BLK_%d hashes_done = %d\n", i, read_hashes_done(slot_id, FPGA_APP_PF, APP_PF_BAR0, i));
+    }
 
+    heavy_hash_fpga_deinit(slot_id, FPGA_APP_PF, APP_PF_BAR0, 0);
+    heavy_hash_fpga_deinit(slot_id, FPGA_APP_PF, APP_PF_BAR0, 1);
 #ifndef SV_TEST
     return 0;
 
@@ -444,7 +438,7 @@ out:
     }
 }
 
-void heavy_hash_fpga_deinit(int slot_id, int pf_id, int bar_id ,uint8_t blk)
+void heavy_hash_fpga_deinit(int slot_id, int pf_id, int bar_id, uint8_t blk)
 {
     int rc;
     pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
@@ -468,7 +462,7 @@ out:
     }
 }
 
-void send_ack(int slot_id, int pf_id, int bar_id ,uint8_t blk)
+void send_ack(int slot_id, int pf_id, int bar_id, uint8_t blk)
 {
     int rc;
     pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
@@ -523,6 +517,7 @@ void wait_status(int slot_id, int pf_id, int bar_id, uint32_t *status)
 
             if (status[i] == 1)
             {
+                send_ack(slot_id, FPGA_APP_PF, APP_PF_BAR0, i);
                 golden_nonce = read_golden_nonce(slot_id, FPGA_APP_PF, APP_PF_BAR0, i) - 1;
                 for (size_t j = 0; j < 8; j++)
                 {
@@ -537,7 +532,7 @@ void wait_status(int slot_id, int pf_id, int bar_id, uint32_t *status)
                 }
                 printf("\n");
                 // inform the core that golden nonce is read
-                send_ack(slot_id, FPGA_APP_PF, APP_PF_BAR0, i);
+                
                 status[i] = 0;
             }
         }

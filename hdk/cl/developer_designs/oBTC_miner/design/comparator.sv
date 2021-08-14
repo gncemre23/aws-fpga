@@ -19,6 +19,8 @@ module comparator
     //!stop input
     input logic stop,
 
+    input logic [1:0] status, 
+
     //!read enable for hashout fifo
     output logic heavy_hash_re,
     input logic [63:0] heavy_hash_din,
@@ -151,25 +153,30 @@ module comparator
       begin
         if(!stop)
         begin
-          heavy_hash_re = 1'b1;
-          if(heavy_hash_din_we)
+          if(status != 1)
           begin
-            heavy_hash_dout_next[63:0] = le2be(heavy_hash_din);
-            heavy_hash_rdy_next = 0;
-            state_next = COMPARE_1;
-            if(le2be(heavy_hash_din) < target_reg[63:0])
+            heavy_hash_re = 1'b1;
+            if(heavy_hash_din_we)
             begin
-              comp0_next = 1;
-            end
-            else if(le2be(heavy_hash_din) > target_reg[63:0])
-            begin
-              comp0_next = 0;
-            end  
-            else
-            begin
-              comp0_next = 2;
+              heavy_hash_dout_next[63:0] = le2be(heavy_hash_din);
+              heavy_hash_rdy_next = 0;
+              state_next = COMPARE_1;
+              if(le2be(heavy_hash_din) < target_reg[63:0])
+              begin
+                comp0_next = 1;
+              end
+              else if(le2be(heavy_hash_din) > target_reg[63:0])
+              begin
+                comp0_next = 0;
+              end
+              else
+              begin
+                comp0_next = 2;
+              end
             end
           end
+          else
+            result_next = 0;
         end
         else
           state_next = INIT;
@@ -190,7 +197,7 @@ module comparator
             else if(le2be(heavy_hash_din) > target_reg[127:64])
             begin
               comp1_next = 0;
-            end  
+            end
             else
             begin
               comp1_next = 2;
@@ -216,7 +223,7 @@ module comparator
             else if(le2be(heavy_hash_din) > target_reg[191:128])
             begin
               comp2_next = 0;
-            end  
+            end
             else
             begin
               comp2_next = 2;
@@ -243,7 +250,7 @@ module comparator
             else if(le2be(heavy_hash_din) > target_reg[255:192])
             begin
               comp3_next = 0;
-            end  
+            end
             else
             begin
               comp3_next = 2;
@@ -271,7 +278,7 @@ module comparator
           else if(comp1_reg == 1)
             result_next = 1;
           else
-            result_next = 0;   
+            result_next = 0;
         end
         else
           state_next = INIT;
@@ -286,6 +293,6 @@ module comparator
   assign heavy_hash_dout = heavy_hash_dout_reg;
   assign hashes_done = hashes_done_reg;
   assign heavy_hash_rdy = heavy_hash_rdy_reg;
-  
 
-  endmodule
+
+endmodule

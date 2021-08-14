@@ -22,7 +22,7 @@
 `timescale  1ns / 1ps
 //`define DBG_
 
-`define VERIF_
+//`define VERIF_
 `define HEAVYHASH_REG_ADDR      32'h0000_0508
 `define STATUS_REG_ADDR         32'h0000_050C
 `define NONCE_REG_ADDR          32'h0000_0510
@@ -32,8 +32,8 @@
 `define NONCESIZE_REG_ADDR      32'h0000_0520
 `define START_REG_ADDR          32'h0000_0524
 `define STOP_REG_ADDR           32'h0000_0528
-`define HASHES_DONE_BASE        32'h0000_053C
-`define ACK_REG_ADDR            32'h0000_0540
+`define HASHES_DONE_BASE        32'h0000_0530
+`define ACK_REG_ADDR            32'h0000_0534
 module heavy_hash_blk
   #(
      parameter NONCE_COEF = 1,
@@ -271,10 +271,10 @@ module heavy_hash_blk
   logic [2:0] hold_cnt = 3'd0;
   logic [31:0] hashes_done;
 
-  const int NONCE_REG_ADDR_BLK = `NONCE_REG_ADDR + (NONCE_COEF-1)*40;
-  const int HEAVYHASH_REG_ADDR_BLK = `HEAVYHASH_REG_ADDR + (NONCE_COEF-1)*40;
-  const int STATUS_REG_ADDR_BLK = `STATUS_REG_ADDR + (NONCE_COEF-1)*40;
-  const int HASHES_DONE_ADDR_BLK = `HASHES_DONE_BASE + (NONCE_COEF-1)*40;
+  const int NONCE_REG_ADDR_BLK = `NONCE_REG_ADDR + (NONCE_COEF-1)*44;
+  const int HEAVYHASH_REG_ADDR_BLK = `HEAVYHASH_REG_ADDR + (NONCE_COEF-1)*44;
+  const int STATUS_REG_ADDR_BLK = `STATUS_REG_ADDR + (NONCE_COEF-1)*44;
+  const int HASHES_DONE_ADDR_BLK = `HASHES_DONE_BASE + (NONCE_COEF-1)*44;
   always_ff @(posedge clk_int)
   begin
     arvalid_int_old <= arvalid_int;
@@ -727,7 +727,8 @@ module heavy_hash_blk
       .result  ( result),
       .nonce_fifo_re (nonce_fifo_re),
       .hashes_done(hashes_done),
-      .heavy_hash_rdy(heavy_hash_rdy)
+      .heavy_hash_rdy(heavy_hash_rdy),
+      .status(status)
     );
 
 
@@ -780,7 +781,7 @@ module heavy_hash_blk
         begin
           if(ack_int)
           begin
-            status <= 0;
+            status <= 2;
             state_status <= 0;
           end
           else
