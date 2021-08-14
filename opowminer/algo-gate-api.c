@@ -99,7 +99,7 @@ int null_scanhash()
 
 // Default generic scanhash can be used in many cases.
 int scanhash_generic( struct work *work, uint32_t max_nonce,
-                      uint64_t *hashes_done, struct thr_info *mythr ,uint32_t *  golden_i, uint32_t * circ_buffer,  uint32_t *found_nonce_count)
+                      uint64_t *hashes_done, struct thr_info *mythr ,uint32_t *  golden_i, uint32_t * circ_buffer,  uint32_t *found_nonce_count, pthread_mutex_t *fpga_lock, pci_bar_handle_t * pci)
 {
    uint32_t edata[20] __attribute__((aligned(64)));
    uint32_t hash[8] __attribute__((aligned(64)));

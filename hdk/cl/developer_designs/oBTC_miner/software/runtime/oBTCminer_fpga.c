@@ -282,11 +282,39 @@ int main(int argc, char **argv)
 
     //printf("The elapsed time is %f seconds for scanning all possible nonce values", time_spent);
 
+<<<<<<< HEAD
     //initializiation of all blocks (for now 2 blocks)
     g_work1.data[19] = 0x3018f780;
     heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size, 0);
     g_work1.data[19] = 0x3018f79f;
     heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size, 1);
+=======
+
+    //initializiation of all blocks (for now 2 blocks)
+    heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size, 0);
+    g_work1.data[19] = 0x3018f79f;
+    heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size, 1);
+
+    uint32_t status[BLK_CNT] = {0};
+    uint32_t hash = 0;
+    
+    //wait until status will be other than 2
+    wait_status(slot_id, FPGA_APP_PF, APP_PF_BAR0, status);
+
+    for (size_t i = 0; i < BLK_CNT; i++)
+    {
+        printf("BLK_%d hashes_done = %d\n", i, read_hashes_done(slot_id, FPGA_APP_PF, APP_PF_BAR0, i));
+    }
+    // //run for second time
+    // for (size_t i = 0; i < BLK_CNT; i++)
+    // {
+    //     status[i] = 0;
+    // }
+    // hash = 0;
+    // nonce_size = 100;
+    // heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size);
+    // //wait until status will be other than 2
+>>>>>>> 24e0affd750e22374c136230cce1b426657d900d
 
 
     //wait until status will be other than 2
