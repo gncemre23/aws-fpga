@@ -45,8 +45,6 @@ bool is_found_before(uint32_t *circ_buffer, uint32_t nonce)
     return false;
 }
 
-
-
 static inline uint64_t le64dec(const void *pp)
 {
     const uint8_t *p = (uint8_t const *)pp;
@@ -224,7 +222,7 @@ void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, 
 }
 
 int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
-                       uint64_t *hashes_done, struct thr_info *mythr, uint32_t *golden_i, uint32_t *circ_buffer, uint32_t *found_nonce_count, pthread_mutex_t *fpga_lock)
+                       uint64_t *hashes_done, struct thr_info *mythr, uint32_t *golden_i, uint32_t *circ_buffer, uint32_t *found_nonce_count, pthread_mutex_t *fpga_lock, pci_bar_handle_t *pci_bar_handle)
 {
     uint32_t edata[20] __attribute__((aligned(64)));
     uint32_t hash[8] __attribute__((aligned(64)));
@@ -258,24 +256,17 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
 
     generate_matrix(matrix, &state);
 
+    // uint32_t value = thr_id == 0 ? 0xdeadbeef:0xcafebeef;
+
+    // pthread_mutex_lock(fpga_lock);
+    // peek_poke_example(pci_bar_handle,value);
+    // pthread_mutex_unlock(fpga_lock);
 
     pthread_mutex_lock(fpga_lock);
-    printf("Line 263 ---thread %d.....\n", thr_id);
-    heavy_hash_fpga_init(pdata, matrix, nonce_size, ptarget, thr_id);
+    //printf("Line 263 ---thread %d.....\n", thr_id);
+    heavy_hash_fpga_init(pdata, matrix, nonce_size, ptarget, thr_id, pci_bar_handle);
     pthread_mutex_unlock(fpga_lock);
 
-    int rc;
-    pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
-
-    pthread_mutex_lock(fpga_lock);
-    printf("Line 271 ---thread %d.....\n", thr_id);
-    rc = fpga_pci_attach(0, FPGA_APP_PF, APP_PF_BAR0, 0, &pci_bar_handle);
-    fail_on(rc, out, "Unable to attach to the AFI on slot id %d", 0);
-    pthread_mutex_unlock(fpga_lock);
-    //read status registers from all blocks
-    //read status registers from all blocks
-    
-    
     uint64_t k = 0;
     uint32_t status = 0;
 
@@ -284,33 +275,17 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
 
     printf("beginning of wait status \n");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     do
     {
-        // if ((k % 100000) == 0)
-        //     printf("status = ");
-        
-        
+        if ((k % 100000) == 0)
+            printf("status = ");
+
         if (work_restart[thr_id].restart)
-        {   
+        {
             pthread_mutex_lock(fpga_lock);
             printf("Line 310 ---thread %d.....\n", thr_id);
-            *hashes_done = read_hashes_done(&pci_bar_handle, thr_id);
+            *hashes_done = 0x0000ffff;
             printf("stop signal is came before all nonce values!\n");
-            fpga_pci_detach(pci_bar_handle);
             pthread_mutex_unlock(fpga_lock);
             return 0;
         }
@@ -325,22 +300,23 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
         //     return 0;
         // }
         pthread_mutex_lock(fpga_lock);
-        printf("Line 328 ---thread %d.....\n", thr_id);
-        rc = fpga_pci_peek(pci_bar_handle, STATUS_REG_BASE + thr_id * FPGA_REG_OFFSET, status);
+        //printf("Line 328 ---thread %d.....\n", thr_id);
+        int rc;
+        rc = fpga_pci_peek(*pci_bar_handle, STATUS_REG_BASE + thr_id * FPGA_REG_OFFSET, &status);
         fail_on(rc, out, "Unable to write to the fpga !");
         pthread_mutex_unlock(fpga_lock);
-        // if ((k % 100000) == 0)
-        //     printf("%d", status);
+        if ((k % 100000) == 0)
+            printf("%d", status);
         if (status == 1)
         {
             pthread_mutex_lock(fpga_lock);
             printf("Line 337 ---thread %d.....\n", thr_id);
-            send_ack(&pci_bar_handle, thr_id);
+            send_ack(pci_bar_handle, thr_id);
             pthread_mutex_unlock(fpga_lock);
 
             pthread_mutex_lock(fpga_lock);
             printf("Line 342 ---thread %d.....\n", thr_id);
-            golden_nonce = read_golden_nonce(&pci_bar_handle, thr_id) - 1;
+            golden_nonce = read_golden_nonce(pci_bar_handle, thr_id) - 1;
             pthread_mutex_unlock(fpga_lock);
             if (is_found_before(circ_buffer, golden_nonce) == false)
             {
@@ -348,7 +324,7 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
                 printf("Line 348 ---thread %d.....\n", thr_id);
                 for (size_t j = 0; j < 8; j++)
                 {
-                    heavy_hash[j] = read_heavyhash(&pci_bar_handle, thr_id);
+                    heavy_hash[j] = read_heavyhash(pci_bar_handle, thr_id);
                 }
                 pthread_mutex_unlock(fpga_lock);
 
@@ -359,11 +335,9 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
                     printf("%08x", heavy_hash[j]);
                 }
                 printf("\n");
+
                 
-                pthread_mutex_lock(fpga_lock);
-                printf("Line 356 ---thread %d.....\n", thr_id);
-                *hashes_done = read_hashes_done(&pci_bar_handle, thr_id);
-                pthread_mutex_unlock(fpga_lock);
+                *hashes_done = golden_nonce - first_nonce + 1;
 
                 pdata[19] = bswap_32(golden_nonce);
                 submit_solution(work, heavy_hash, mythr);
@@ -374,24 +348,21 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
                 pthread_mutex_unlock(fpga_lock);
             }
         }
-        // if ((k % 100000) == 0)
-        // {
-        //     printf("\n k: %x\n", k);
-        // }
-        // k++;
+        if ((k % 100000) == 0)
+        {
+            printf("\n k: %x\n", k);
+        }
+        k++;
     } while (status != 0);
 
-    
     pthread_mutex_lock(fpga_lock);
     printf("Line 375 ---thread %d.....\n", thr_id);
     printf("last_st %d\n", status);
-    *hashes_done = read_hashes_done(&pci_bar_handle, thr_id);
-
-
+    *hashes_done = max_nonce - first_nonce;
+    printf("hashes_done : %08x", *hashes_done);
 out:
-    fpga_pci_detach(pci_bar_handle);
 
-    heavy_hash_fpga_deinit(thr_id);
+    heavy_hash_fpga_deinit(thr_id, pci_bar_handle);
     pthread_mutex_unlock(fpga_lock);
     return 0;
 }

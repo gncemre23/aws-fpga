@@ -285,6 +285,22 @@ int main(int argc, char **argv)
 
     printf("The elapsed time is %f seconds for scanning all possible nonce values", time_spent);
 
+
+    //initializiation of all blocks (for now 2 blocks)
+    heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size, 0);
+    g_work1.data[19] = 0x3018f79f;
+    heavy_hash_fpga_init(&g_work1, matrix, slot_id, FPGA_APP_PF, APP_PF_BAR0, nonce_size, 1);
+
+    uint32_t status[BLK_CNT] = {0};
+    uint32_t hash = 0;
+    
+    //wait until status will be other than 2
+    wait_status(slot_id, FPGA_APP_PF, APP_PF_BAR0, status);
+
+    for (size_t i = 0; i < BLK_CNT; i++)
+    {
+        printf("BLK_%d hashes_done = %d\n", i, read_hashes_done(slot_id, FPGA_APP_PF, APP_PF_BAR0, i));
+    }
     // //run for second time
     // for (size_t i = 0; i < BLK_CNT; i++)
     // {

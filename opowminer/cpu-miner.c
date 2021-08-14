@@ -38,6 +38,7 @@
 #include <jansson.h>
 #include <openssl/sha.h>
 #include "sysinfos.c"
+#include "../build-fpga/oBTCminer_fpga.h"
 
 #ifdef WIN32
 #include <winsock2.h>
@@ -87,7 +88,7 @@ uint32_t circ_buffer[5] = {0};
 uint32_t found_nonce_count = 0;
 
 bool fpga_busy = false;
-
+pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
 bool opt_debug = false;
 bool opt_debug_diff = false;
 bool opt_protocol = false;
@@ -2398,13 +2399,13 @@ static void *miner_thread(void *userdata)
       // Scan for nonce
       printf("it = %d\n", it);
       nonce_found = algo_gate.scanhash(&work, max_nonce, &hashes_done,
-                                       mythr, golden_i, circ_buffer, &found_nonce_count, &fpga_lock);
+                                       mythr, golden_i, circ_buffer, &found_nonce_count, &fpga_lock, &pci_bar_handle);
       it++;
       // for (size_t i = 0; i < 5; i++)
       // {
       //    printf("circ_buffer[%d] = %08x\n", i, circ_buffer[i]);
       // }
-      
+
       // record scanhash elapsed time
       gettimeofday(&tv_end, NULL);
       timeval_subtract(&diff, &tv_end, &tv_start);
@@ -3677,6 +3678,11 @@ int main(int argc, char *argv[])
 
    parse_cmdline(argc, argv);
 
+   int rc;
+   
+   
+   rc = fpga_pci_attach(0, FPGA_APP_PF, APP_PF_BAR0, 0, &pci_bar_handle);
+
 #if defined(WIN32)
    //	SYSTEM_INFO sysinfo;
    //	GetSystemInfo(&sysinfo);
@@ -4019,5 +4025,7 @@ int main(int argc, char *argv[])
    /* main loop - simply wait for workio thread to exit */
    pthread_join(thr_info[work_thr_id].pth, NULL);
    applog(LOG_WARNING, "workio thread dead, exiting.");
+
+   fpga_pci_detach(pci_bar_handle);
    return 0;
 }

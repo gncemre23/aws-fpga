@@ -52,9 +52,9 @@
 
 
 uint32_t byte_swap(uint32_t value);
-int peek_poke_example(uint32_t value);
-void heavy_hash_fpga_init(uint32_t *work_data, uint16_t matrix[64][64], uint32_t nonce_size, uint32_t *target, uint8_t blk);
-void heavy_hash_fpga_deinit(uint8_t blk);
+int peek_poke_example(pci_bar_handle_t *pci_bar_handle, uint32_t value);
+void heavy_hash_fpga_init(uint32_t *work_data, uint16_t matrix[64][64], uint32_t nonce_size, uint32_t *target, uint8_t blk, pci_bar_handle_t *pci_bar_handle);
+void heavy_hash_fpga_deinit(uint8_t blk, pci_bar_handle_t *pci_bar_handle);
 //uint32_t wait_status();
 uint32_t read_golden_nonce(pci_bar_handle_t *pci_bar_handle, uint8_t golden_blk);
 uint32_t read_heavyhash(pci_bar_handle_t *pci_bar_handle, uint8_t golden_blk);
