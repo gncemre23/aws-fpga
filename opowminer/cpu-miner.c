@@ -136,7 +136,7 @@ static bool affinity_uses_uint128 = false;
 #endif
 
 int opt_priority = 0;
-int num_cpus = 2;
+int num_cpus = CORE_CNT;
 int num_cpugroups = 1;
 char *rpc_url = NULL;
 ;
@@ -2034,8 +2034,10 @@ void std_get_new_work(struct work *work, struct work *g_work, int thr_id,
    pthread_rwlock_rdlock(&g_work_lock);
 
    if (have_stratum)
+   {
       force_new_work = work->job_id ? strtoul(work->job_id, NULL, 16) != strtoul(g_work->job_id, NULL, 16)
                                     : false;
+   }
 
    if (force_new_work || (*nonceptr >= *end_nonce_ptr) || memcmp(work->data, g_work->data, algo_gate.work_cmp_size))
    {
@@ -2298,8 +2300,10 @@ static void *miner_thread(void *userdata)
       {
          if (have_stratum)
          {
-            if (*nonceptr >= end_nonce)
+            if (*nonceptr >= end_nonce || (time(NULL) - g_work_time) >= FPGA_SCAN_TIME)
+            {
                stratum_gen_work(&stratum, &g_work);
+            }
          }
          else
          {
@@ -2343,7 +2347,7 @@ static void *miner_thread(void *userdata)
       // an early abort. get_work on the other hand can't rely on
       // restart_threads so need a much shorter scantime
       if (have_stratum)
-         max64 = 60 * thr_hashrates[thr_id];
+         max64 = FPGA_SCAN_TIME * thr_hashrates[thr_id];
       else if (have_longpoll)
          max64 = LP_SCANTIME * thr_hashrates[thr_id];
       else // getwork inline
@@ -2397,10 +2401,8 @@ static void *miner_thread(void *userdata)
       gettimeofday((struct timeval *)&tv_start, NULL);
 
       // Scan for nonce
-      printf("it = %d\n", it);
       nonce_found = algo_gate.scanhash(&work, max_nonce, &hashes_done,
                                        mythr, golden_i, circ_buffer, &found_nonce_count, &fpga_lock, &pci_bar_handle);
-      it++;
       // for (size_t i = 0; i < 5; i++)
       // {
       //    printf("circ_buffer[%d] = %08x\n", i, circ_buffer[i]);
@@ -3415,10 +3417,12 @@ static void signal_handler(int sig)
       break;
    case SIGINT:
       applog(LOG_INFO, "SIGINT received, exiting");
+      fpga_pci_detach(pci_bar_handle);
       proper_exit(0);
       break;
    case SIGTERM:
       applog(LOG_INFO, "SIGTERM received, exiting");
+      fpga_pci_detach(pci_bar_handle);
       proper_exit(0);
       break;
    }
@@ -3662,11 +3666,14 @@ bool check_cpu_capability()
 
 void get_defconfig_path(char *out, size_t bufsize, char *argv0);
 
+
 int main(int argc, char *argv[])
 {
    struct thr_info *thr;
    long flags;
    int i, err;
+
+
 
    pthread_mutex_init(&applog_lock, NULL);
    pthread_mutex_init(&fpga_lock, NULL);
@@ -3679,8 +3686,7 @@ int main(int argc, char *argv[])
    parse_cmdline(argc, argv);
 
    int rc;
-   
-   
+
    rc = fpga_pci_attach(0, FPGA_APP_PF, APP_PF_BAR0, 0, &pci_bar_handle);
 
 #if defined(WIN32)
@@ -3710,7 +3716,7 @@ int main(int argc, char *argv[])
 
 #elif defined(_SC_NPROCESSORS_CONF)
    //num_cpus = sysconf(_SC_NPROCESSORS_CONF);
-   num_cpus = 2;
+   num_cpus = CORE_CNT;
 #elif defined(CTL_HW) && defined(HW_NCPU)
    int req[] = {CTL_HW, HW_NCPU};
    size_t len = sizeof(num_cpus);
@@ -4029,3 +4035,4 @@ int main(int argc, char *argv[])
    fpga_pci_detach(pci_bar_handle);
    return 0;
 }
+

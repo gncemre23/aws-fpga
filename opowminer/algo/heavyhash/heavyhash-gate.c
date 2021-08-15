@@ -204,7 +204,6 @@ void heavyhash(const uint16_t matrix[64][64], uint8_t *pdata, size_t pdata_len, 
         hash_second[i] = (product[2 * i] << 4) | (product[2 * i + 1]);
     }
 
-    //printf("=== Hash XORed ===\n");
     for (int i = 0; i < 32; ++i)
     {
         hash_xored[i] = hash_first[i] ^ hash_second[i];
@@ -234,12 +233,9 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
     const uint32_t first_nonce = pdata[19];
     const uint32_t last_nonce = max_nonce - 1;
     uint32_t nonce_size = max_nonce - first_nonce;
-
-    printf("last_nonce_hh : %08x\n", last_nonce);
-    printf("first_nonce_hh : %08x\n", first_nonce);
-    printf("nonce_size_hh : %08x\n", nonce_size);
-    uint32_t n = first_nonce;
     const int thr_id = mythr->id;
+
+    uint32_t n = first_nonce;
     const bool bench = opt_benchmark;
 
     uint16_t matrix[64][64];
@@ -256,14 +252,7 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
 
     generate_matrix(matrix, &state);
 
-    // uint32_t value = thr_id == 0 ? 0xdeadbeef:0xcafebeef;
-
-    // pthread_mutex_lock(fpga_lock);
-    // peek_poke_example(pci_bar_handle,value);
-    // pthread_mutex_unlock(fpga_lock);
-
     pthread_mutex_lock(fpga_lock);
-    //printf("Line 263 ---thread %d.....\n", thr_id);
     heavy_hash_fpga_init(pdata, matrix, nonce_size, ptarget, thr_id, pci_bar_handle);
     pthread_mutex_unlock(fpga_lock);
 
@@ -273,74 +262,60 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
     uint32_t golden_nonce = 0;
     uint32_t heavy_hash[8] = {0};
 
-    printf("beginning of wait status \n");
-
     do
     {
-        if ((k % 100000) == 0)
-            printf("status = ");
-
         if (work_restart[thr_id].restart)
         {
             pthread_mutex_lock(fpga_lock);
-            printf("Line 310 ---thread %d.....\n", thr_id);
-            *hashes_done = 0x0000ffff;
-            printf("stop signal is came before all nonce values!\n");
+            *hashes_done = read_hashes_done(pci_bar_handle, thr_id);
+            heavy_hash_fpga_deinit(thr_id, pci_bar_handle);
             pthread_mutex_unlock(fpga_lock);
             return 0;
         }
-        // if (k > 0x2000000)
-        // {
-        //     for (size_t j = 0; j < BLK_CNT; j++)
-        //     {
-        //         *hashes_done += read_hashes_done(&pci_bar_handle, j);
-        //     }
-        //     fpga_pci_detach(pci_bar_handle);
-        //     printf("Too much time\n");
-        //     return 0;
-        // }
         pthread_mutex_lock(fpga_lock);
-        //printf("Line 328 ---thread %d.....\n", thr_id);
         int rc;
         rc = fpga_pci_peek(*pci_bar_handle, STATUS_REG_BASE + thr_id * FPGA_REG_OFFSET, &status);
         fail_on(rc, out, "Unable to write to the fpga !");
         pthread_mutex_unlock(fpga_lock);
-        if ((k % 100000) == 0)
-            printf("%d", status);
         if (status == 1)
         {
             pthread_mutex_lock(fpga_lock);
-            printf("Line 337 ---thread %d.....\n", thr_id);
             send_ack(pci_bar_handle, thr_id);
             pthread_mutex_unlock(fpga_lock);
 
             pthread_mutex_lock(fpga_lock);
-            printf("Line 342 ---thread %d.....\n", thr_id);
             golden_nonce = read_golden_nonce(pci_bar_handle, thr_id) - 1;
             pthread_mutex_unlock(fpga_lock);
             if (is_found_before(circ_buffer, golden_nonce) == false)
             {
                 pthread_mutex_lock(fpga_lock);
-                printf("Line 348 ---thread %d.....\n", thr_id);
                 for (size_t j = 0; j < 8; j++)
                 {
                     heavy_hash[j] = read_heavyhash(pci_bar_handle, thr_id);
                 }
                 pthread_mutex_unlock(fpga_lock);
-
+                if (thr_id == 0)
+                    printf("\033[1;33m");
+                else
+                    printf("\033[1;31m");
                 printf("Golden nonce is = %08x\n", golden_nonce);
                 printf("Golden hash is =");
                 for (size_t j = 0; j < 8; j++)
                 {
                     printf("%08x", heavy_hash[j]);
                 }
-                printf("\n");
 
-                
-                *hashes_done = golden_nonce - first_nonce + 1;
+                for (size_t j = 0; j < 8; j++)
+                {
+                    golden_hash[7-j] = heavy_hash[j];
+                }
+                printf("\n");
+                pthread_mutex_lock(fpga_lock);
+                *hashes_done = read_hashes_done(pci_bar_handle, thr_id);
+                pthread_mutex_unlock(fpga_lock);
 
                 pdata[19] = bswap_32(golden_nonce);
-                submit_solution(work, heavy_hash, mythr);
+                submit_solution(work, golden_hash, mythr);
 
                 pthread_mutex_lock(fpga_lock);
                 circ_buffer[*found_nonce_count % MAX_BUF_LENGTH] = golden_nonce;
@@ -348,18 +323,10 @@ int scanhash_heavyhash(struct work *work, uint32_t max_nonce,
                 pthread_mutex_unlock(fpga_lock);
             }
         }
-        if ((k % 100000) == 0)
-        {
-            printf("\n k: %x\n", k);
-        }
-        k++;
     } while (status != 0);
 
     pthread_mutex_lock(fpga_lock);
-    printf("Line 375 ---thread %d.....\n", thr_id);
-    printf("last_st %d\n", status);
-    *hashes_done = max_nonce - first_nonce;
-    printf("hashes_done : %08x", *hashes_done);
+    *hashes_done = read_hashes_done(pci_bar_handle, thr_id);
 out:
 
     heavy_hash_fpga_deinit(thr_id, pci_bar_handle);

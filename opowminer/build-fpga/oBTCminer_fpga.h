@@ -22,12 +22,6 @@
 
 #include <utils/sh_dpi_tasks.h>
 
-// Definitions for socket
-#define PortNumber      9876
-#define MaxConnects        8
-#define BuffSize         256
-#define ConversationLen    3
-#define Host            "localhost"
 
 #define HELLO_WORLD_REG_ADDR UINT64_C(0x500)
 #define VLED_REG_ADDR UINT64_C(0x504)
@@ -40,12 +34,13 @@
 #define NONCE_SIZE_REG_BASE UINT64_C(0x520)
 #define START_REG_BASE UINT64_C(0x524)
 #define STOP_REG_BASE UINT64_C(0x528)
-#define HASHES_DONE_BASE UINT64_C(0x53C)
-#define ACK_REG_BASE UINT64_C(0x540)
+#define HASHES_DONE_BASE UINT64_C(0x530)
+#define ACK_REG_BASE UINT64_C(0x534)
 
 
 #define FPGA_REG_OFFSET 44
-#define BLK_CNT 2
+#define CORE_CNT 40
+#define FPGA_SCAN_TIME 7
 
 
 

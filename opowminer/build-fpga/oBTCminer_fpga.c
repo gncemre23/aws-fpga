@@ -5,8 +5,6 @@ void heavy_hash_fpga_init(uint32_t *work_data, uint16_t matrix[64][64], uint32_t
     int rc;
     uint32_t value;
 
-    printf("init begin\n");
-
     //send stop to all blocks
     rc = fpga_pci_poke(*pci_bar_handle, STOP_REG_BASE + blk * FPGA_REG_OFFSET, 1);
     fail_on(rc, out, "Unable to write to the fpga !");
@@ -19,16 +17,12 @@ void heavy_hash_fpga_init(uint32_t *work_data, uint16_t matrix[64][64], uint32_t
     rc = fpga_pci_poke(*pci_bar_handle, NONCE_SIZE_REG_BASE + blk * FPGA_REG_OFFSET, nonce_size);
     fail_on(rc, out, "Unable to write to the fpga !");
 
-    printf("nonce_size : %08x\n", nonce_size);
-    //send target to all blocks
-    //printf("target : ");
+    
     for (int i = 0; i < 8; i++)
     {
         rc = fpga_pci_poke(*pci_bar_handle, TARGET_REG_BASE + blk * FPGA_REG_OFFSET, target[i]);
-    //    printf("%08x\n", target[i]);
         fail_on(rc, out, "Unable to write to the fpga !");
     }
-    //printf("\n");
 
     //send block header to all blocks
     for (int i = 19; i >= 0; i--)
@@ -48,7 +42,6 @@ void heavy_hash_fpga_init(uint32_t *work_data, uint16_t matrix[64][64], uint32_t
         }
     }
 
-    printf("init done \n ...");
 
 out:
     return;
