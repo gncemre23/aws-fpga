@@ -119,6 +119,10 @@ module comparator
     nonce_fifo_re = 1'b0;
     hashes_done_next = hashes_done_reg;
     heavy_hash_rdy_next = heavy_hash_rdy_reg;
+    comp0_next = comp0_reg;
+    comp1_next = comp1_reg;
+    comp2_next = comp2_reg;
+    comp3_next = comp3_reg;
 
     case (state_reg)
       INIT:
