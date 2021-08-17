@@ -77,16 +77,12 @@ There is a test software, to make sure the FPGA cores are working after the imag
 -   Run the following commands
     -   $ make
     -   $ sudo ./oBTCminer_fpga
-    -   
+    - 
+
 <a name="mining"></a>
-
-
-
-
-
 ## Mining
 
-FPGA miner uses the FPGA hardware cores and the software controlling these cores named `oBTCminer_fpga`.  The software is used with `cpuminer` software. Therefore, the socket programming tecniques are used. The work is recevied by `cpuminer` and sent to the `oBTCminer_fpga` by `cpuminer`. To do that, the thread count is fixed to 1 at `cpuminer`. Also, the normally used `heavyhash function` is deactivated. Therefore, all the hash calculations are done by `oBTCminer_fpga`. Then, `oBTCminer_fpga` sends the golden nonce and hash (if they are exist) with `hashes_done` variable which is denoting the how many hash calculations are done by FPGA, to `cpuminer`.
+FPGA miner uses the FPGA hardware cores and the software controlling these cores named `cpu_miner`.  The work is recevied by `cpuminer` and distributed to the FPGA cores. To do that, the thread count is fixed to FPGA core count (40) at `cpuminer`. Also, the normally used `heavyhash function` is modified to use FPGA cores. But all the FPGA cores can be acessed by PCIE interface and at the same time only one thread can access the PCIE, the mutex lock and unlock functions are used very carefully.  All the possible hashes can be done for a work in 7 seconds. But normally, all threads normally get work in every 1 minute. To overcome this issue, at the cpuminer code, it is changed to get the work (using stratum_gen_work() function) in every 7 seconds.
 
 To run the FPGA miner, follow the below steps:
 
@@ -95,13 +91,11 @@ To run the FPGA miner, follow the below steps:
     - $ source fpga_init.sh
 - After previous command, the current directory is oBTCminer. Go to the top folder of the repository (`aws-fpga`).
 - Open `opowminer` folder.
-- Open a second terminal and do the previous steps. After that you have two terminals connected to the instance.
-- Run the following commands on one of the terminals. After these command, the FPGA will be programmed.
+- Run the following commands. After these commands, the FPGA will be programmed.
     - $ sudo fpga-clear-local-image -S 0
-    - $ sudo fpga-load-local-image -S 0 -I agfi-02242ecde389dc834 -a 125 -b 343 -c 1
-- At the first terminal, open `build-fpga` folder. Run `$ make` command. Therefore, `oBTCminer_fpga` is compiled.
-- At the second terminal, run  `$ ./build.sh` command to compile cpuminer.
-- After two ones are compiled, first, run `$ sudo ./oBTCminer_fpga` at build-fpga folder at one of the terminal. Then on the other terminal run the following command:
-    - $ ./cpuminer -o stratum+tcp://pool.obtc.me:3390 -u [oBTC address] -p . -a heavyhash -D
+    - $ sudo fpga-load-local-image -S 0 -I agfi-09b1521d93088246c -a 125 -b 343 -c 1
+- Run  `$ ./build.sh` command to compile cpuminer.
+- Run the following command:
+    - `$ ./cpuminer -o stratum+tcp://pool.obtc.me:3390 -u [oBTC address] -p . -a heavyhash -D`
 
 After these steps, the mining is started.
