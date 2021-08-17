@@ -23,13 +23,13 @@ FPGA miner is composed of software and hardware (FPGA) components. The block dia
 
 Inside of the `heavyhash` module is given below. `heavyhash` module has three main parts which are `sha3_in`, `sha3_out`, `matrix_multiplier`.  `sha3_in` and `sha3_out` modules have been from https://cryptography.gmu.edu/athena/index.php?id=source_codes . Block headers are feeded to fifo before the `sha3_in`. Then `sha3_in` takes the blockheader and calculates the hash. Then sends the hash result to the matrix multiplier. Matrix multiplier takes the generated matrix value from matrix fifo and with a systolic array structure calculates the matrix multiplication. Finally, `sha3_out` takes the XOR of matrix multiplication result and hash value and calculates the heavy hash result. Each heavy hash calculation takes 25 clock cycles. Hence the hash rate can be calculated as the following formula
 
-$$ Hash rate = \frac{Clock Frequency * Core count}{25}.$$
+Hash rate = Clock Frequency * Core count / 25
 
 ![Alt text](./heavyhash.png)
 
 The software part of the system is composed of two main parts, `cpuminer` and `oBTCminer_fpga`. The two softwares are communicating between eachother with socket programming. `cpuminer` sends the first nonce, last nonce, block header, generated matrix and target parameters to `oBTCminer_fpga`. `oBTCminer` calculates the nonce size determining how many nonce to be tried by each FPGA core. The nonce size is determined by the following
 
-$$ nonce\_size = \frac{(last\_nonce - first\_nonce + 1)}{Core\_count} + (last\_nonce - first\_nonce + 1)\ mod \ Core\_count $$
+nonce_size = last_nonce - first_nonce + 1
 
 After nonce size is determined, all the inputs are sent to FPGA. Then, the status value is continuosly read. When status is 1 or 0, the loop is broken. Then, the hashes_done value, golden nonce and golden hash (if they are exist), are sent to `cpuminer`. After that, `oBTCminer_fpga` waits for the new work.
 
