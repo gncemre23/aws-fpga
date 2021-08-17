@@ -141,6 +141,27 @@ New status evaluation logic
 
 }
 
+-v23 cl_oBTC_v23_axi_250MHz_2blk_withoutSlack
+{
+    "FpgaImageId": "afi-082f42d78f8a44485",
+    "FpgaImageGlobalId": "agfi-02a336159a5782391"
+    (Bugfix for hanging after first nonce range trying commit:97a947967cb1e72b2687d27ca8717e82642ea2f3)
+}
+
+-v24 cl_oBTC_v24_axi_400MHz_40blk_withSlack_0_360
+{
+    "FpgaImageId": "afi-0f83b69bd2c86fd95",
+    "FpgaImageGlobalId": "agfi-02b45ff7b5b797bc9"
+    Run this core with 343Mhz (max) B clk, 125 Mhz A clk
+    (Same as v23, just the block count is increased)
+}
+
+-v25 cl_oBTC_v25_axi_400MHz_40blk_withSlack_0_295
+{
+    "FpgaImageId": "afi-009107b0d7496cb02",
+    "FpgaImageGlobalId": "agfi-09b1521d93088246c"
+    (fix rejection error, because of compx_reg)
+}
 
 
 
