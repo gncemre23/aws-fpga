@@ -96,6 +96,6 @@ To run the FPGA miner, follow the below steps:
     - $ sudo fpga-load-local-image -S 0 -I agfi-09b1521d93088246c -a 125 -b 343 -c 1
 - Run  `$ ./build.sh` command to compile cpuminer.
 - Run the following command:
-    - `$ ./cpuminer -o stratum+tcp://pool.obtc.me:3390 -u [oBTC address] -p . -a heavyhash -D`
+    - `$ sudo ./cpuminer -o stratum+tcp://pool.obtc.me:3390 -u [oBTC address] -p . -a heavyhash -D`
 
 After these steps, the mining is started.
