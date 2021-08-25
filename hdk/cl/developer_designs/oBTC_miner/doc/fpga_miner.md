@@ -51,7 +51,7 @@ After that, verification is done by comparing the original heavy hash results wi
 To build an FPGA image, the following steps are done
 -   Comment the \`define VERIF_ lines in `wrapper_top.sv` and `heavy_hash_blk.sv`.
 -   Run the script `aws-fpga/fpga-init.sh`
--   Go to `oBTCminer/build/scripts`
+-   Go to `hdk/cl/developer_designs/oBTC_miner/build/scripts`
 -   Run the following command
     -   $ ./aws_build_dcp_from_cl.sh -strategy TIMING -clock_recipe_a A0 -clock_recipe_b B5
     -  where A0 and B5 correspond to 125MHz and 400MHz, respectively. To change this parameters check the following link https://github.com/aws/aws-fpga/blob/master/hdk/docs/clock_recipes.csv) 
