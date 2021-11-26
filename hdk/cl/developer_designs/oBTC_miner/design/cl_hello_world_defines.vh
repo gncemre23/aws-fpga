@@ -48,6 +48,6 @@
 //`define DBG_
 
 // Uncomment to disable Virtual JTAG
-//`define DISABLE_VJTAG_DEBUG
+`define DISABLE_VJTAG_DEBUG
 
 `endif

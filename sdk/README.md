@@ -14,7 +14,7 @@ The SDK is **NOT** used to build or register AFI, rather it is only used for man
 
 You can setup and install the SDK with the following few steps.  Note that the first two steps may be skipped if you have already ran them in the above HDK setup.
 
-    $ git clone https://github.com/aws/aws-fpga   # Fetch the HDK and SDK code
+    $ git clone -b small_shell https://github.com/aws/aws-fpga   # Fetch the HDK and SDK code
     $ cd aws-fpga                                 # Move to the root directory of the repository before running the next script
     $ source sdk_setup.sh                         # Set up the envronment variables, build and install the SDK
 
@@ -38,6 +38,7 @@ $ sudo apt-get install build-essential
 
 SDK supports granting access to FPGA resources and AFI management tools to users other than root. The SDK setup will create a group and make all the device resources members of this group. The user will be added to this group. Variables below help control this feature
 * AWS_FPGA_ALLOW_NON_ROOT when set, will turn on the feature.
+* AWS_FPGA_SDK_OTHERS when set, will allow all users to use FPGA, else only the group specified by AWS_FPGA_SDK_GROUP.
 * AWS_FPGA_SDK_GROUP specifies group that will have access to FPGA and AFI tools. The setup will create the group and add user to this group. User must switch or relogin to have this group membership effective. If unspecified, this will default to "fpgauser".
 * AWS_FPGA_SDK_OVERRIDE_GROUP specifies to add user to already existing group specified by AWS_FPGA_SDK_GROUP. If this is unset and AWS_FPGA_SDK_GROUP evaluates to an  existing group, setup will fail.
 

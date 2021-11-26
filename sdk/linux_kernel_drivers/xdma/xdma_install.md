@@ -68,7 +68,7 @@ __**Step 2**__: Clone the git repo locally under my_fpga_dir for example:
 ```
   $ mkdir -p <my_fpga_repo>
   $ cd <my_fpga_repo>
-  $ git clone https://github.com/aws/aws-fpga
+  $ git clone -b small_shell https://github.com/aws/aws-fpga
 ```
 
 *Note: the above mentioned git call would fail if the local git repository already exists.*
@@ -194,12 +194,12 @@ DEVAMI 1.5.0 or Later instances come with preinstalled Xilinx Runtime Environmen
  lsmod | grep xocl
  
  ```
- To Remove XRT and XOCL driver
+ To Remove XOCL driver
  
  ```
- sudo systemctl stop mpd
- sudo yum remove -y xrt xrt-aws
+ sudo rmmod xocl
+ 
  ```
 
- XDMA driver install can proceed once XRT is removed.
+ XDMA driver install can proceed once XOCL driver is removed.
  

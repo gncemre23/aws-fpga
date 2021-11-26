@@ -69,7 +69,7 @@
 #define ACK_REG_BASE UINT64_C(0x534)
 
 #define FPGA_REG_OFFSET 44
-#define BLK_CNT 2
+#define BLK_CNT 1
 /* use the stdout logger for printing debug information  */
 #ifndef SV_TEST
 const struct logger *logger = &logger_stdout;

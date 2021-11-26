@@ -1,10 +1,10 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
---------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
-| Date         : Sat May 29 16:54:07 2021
-| Host         : ip-172-31-48-57.ec2.internal running 64-bit CentOS Linux release 7.9.2009 (Core)
+| Date         : Tue Nov 23 01:04:27 2021
+| Host         : egoncu-desktop running 64-bit Ubuntu 20.04.3 LTS
 | Command      : report_ip_status
---------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
 
 IP Status Summary
 
@@ -73,19 +73,19 @@ Project IP Instances
 |                             |            |                     |           | Generator          | (Rev.   |               |            |                      |
 |                             |            |                     |           |                    | 4)      |               |            |                      |
 +-----------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
-*(1) /opt/Xilinx/Vivado/2020.2/data/ip/xilinx/ddr4_v2_2/doc/ddr4_v2_2_changelog.txt
-*(2) /opt/Xilinx/Vivado/2020.2/data/ip/xilinx/microblaze_mcs_v3_0/doc/microblaze_mcs_v3_0_changelog.txt
-*(3) /opt/Xilinx/Vivado/2020.2/data/ip/xilinx/ddr4_phy_v2_2/doc/phy_ip_v1_2_changelog.txt
-*(4) /opt/Xilinx/Vivado/2020.2/data/ip/xilinx/lmb_v10_v3_0/doc/lmb_v10_v3_0_changelog.txt
-*(5) /opt/Xilinx/Vivado/2020.2/data/ip/xilinx/lmb_bram_if_cntlr_v4_0/doc/lmb_bram_if_cntlr_v4_0_changelog.txt
-*(6) /opt/Xilinx/Vivado/2020.2/data/ip/xilinx/lmb_v10_v3_0/doc/lmb_v10_v3_0_changelog.txt
-*(7) /opt/Xilinx/Vivado/2020.2/data/ip/xilinx/lmb_bram_if_cntlr_v4_0/doc/lmb_bram_if_cntlr_v4_0_changelog.txt
-*(8) /opt/Xilinx/Vivado/2020.2/data/ip/xilinx/iomodule_v3_1/doc/iomodule_v3_1_changelog.txt
-*(9) /opt/Xilinx/Vivado/2020.2/data/ip/xilinx/blk_mem_gen_v8_4/doc/blk_mem_gen_v8_4_changelog.txt
-*(10) /opt/Xilinx/Vivado/2020.2/data/ip/xilinx/microblaze_v11_0/doc/microblaze_v11_0_changelog.txt
-*(11) /opt/Xilinx/Vivado/2020.2/data/ip/xilinx/proc_sys_reset_v5_0/doc/proc_sys_reset_v5_0_changelog.txt
-*(12) /opt/Xilinx/Vivado/2020.2/data/ip/xilinx/lmb_bram_if_cntlr_v4_0/doc/lmb_bram_if_cntlr_v4_0_changelog.txt
-*(13) /opt/Xilinx/Vivado/2020.2/data/ip/xilinx/lmb_bram_if_cntlr_v4_0/doc/lmb_bram_if_cntlr_v4_0_changelog.txt
-*(14) /opt/Xilinx/Vivado/2020.2/data/ip/xilinx/blk_mem_gen_v8_4/doc/blk_mem_gen_v8_4_changelog.txt
+*(1) /tools/Xilinx/Vivado/2020.2/data/ip/xilinx/ddr4_v2_2/doc/ddr4_v2_2_changelog.txt
+*(2) /tools/Xilinx/Vivado/2020.2/data/ip/xilinx/microblaze_mcs_v3_0/doc/microblaze_mcs_v3_0_changelog.txt
+*(3) /tools/Xilinx/Vivado/2020.2/data/ip/xilinx/ddr4_phy_v2_2/doc/phy_ip_v1_2_changelog.txt
+*(4) /tools/Xilinx/Vivado/2020.2/data/ip/xilinx/lmb_v10_v3_0/doc/lmb_v10_v3_0_changelog.txt
+*(5) /tools/Xilinx/Vivado/2020.2/data/ip/xilinx/lmb_bram_if_cntlr_v4_0/doc/lmb_bram_if_cntlr_v4_0_changelog.txt
+*(6) /tools/Xilinx/Vivado/2020.2/data/ip/xilinx/lmb_v10_v3_0/doc/lmb_v10_v3_0_changelog.txt
+*(7) /tools/Xilinx/Vivado/2020.2/data/ip/xilinx/lmb_bram_if_cntlr_v4_0/doc/lmb_bram_if_cntlr_v4_0_changelog.txt
+*(8) /tools/Xilinx/Vivado/2020.2/data/ip/xilinx/iomodule_v3_1/doc/iomodule_v3_1_changelog.txt
+*(9) /tools/Xilinx/Vivado/2020.2/data/ip/xilinx/blk_mem_gen_v8_4/doc/blk_mem_gen_v8_4_changelog.txt
+*(10) /tools/Xilinx/Vivado/2020.2/data/ip/xilinx/microblaze_v11_0/doc/microblaze_v11_0_changelog.txt
+*(11) /tools/Xilinx/Vivado/2020.2/data/ip/xilinx/proc_sys_reset_v5_0/doc/proc_sys_reset_v5_0_changelog.txt
+*(12) /tools/Xilinx/Vivado/2020.2/data/ip/xilinx/lmb_bram_if_cntlr_v4_0/doc/lmb_bram_if_cntlr_v4_0_changelog.txt
+*(13) /tools/Xilinx/Vivado/2020.2/data/ip/xilinx/lmb_bram_if_cntlr_v4_0/doc/lmb_bram_if_cntlr_v4_0_changelog.txt
+*(14) /tools/Xilinx/Vivado/2020.2/data/ip/xilinx/blk_mem_gen_v8_4/doc/blk_mem_gen_v8_4_changelog.txt
 
 
