@@ -263,6 +263,7 @@ module heavy_hash_blk
   logic [2:0] counter_i;
   logic [31:0] rdata_int;
   logic rvalid_heavy_hash_int;
+  logic rvalid_heavy_hash_reg;
   logic arvalid_int;
   logic arvalid_int_old;
   logic [31:0] araddr_int;
@@ -358,7 +359,7 @@ module heavy_hash_blk
 
 
 
-  
+
   //-------------------------------------------------
   // Synchronizations for bus (multi-bit) signals
   //-------------------------------------------------
@@ -445,7 +446,7 @@ module heavy_hash_blk
   xpm_cdc_gray #(
                  .DEST_SYNC_FF(4),          // DECIMAL; range: 2-10
                  .INIT_SYNC_FF(0),          // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
-                 .REG_OUTPUT(0),            // DECIMAL; 0=disable registered output, 1=enable registered output
+                 .REG_OUTPUT(1),            // DECIMAL; 0=disable registered output, 1=enable registered output
                  .SIM_ASSERT_CHK(0),        // DECIMAL; 0=disable simulation messages, 1=enable simulation messages
                  .SIM_LOSSLESS_GRAY_CHK(0), // DECIMAL; 0=disable lossless check, 1=enable lossless check
                  .WIDTH(32)                  // DECIMAL; range: 2-32
@@ -577,7 +578,7 @@ module heavy_hash_blk
                    .SRC_INPUT_REG(1)   // DECIMAL; 0=do not register input, 1=register input
                  )
                  sync_rdata_valid_heavyhash_int (
-                   .dest_out(rvalid_heavy_hash), // 1-bit output: src_in synchronized to the destination clock domain. This output is
+                   .dest_out(rvalid_heavy_hash_reg), // 1-bit output: src_in synchronized to the destination clock domain. This output is
                    // registered.
                    .dest_clk(clk_axi), // 1-bit input: Clock signal for the destination clock domain.
                    .src_clk(clk_int),   // 1-bit input: optional; required when SRC_INPUT_REG = 1
@@ -597,6 +598,18 @@ module heavy_hash_blk
                    .src_clk(clk_axi),   // 1-bit input: optional; required when SRC_INPUT_REG = 1
                    .src_in(arvalid)      // 1-bit input: Input signal to be synchronized to dest_clk domain.
                  );
+
+
+  FDRE #(
+         .INIT(1'b0) // Initial value of register (1'b0 or 1'b1)
+       ) FDRE_rvalid (
+         .Q(rvalid_heavy_hash),      // 1-bit Data output
+         .C(clk_axi),      // 1-bit Clock input
+         .CE(1'b1),    // 1-bit Clock enable input
+         .R(1'b0),      // 1-bit Synchronous reset input
+         .D(rvalid_heavy_hash_reg)       // 1-bit Data input
+       );
+
   logic matrix_we;
   logic matrix_we_int_old;
   logic block_header_we_int_old;
@@ -738,11 +751,11 @@ module heavy_hash_blk
 
   assign nonce_end_1 = nonce_end -1 ;
 
-  
+
   //-------------------------------------------------
   // Golden nonce and Golden hash
   //-------------------------------------------------
-  
+
   logic golden_state  = 0;
   logic [1:0] status_old;
   logic state_status;
@@ -800,11 +813,11 @@ module heavy_hash_blk
       golden_state <= 0;
     else if(status == 1 && status_old == 2)
     begin
-      golden_state <= 1;   
+      golden_state <= 1;
     end
     else if (heavy_hash_rdy)
     begin
-      golden_state <= 0;   
+      golden_state <= 0;
     end
     else
     begin
@@ -882,11 +895,12 @@ module heavy_hash_blk
     //   $display("Error -- blk[%d]-- heavy_hash : %h", NONCE_COEF - 1, heavy_hash_dout);
     if(comparator_inst.state_reg == 2 && count_m > 0)
     begin
-      
+
       if(NONCE_COEF == 1)
       begin
         //$display(cl_hello_world.heavy_hash_ref0[count_m - 1]);
-        if(heavy_hash_dout != cl_hello_world.heavy_hash_ref0[count_m - 1]) begin
+        if(heavy_hash_dout != cl_hello_world.heavy_hash_ref0[count_m - 1])
+        begin
           $display("%d --- %h -- %h", count_m - 1, heavy_hash_dout, cl_hello_world.heavy_hash_ref0[count_m - 1]);
         end
       end
