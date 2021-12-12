@@ -72,7 +72,6 @@ module cl_hello_world
 
 
 
-
   //-------------------------------------------------
   // ID Values (cl_hello_world_defines.vh)
   //-------------------------------------------------
@@ -414,6 +413,48 @@ module cl_hello_world
   endgenerate
 
 
+  logic [31:0] rdata_blk_reg[BLK_CNT-1 : 0];
+  logic rvalid_reg[BLK_CNT-1:0];
+
+  //--------------------------------------------------------------
+  // Pipeline registers for reducing the critical paths
+  //--------------------------------------------------------------
+  generate
+    for (k=0;k<BLK_CNT;k++ )
+    begin
+      pipeLine
+        #(
+          .DWIDTH(32 ),
+          .REGCNT (2)
+        )
+        pipeLine_rdata (
+          .clk (clk_main_a0),
+          .din (rdata_blk[k]),
+          .dout  (rdata_blk_reg[k])
+        );
+
+    end
+  endgenerate
+
+  generate
+    for (k=0;k<BLK_CNT;k++ )
+    begin
+      pipeLine
+        #(
+          .DWIDTH(1),
+          .REGCNT (2)
+        )
+        pipeLine_rvalid (
+          .clk (clk_main_a0 ),
+          .din (rvalid_heavy_hash[k]),
+          .dout  (rvalid_reg[k])
+        );
+
+    end
+  endgenerate
+
+
+
   //--------------------------------------------------------------
   // OR operations for rdata_blk signals
   // only one of the blocks output is different than zero.
@@ -423,8 +464,8 @@ module cl_hello_world
   generate
     for (k = 0 ; k < BLK_CNT ; k ++ )
     begin
-      assign rdata_blk_or[k+1] = rdata_blk[k] | rdata_blk_or[k];
-      assign rvalid_or[k+1] = rvalid_heavy_hash[k] | rvalid_or[k];
+      assign rdata_blk_or[k+1] = rdata_blk_reg[k] | rdata_blk_or[k];
+      assign rvalid_or[k+1] = rvalid_reg[k] | rvalid_or[k];
     end
   endgenerate
 
@@ -607,186 +648,22 @@ module cl_hello_world
   assign cl_sh_status0[31:0] = 32'h0;
   assign cl_sh_status1[31:0] = 32'h0;
 
-  //-----------------------------------------------
-  // Debug bridge, used if need Virtual JTAG
-  //-----------------------------------------------
-  `ifndef DISABLE_VJTAG_DEBUG
-
-          // Flop for timing global clock counter
-          logic[63:0] sh_cl_glcount0_q;
-
-  always_ff @(posedge clk_main_a0)
-    if (!rst_main_n_sync)
-      sh_cl_glcount0_q <= 0;
-    else
-      sh_cl_glcount0_q <= sh_cl_glcount0;
-
-
-  // Integrated Logic Analyzers (ILA)
-  ila_0 CL_ILA_0 (
-          .clk    (clk_main_a0),
-          .probe0 (sh_ocl_awvalid_q),
-          .probe1 (sh_ocl_awaddr_q ),
-          .probe2 (ocl_sh_awready_q),
-          .probe3 (sh_ocl_arvalid_q),
-          .probe4 (sh_ocl_araddr_q ),
-          .probe5 (ocl_sh_arready_q)
-        );
-
-  ila_0 CL_ILA_1 (
-          .clk    (clk_main_a0),
-          .probe0 (ocl_sh_bvalid_q),
-          .probe1 (sh_cl_glcount0_q),
-          .probe2 (sh_ocl_bready_q),
-          .probe3 (ocl_sh_rvalid_q),
-          .probe4 ({32'b0,ocl_sh_rdata_q[31:0]}),
-          .probe5 (sh_ocl_rready_q)
-        );
-
-
-`ifdef DBG_
-
-  ila_0 CL_ILA_2 (
-          .clk    (clk_main_a0),
-          .probe0 (hash_out_we_dbg),
-          .probe1 (hash_out_dbg[63:0]),
-          .probe2 (hashin_fifo_in_we),
-          .probe3 (state_top_dbg[0]),
-          .probe4 (hashin_fifo_in_din),
-          .probe5 (state_top_dbg[1])
-        );
-
-  ila_0 CL_ILA_3 (
-          .clk    (clk_main_a0),
-          .probe0 (sha3in_dst_write_dbg),
-          .probe1 (sha3in_dout_dbg),
-          .probe2 (sha3out_dst_write_dbg),
-          .probe3 (start_dbg),
-          .probe4 (sha3out_dout_dbg),
-          .probe5 (stop_dbg)
-        );
-
-  ila_0 CL_ILA_4 (
-          .clk    (clk_main_a0),
-          .probe0 (status[0]),
-          .probe1 ({61'd0,state_nonce_dbg}),
-          .probe2 (status[1]),
-          .probe3 (stop_ack_dbg),
-          .probe4 ({32'd0,nonce_end_dbg}),
-          .probe5 (start_dbg)
-        );
-  ila_0 CL_ILA_5 (
-          .clk    (clk_main_a0),
-          .probe0 (start_dbg),
-          .probe1 (target_dbg[63:0]),
-          .probe4 ({61'd0,state_comparator_dbg})
-        );
-`endif
-
-  // Debug Bridge
   cl_debug_bridge CL_DEBUG_BRIDGE (
-                    .clk(clk_main_a0),
-                    .S_BSCAN_drck(drck),
-                    .S_BSCAN_shift(shift),
-                    .S_BSCAN_tdi(tdi),
-                    .S_BSCAN_update(update),
-                    .S_BSCAN_sel(sel),
-                    .S_BSCAN_tdo(tdo),
-                    .S_BSCAN_tms(tms),
-                    .S_BSCAN_tck(tck),
-                    .S_BSCAN_runtest(runtest),
-                    .S_BSCAN_reset(reset),
-                    .S_BSCAN_capture(capture),
-                    .S_BSCAN_bscanid_en(bscanid_en)
-                  );
+      .clk(clk_main_a0),
+      .S_BSCAN_drck(drck),
+      .S_BSCAN_shift(shift),
+      .S_BSCAN_tdi(tdi),
+      .S_BSCAN_update(update),
+      .S_BSCAN_sel(sel),
+      .S_BSCAN_tdo(tdo),
+      .S_BSCAN_tms(tms),
+      .S_BSCAN_tck(tck),
+      .S_BSCAN_runtest(runtest),
+      .S_BSCAN_reset(reset),
+      .S_BSCAN_capture(capture),
+      .S_BSCAN_bscanid_en(bscanid_en)
+   );
 
-  //-----------------------------------------------
-  // VIO Example - Needs Virtual JTAG
-  //-----------------------------------------------
-  // Counter running at 125MHz
-
-  logic      vo_cnt_enable;
-  logic      vo_cnt_load;
-  logic      vo_cnt_clear;
-  logic      vo_cnt_oneshot;
-  logic [7:0]  vo_tick_value;
-  logic [15:0] vo_cnt_load_value;
-  logic [15:0] vo_cnt_watermark;
-
-  logic      vo_cnt_enable_q = 0;
-  logic      vo_cnt_load_q = 0;
-  logic      vo_cnt_clear_q = 0;
-  logic      vo_cnt_oneshot_q = 0;
-  logic [7:0]  vo_tick_value_q = 0;
-  logic [15:0] vo_cnt_load_value_q = 0;
-  logic [15:0] vo_cnt_watermark_q = 0;
-
-  logic        vi_tick;
-  logic        vi_cnt_ge_watermark;
-  logic [7:0]  vi_tick_cnt = 0;
-  logic [15:0] vi_cnt = 0;
-
-  // Tick counter and main counter
-  always @(posedge clk_main_a0)
-  begin
-
-    vo_cnt_enable_q     <= vo_cnt_enable    ;
-    vo_cnt_load_q       <= vo_cnt_load      ;
-    vo_cnt_clear_q      <= vo_cnt_clear     ;
-    vo_cnt_oneshot_q    <= vo_cnt_oneshot   ;
-    vo_tick_value_q     <= vo_tick_value    ;
-    vo_cnt_load_value_q <= vo_cnt_load_value;
-    vo_cnt_watermark_q  <= vo_cnt_watermark ;
-
-    vi_tick_cnt = vo_cnt_clear_q ? 0 :
-                ~vo_cnt_enable_q ? vi_tick_cnt :
-                (vi_tick_cnt >= vo_tick_value_q) ? 0 :
-                vi_tick_cnt + 1;
-
-    vi_cnt = vo_cnt_clear_q ? 0 :
-           vo_cnt_load_q ? vo_cnt_load_value_q :
-           ~vo_cnt_enable_q ? vi_cnt :
-           (vi_tick_cnt >= vo_tick_value_q) && (~vo_cnt_oneshot_q || (vi_cnt <= 16'hFFFF)) ? vi_cnt + 1 :
-           vi_cnt;
-
-    vi_tick = (vi_tick_cnt >= vo_tick_value_q);
-
-    vi_cnt_ge_watermark = (vi_cnt >= vo_cnt_watermark_q);
-
-  end // always @ (posedge clk_main_a0)
-
-
-  vio_0 CL_VIO_0 (
-          .clk    (clk_main_a0),
-          .probe_in0  (vi_tick),
-          .probe_in1  (vi_cnt_ge_watermark),
-          .probe_in2  (vi_tick_cnt),
-          .probe_in3  (vi_cnt),
-          .probe_out0 (vo_cnt_enable),
-          .probe_out1 (vo_cnt_load),
-          .probe_out2 (vo_cnt_clear),
-          .probe_out3 (vo_cnt_oneshot),
-          .probe_out4 (vo_tick_value),
-          .probe_out5 (vo_cnt_load_value),
-          .probe_out6 (vo_cnt_watermark)
-        );
-
-  ila_vio_counter CL_VIO_ILA (
-                    .clk     (clk_main_a0),
-                    .probe0  (vi_tick),
-                    .probe1  (vi_cnt_ge_watermark),
-                    .probe2  (vi_tick_cnt),
-                    .probe3  (vi_cnt),
-                    .probe4  (vo_cnt_enable_q),
-                    .probe5  (vo_cnt_load_q),
-                    .probe6  (vo_cnt_clear_q),
-                    .probe7  (vo_cnt_oneshot_q),
-                    .probe8  (vo_tick_value_q),
-                    .probe9  (vo_cnt_load_value_q),
-                    .probe10 (vo_cnt_watermark_q)
-                  );
-
-`endif //  `ifndef DISABLE_VJTAG_DEBUG
 
 endmodule
 
