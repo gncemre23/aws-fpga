@@ -48,7 +48,7 @@ file copy -force $CL_DIR/design/matrix_ram.sv                    	    $TARGET_DI
 file copy -force $CL_DIR/design/matrix_top.sv                    	    $TARGET_DIR
 file copy -force $CL_DIR/design/nonce_gen.sv                    	    $TARGET_DIR
 file copy -force $CL_DIR/design/PE.sv                           	    $TARGET_DIR
-file copy -force $CL_DIR/design/top.sv                          	    $TARGET_DIR
+file copy -force $CL_DIR/design/pipeLine.sv                      	    $TARGET_DIR
 
 file copy -force $CL_DIR/design/countern.vhd                          $TARGET_DIR
 file copy -force $CL_DIR/design/keccak_bytepad.vhd                    $TARGET_DIR
