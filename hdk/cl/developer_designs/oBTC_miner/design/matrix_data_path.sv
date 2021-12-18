@@ -167,18 +167,18 @@ module matrix_data_path #(parameter WCOUNT = 4 )
 
   always_ff @( posedge clk ) begin : eni_ff
     if(rst) begin
-      enj0 <= #1 1'b0;
-      enj1 <= #1 1'b0;
-      enj2 <= #1 1'b0;
-      enj3 <= #1 1'b0;
-      enj4 <= #1 1'b0;
+      enj0 <= 1'b0;
+      enj1 <= 1'b0;
+      enj2 <= 1'b0;
+      enj3 <= 1'b0;
+      enj4 <= 1'b0;
     end
     else begin
-      enj0 <= #1 enj;
-      enj1 <= #1 enj0;
-      enj2 <= #1 enj1;
-      enj3 <= #1 enj2;
-      enj4 <= #1 enj3;
+      enj0 <= enj;
+      enj1 <= enj0;
+      enj2 <= enj1;
+      enj3 <= enj2;
+      enj4 <= enj3;
     end
 
   end

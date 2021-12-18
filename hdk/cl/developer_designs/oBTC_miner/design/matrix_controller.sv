@@ -76,23 +76,23 @@ module matrix_controller
   begin : seq_blk
     if(rst)
     begin
-      state_reg <= #1 INIT;
-      h_re_reg <= #1 1'b0;
-      h_we_reg <= #1 1'b0;
-      addr_sel_reg <= #1 1'b0;
-      ent_reg <= #1 1'b0;
-      PE_en_reg <= #1 1'b0;
-      PE_en_reg_reg <= #1 1'b0;
+      state_reg <= INIT;
+      h_re_reg <= 1'b0;
+      h_we_reg <= 1'b0;
+      addr_sel_reg <= 1'b0;
+      ent_reg <= 1'b0;
+      PE_en_reg <= 1'b0;
+      PE_en_reg_reg <= 1'b0;
     end
     else
     begin
-      h_re_reg <= #1 h_re_next;
-      h_we_reg <= #1 h_we_next;
-      ent_reg  <= #1 ent_next;
-      addr_sel_reg <= #1 addr_sel_next;
-      state_reg <= #1 state_next;
-      PE_en_reg <= #1 PE_en_next;
-      PE_en_reg_reg <= #1 PE_en_reg;
+      h_re_reg <= h_re_next;
+      h_we_reg <= h_we_next;
+      ent_reg  <= ent_next;
+      addr_sel_reg <= addr_sel_next;
+      state_reg <= state_next;
+      PE_en_reg <= PE_en_next;
+      PE_en_reg_reg <= PE_en_reg;
     end
   end
 

@@ -11,11 +11,11 @@ module counter
 
   always_ff @( posedge clk ) begin : seq
     if(rst)
-        counter_out <= #1 7'd0;
+        counter_out <= 7'd0;
     else if(ld)
-        counter_out <= #1 ld_data;
+        counter_out <= ld_data;
     else if (en)
-        counter_out <= #1 counter_out + 7'd1;
+        counter_out <= counter_out + 7'd1;
   end
 
 
