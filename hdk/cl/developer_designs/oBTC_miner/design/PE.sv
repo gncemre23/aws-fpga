@@ -84,7 +84,7 @@ module PE #(parameter WCOUNT = 4 )
 
 
   //TODO: make it generic in respect to WCOUNT
-  assign sum_m = PE_reg + {6'd0,mul[0]} + {6'd0,mul[1]} + {6'd0,mul_reg[2]} + {6'd0,mul_reg[3]};
+  assign sum_m = PE_reg + {6'd0,mul_reg[0]} + {6'd0,mul_reg[1]} + {6'd0,mul_reg[2]} + {6'd0,mul_reg[3]};
 
 
 
