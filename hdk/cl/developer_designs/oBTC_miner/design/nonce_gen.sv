@@ -46,11 +46,16 @@ module nonce_gen
    );
 
   logic stop_ack_reg, stop_ack_next;
-  logic [32:0] nonce_reg, nonce_next;
-  logic [32:0] nonce_end_reg, nonce_end_next;
+  logic [32:0] nonce_reg = 33'd0; 
+  logic [32:0] nonce_next =33'd0;
+  
+  logic [32:0] nonce_end_reg = 33'd0;
+  logic [32:0] nonce_end_next = 33'd0;
   //80-byte block header
-  logic [639:0] block_header_reg, block_header_next;
-  logic [639:0] block_header_reg_reg, block_header_reg_next;
+  logic [639:0] block_header_reg = 640'd0;
+  logic [639:0] block_header_next = 640'd0;
+  logic [639:0] block_header_reg_reg = 640'd0;
+  logic [639:0] block_header_reg_next = 640'd0;;
   logic [4:0] cnt_reg, cnt_next;
 
   typedef enum { INIT, READ_BLOCK_HEADER, CHECK_NONCE_END, UPDATE_NONCE, WRITE_HASHIN} state_type;
@@ -66,10 +71,10 @@ module nonce_gen
     begin
       cnt_reg <= 5'd0;
       state_reg <= INIT;
-      block_header_reg <= 640'd0;
-      block_header_reg_reg <= 640'd0;
-      nonce_reg <= 33'd0;
-      nonce_end_reg <= 33'd0;
+      //block_header_reg <= 640'd0;
+      //block_header_reg_reg <= 640'd0;
+      //nonce_reg <= 33'd0;
+      //nonce_end_reg <= 33'd0;
       stop_ack_reg <= 1'b0;
     end
     else
