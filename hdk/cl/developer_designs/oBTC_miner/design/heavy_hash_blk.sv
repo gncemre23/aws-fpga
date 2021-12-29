@@ -20,7 +20,6 @@
 /*                                     nonce               result        */
 /* ================== Heavy hash block ================================= */
 `timescale  1ns / 1ps
-//`define DBG_
 
 //`define VERIF_
 `define HEAVYHASH_REG_ADDR      32'h0000_0508
