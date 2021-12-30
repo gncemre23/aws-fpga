@@ -49,6 +49,7 @@ module PE #(parameter WCOUNT = 4 )
   logic [7 :0] mul[WCOUNT-1:0];
   logic [7 :0] mul_reg[WCOUNT-1:0];
   logic [7 :0] mul_reg_reg[WCOUNT-1:0];
+  logic [7 :0] mul_reg_reg_reg[WCOUNT-1:0];
   logic [13 : 0] sum[WCOUNT : 0];
   logic [13 : 0] PE_reg;
   logic [13 : 0] PE_reg_reg;
@@ -67,7 +68,7 @@ module PE #(parameter WCOUNT = 4 )
 
   MULT_MACRO #(
                .DEVICE("7SERIES"), // Target Device: "7SERIES"
-               .LATENCY(2),        // Desired clock cycle latency, 0-4
+               .LATENCY(3),        // Desired clock cycle latency, 0-4
                .WIDTH_A(18),       // Multiplier A-input bus width, 1-25
                .WIDTH_B(18)        // Multiplier B-input bus width, 1-18
              ) MULT_MACRO_inst (
@@ -99,7 +100,7 @@ module PE #(parameter WCOUNT = 4 )
 
 
   //TODO: make it generic in respect to WCOUNT
-  assign sum_m = PE_reg + {6'd0,mul[0]} + {6'd0,mul[1]} + {6'd0,mul_reg_reg[2]} + {6'd0,mul_reg_reg[3]};
+  assign sum_m = PE_reg + {6'd0,mul[0]} + {6'd0,mul[1]} + {6'd0,mul_reg_reg_reg[2]} + {6'd0,mul_reg_reg_reg[3]};
 
 
 
@@ -120,6 +121,10 @@ module PE #(parameter WCOUNT = 4 )
       mul_reg_reg[1] <= 8'd0;
       mul_reg_reg[2] <= 8'd0;
       mul_reg_reg[3] <= 8'd0;
+      mul_reg_reg_reg[0] <= 8'd0;
+      mul_reg_reg_reg[1] <= 8'd0;
+      mul_reg_reg_reg[2] <= 8'd0;
+      mul_reg_reg_reg[3] <= 8'd0;
     end
     else
     begin
@@ -135,6 +140,10 @@ module PE #(parameter WCOUNT = 4 )
         mul_reg_reg[1] <= mul_reg[1];
         mul_reg_reg[2] <= mul_reg[2];
         mul_reg_reg[3] <= mul_reg[3];
+        mul_reg_reg_reg[0] <= mul_reg_reg[0];
+        mul_reg_reg_reg[1] <= mul_reg_reg[1];
+        mul_reg_reg_reg[2] <= mul_reg_reg[2];
+        mul_reg_reg_reg[3] <= mul_reg_reg[3];
       end
     end
   end
