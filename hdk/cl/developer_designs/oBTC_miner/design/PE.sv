@@ -67,7 +67,7 @@ module PE #(parameter WCOUNT = 4 )
 
   MULT_MACRO #(
                .DEVICE("7SERIES"), // Target Device: "7SERIES"
-               .LATENCY(1),        // Desired clock cycle latency, 0-4
+               .LATENCY(2),        // Desired clock cycle latency, 0-4
                .WIDTH_A(18),       // Multiplier A-input bus width, 1-25
                .WIDTH_B(18)        // Multiplier B-input bus width, 1-18
              ) MULT_MACRO_inst (
@@ -99,7 +99,7 @@ module PE #(parameter WCOUNT = 4 )
 
 
   //TODO: make it generic in respect to WCOUNT
-  assign sum_m = PE_reg + {6'd0,mul_reg[0]} + {6'd0,mul_reg[1]} + {6'd0,mul_reg_reg[2]} + {6'd0,mul_reg_reg[3]};
+  assign sum_m = PE_reg + {6'd0,mul[0]} + {6'd0,mul[1]} + {6'd0,mul_reg_reg[2]} + {6'd0,mul_reg_reg[3]};
 
 
 
