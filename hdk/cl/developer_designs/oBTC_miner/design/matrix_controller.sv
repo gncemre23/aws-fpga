@@ -56,20 +56,20 @@ module matrix_controller
     output logic hashout_we
   );
 
-  typedef enum { INIT, M_LOAD, MULT, DONE} state_type;
+  typedef enum { INIT, M_LOAD, MULT, WAIT_FOR_1_CLK, DONE} state_type;
   state_type state_next, state_reg;
   logic h_re_next, h_re_reg;
-  logic h_we_next, h_we_reg;
+  logic h_we_next, h_we_reg, h_we_reg_reg ;
   logic ent_next, ent_reg;
   logic addr_sel_next, addr_sel_reg;
-  logic PE_en_next, PE_en_reg, PE_en_reg_reg;
+  logic PE_en_next, PE_en_reg, PE_en_reg_reg, PE_en_reg_reg_reg;
 
 
   assign hashin_re = h_re_reg;
   assign hashout_we = h_we_reg;
   assign ent = ent_reg;
   assign addr_sel = addr_sel_reg;
-  assign PE_en = PE_en_reg_reg;
+  assign PE_en = PE_en_next | PE_en_reg_reg_reg;
 
 
   always_ff @( posedge clk )
@@ -79,20 +79,24 @@ module matrix_controller
       state_reg <= INIT;
       h_re_reg <= 1'b0;
       h_we_reg <= 1'b0;
+      h_we_reg_reg <= 1'b0;
       addr_sel_reg <= 1'b0;
       ent_reg <= 1'b0;
       PE_en_reg <= 1'b0;
       PE_en_reg_reg <= 1'b0;
+      PE_en_reg_reg_reg <= 1'b0;
     end
     else
     begin
       h_re_reg <= h_re_next;
       h_we_reg <= h_we_next;
+      h_we_reg_reg <= h_we_reg;
       ent_reg  <= ent_next;
       addr_sel_reg <= addr_sel_next;
       state_reg <= state_next;
       PE_en_reg <= PE_en_next;
       PE_en_reg_reg <= PE_en_reg;
+      PE_en_reg_reg_reg <= PE_en_reg_reg;
     end
   end
 
@@ -170,7 +174,7 @@ module matrix_controller
           en_column = 64'hFFFFFFFFFFFFFFFF;
           if(zj)
           begin
-            state_next = DONE;
+            state_next = WAIT_FOR_1_CLK;
             ldt = 1'b1;
             PE_en_next = 1'b0;
             h_re_next = 1'b0;
@@ -182,6 +186,8 @@ module matrix_controller
           end
         end
       end
+      WAIT_FOR_1_CLK:
+        state_next = DONE;
       DONE:
       begin
         if(zt)
