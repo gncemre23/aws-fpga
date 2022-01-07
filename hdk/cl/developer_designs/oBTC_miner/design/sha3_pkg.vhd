@@ -145,19 +145,19 @@ package sha3_pkg is
 	);
 	end component;
 
-	component regn is
-		generic ( 
-			N : integer := 32;
-			init : std_logic_vector
-		);
-		port ( 	  
-		    clk : in std_logic;	 
-			rst : in std_logic;
-		    en : in std_logic; 
-			input  : in std_logic_vector(N-1 downto 0);
-	        output : out std_logic_vector(N-1 downto 0)
-		);
-	end component;
+	-- component regn is
+	-- 	generic ( 
+	-- 		N : integer := 32;
+	-- 		init : std_logic_vector
+	-- 	);
+	-- 	port ( 	  
+	-- 		clk    : in std_logic;
+	-- 		rst    : in std_logic;
+	-- 		en     : in std_logic;
+	-- 		input: in std_logic_vector(N - 1 downto 0);
+	-- 		output : out std_logic_vector(N - 1 downto 0)
+	-- 	);
+	-- end component;
 
 
 	component d_ff is 

@@ -50,7 +50,7 @@ module cl_hello_world
 `include "unused_apppf_irq_template.inc"
 
 
-  parameter  BLK_CNT = 50;
+  parameter  BLK_CNT = 53;
   //-------------------------------------------------
   // Wires
   //-------------------------------------------------

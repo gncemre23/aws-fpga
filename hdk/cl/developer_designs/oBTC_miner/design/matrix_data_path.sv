@@ -51,50 +51,55 @@ module matrix_data_path #(parameter WCOUNT = 4 )
   logic [13 : 0] PE_out [63:0];
   logic [6 : 0] counter_i, counter_j, counter_t;
   logic [WCOUNT*4 -1 : 0] dout [63:0];
-  logic [63 : 0] htemp0, htemp1, htemp2, htemp3; 
+  logic [63 : 0] htemp0, htemp1, htemp2, htemp3;
   logic enj0, enj1, enj2, enj3, enj4;
   logic [3:0] addr_m_ram;
 
   genvar i;
-  
+
+  assign addr_m_ram  = addr_sel ? counter_j[3:0] : counter_i[3:0];
   generate
     for (i = 0 ; i < 64 ; i++ )
     begin
-      //      matrix_ram #(.WCOUNT(WCOUNT))
-      //                 M_ram_inst
-      //                 (
-      //                   .clk(clk),
-      //                   .we(m_ram_we),
-      //                   .en(en_column[i]),
-      //                   .din(m_dout),
-      //                   .addr(counter_i),
-      //                   .dout(dout[i])
-      //                 );
-      //      matrix_bram m_ram_inst(
-      //      .clka(clk),    // input wire clka
-      //      .ena(en_column[i]),      // input wire ena
-      //      .wea(m_ram_we),      // input wire [0 : 0] wea
-      //      .addra(counter_i[3:0]),  // input wire [3 : 0] addra
-      //      .dina(m_dout),    // input wire [15 : 0] dina
-      //      .douta(dout[i])  // output wire [15 : 0] douta
-      //      );
-      assign addr_m_ram  = addr_sel ? counter_j[3:0] : counter_i[3:0];
-      xilinx_single_port_ram_no_change
-        #(
-          .RAM_WIDTH(16),                       // Specify RAM data width
-          .RAM_DEPTH(16),                     // Specify RAM depth (number of entries)
-          .RAM_PERFORMANCE("LOW_LATENCY"), // Select "HIGH_PERFORMANCE" or "LOW_LATENCY"
-          .INIT_FILE("")                        // Specify name/location of RAM initialization file if using one (leave blank if not)
-        ) your_instance_name (
-          .addra(addr_m_ram),    // Address bus, width determined from RAM_DEPTH
-          .dina(m_dout),      // RAM input data, width determined from RAM_WIDTH
-          .clka(clk),      // Clock
-          .wea(m_ram_we),        // Write enable
-          .ena(en_column[i]),        // RAM Enable, for additional power savings, disable port when not in use
-          .rsta(rst),      // Output reset (does not affect memory contents)
-          .regcea(en_column[i]),  // Output register enable
-          .douta(dout[i])     // RAM output data, width determined from RAM_WIDTH
-        );
+
+      if(i < 32)
+      begin
+        xilinx_single_port_ram_block
+          #(
+            .RAM_WIDTH(16),                       // Specify RAM data width
+            .RAM_DEPTH(16),                     // Specify RAM depth (number of entries)
+            .RAM_PERFORMANCE("LOW_LATENCY"), // Select "HIGH_PERFORMANCE" or "LOW_LATENCY"
+            .INIT_FILE("")                        // Specify name/location of RAM initialization file if using one (leave blank if not)
+          ) your_instance_name (
+            .addra(addr_m_ram),    // Address bus, width determined from RAM_DEPTH
+            .dina(m_dout),      // RAM input data, width determined from RAM_WIDTH
+            .clka(clk),      // Clock
+            .wea(m_ram_we),        // Write enable
+            .ena(en_column[i]),        // RAM Enable, for additional power savings, disable port when not in use
+            .rsta(rst),      // Output reset (does not affect memory contents)
+            .regcea(en_column[i]),  // Output register enable
+            .douta(dout[i])     // RAM output data, width determined from RAM_WIDTH
+          );
+      end
+      else
+      begin
+        xilinx_single_port_ram_dist
+          #(
+            .RAM_WIDTH(16),                       // Specify RAM data width
+            .RAM_DEPTH(16),                     // Specify RAM depth (number of entries)
+            .RAM_PERFORMANCE("LOW_LATENCY"), // Select "HIGH_PERFORMANCE" or "LOW_LATENCY"
+            .INIT_FILE("")                        // Specify name/location of RAM initialization file if using one (leave blank if not)
+          ) your_instance_name (
+            .addra(addr_m_ram),    // Address bus, width determined from RAM_DEPTH
+            .dina(m_dout),      // RAM input data, width determined from RAM_WIDTH
+            .clka(clk),      // Clock
+            .wea(m_ram_we),        // Write enable
+            .ena(en_column[i]),        // RAM Enable, for additional power savings, disable port when not in use
+            .rsta(rst),      // Output reset (does not affect memory contents)
+            .regcea(en_column[i]),  // Output register enable
+            .douta(dout[i])     // RAM output data, width determined from RAM_WIDTH
+          );
+      end
 
 
       PE #(.WCOUNT(WCOUNT))
@@ -149,7 +154,7 @@ module matrix_data_path #(parameter WCOUNT = 4 )
             .ld(ldt),
             .counter_out(counter_t)
           );
-  
+
   generate
     for (i = 0 ; i < 64 ; i++ )
     begin
@@ -161,19 +166,22 @@ module matrix_data_path #(parameter WCOUNT = 4 )
         assign htemp2[192-i*4-1 : 192 - i*4 - 4 ] = PE_out[i][13:10];
       else
         assign htemp3[256-i*4-1 : 256 - i*4 - 4 ] = PE_out[i][13:10];
-    end    
+    end
   endgenerate
-  
 
-  always_ff @( posedge clk ) begin : eni_ff
-    if(rst) begin
+
+  always_ff @( posedge clk )
+  begin : eni_ff
+    if(rst)
+    begin
       enj0 <= 1'b0;
       enj1 <= 1'b0;
       enj2 <= 1'b0;
       enj3 <= 1'b0;
       enj4 <= 1'b0;
     end
-    else begin
+    else
+    begin
       enj0 <= enj;
       enj1 <= enj0;
       enj2 <= enj1;
@@ -182,16 +190,22 @@ module matrix_data_path #(parameter WCOUNT = 4 )
     end
 
   end
-  
-  
 
-  always_comb begin : hashout_din_blk
+
+
+  always_comb
+  begin : hashout_din_blk
     case (counter_t)
-      0: hashout_din = htemp0;
-      1: hashout_din = htemp1;
-      2: hashout_din = htemp2;
-      3: hashout_din = htemp3;
-      default: hashout_din = 64'd0;
+      0:
+        hashout_din = htemp0;
+      1:
+        hashout_din = htemp1;
+      2:
+        hashout_din = htemp2;
+      3:
+        hashout_din = htemp3;
+      default:
+        hashout_din = 64'd0;
 
     endcase
   end

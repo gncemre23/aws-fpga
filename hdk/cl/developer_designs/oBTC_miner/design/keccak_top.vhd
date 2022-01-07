@@ -11,10 +11,11 @@ library ieee;
 use ieee.std_logic_1164.all;	
 use work.sha3_pkg.all;
 use work.keccak_pkg.all;
-
+Library UNISIM;
+use UNISIM.vcomponents.all;
 
 entity keccak_top is		
-generic (HS : integer := HASH_SIZE_256); 											
+generic (HS : integer := HASH_SIZE_256);											
 port (		
 		rst 			: in std_logic;
 		clk 			: in std_logic;
@@ -40,11 +41,19 @@ architecture structure of keccak_top is
 	signal spos : std_logic_vector(1 downto 0);
 	signal sel_dec_size, clr_len : std_logic;	
 	signal last_word : std_logic;
+
+	signal clk_buf : std_logic;
 begin
+
+	BUFG_inst : BUFG
+    port map(
+    O => clk_buf, -- 1-bit output: Clock output
+    I => clk -- 1-bit input: Clock input
+    );
 	
 	control_gen : entity work.keccak_control(struct)
 		generic map(hs=>HS)
-		port map (clk =>clk, rst=>rst, ein=>	ein, 			 
+		port map (clk =>clk_buf, rst=>rst, ein=>	ein, 			 
 		en_ctr=>en_ctr,   en_len=>en_len, sel_xor=>sel_xor, sel_final=>sel_final, ld_rdctr=>ld_rdctr, 
 		en_rdctr=>en_rdctr,  wr_state=>wr_state, sel_out=>sel_piso,final_segment=>final_segment, 
 		wr_piso=>wr_piso, src_ready=>src_ready,
@@ -55,7 +64,7 @@ begin
 
 	datapath_gen : entity work.keccak_datapath(struct)
 		generic map(hs=>HS, b=>capacity, version=>version)
-		port map (clk => clk, rst=>rst, din => din, dout => dout, 
+		port map (clk => clk_buf, rst=>rst, din => din, dout => dout, 
 		en_len=>en_len, en_ctr=>en_ctr, ein=>ein, c=>c, sel_xor=>sel_xor, sel_final=>sel_final, 
 		wr_state=>wr_state, ld_rdctr=>ld_rdctr, en_rdctr=>en_rdctr, sel_piso=>sel_piso, wr_piso	=>wr_piso, 
 		final_segment=>final_segment,
