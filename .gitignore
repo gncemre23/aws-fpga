@@ -13,6 +13,8 @@ irun.key
 fpga-local-cmd*
 static-fpga-local-cmd
 
+fpga_init.sh
+
 *_compile.log
 *_run.log
 *.vpd
