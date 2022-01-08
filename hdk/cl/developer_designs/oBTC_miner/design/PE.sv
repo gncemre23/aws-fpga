@@ -55,20 +55,39 @@ module PE #(parameter WCOUNT = 4 )
   logic [13 : 0] PE_reg_reg;
   logic [13 : 0] sum_m;
   logic [35 : 0] mult_out;
-  
+
   logic [17 : 0] mult_in_A;
   logic [17 : 0] mult_in_B;
+
+  logic [15:0] M_reg, X_reg;
 
 
   logic delayed_clr;
   logic delayed_clr_reg;
 
-  assign mult_in_A = (!delayed_clr) ? {2'b0,M[7:4], 8'd0, M[3:0]} : 18'd0;
-  assign mult_in_B = (!delayed_clr) ? {2'b0,X[7:4], 8'd0, X[3:0]} : 18'd0;
+  always_ff @( posedge clk )
+  begin : input_regs
+    if(delayed_clr)
+    begin
+      M_reg <= 16'd0;
+      X_reg <= 16'd0;
+    end
+    else
+    begin
+      M_reg <= M;
+      X_reg <= X;
+    end
+  end
+
+
+  assign mult_in_A = {2'b0,M_reg[7:4], 8'd0, M_reg[3:0]};
+  assign mult_in_B = {2'b0,X_reg[7:4], 8'd0, X_reg[3:0]};
+
+
 
   MULT_MACRO #(
                .DEVICE("7SERIES"), // Target Device: "7SERIES"
-               .LATENCY(3),        // Desired clock cycle latency, 0-4
+               .LATENCY(1),        // Desired clock cycle latency, 0-4
                .WIDTH_A(18),       // Multiplier A-input bus width, 1-25
                .WIDTH_B(18)        // Multiplier B-input bus width, 1-18
              ) MULT_MACRO_inst (
@@ -80,7 +99,7 @@ module PE #(parameter WCOUNT = 4 )
                .RST(delayed_clr | rst)  // 1-bit input active high reset
              );
 
-  
+
   // always_comb
   // begin
   //   dsp_mult(M[3:0], M[7:4], X[3:0], X[7:4], mul[0], mul[1]);
@@ -90,8 +109,8 @@ module PE #(parameter WCOUNT = 4 )
   logic [7:0] mul3;
 
 
-  assign mul2 = M[11:8]  * X[11:8];
-  assign mul3 = M[15:12] * X[15:12];
+  assign mul2 = M_reg[11:8]  * X_reg[11:8];
+  assign mul3 = M_reg[15:12] * X_reg[15:12];
 
   assign mul[0] = mult_out[7:0] & {~delayed_clr,~delayed_clr,~delayed_clr,~delayed_clr,~delayed_clr,~delayed_clr,~delayed_clr,~delayed_clr};
   assign mul[1] = mult_out[31:24] & {~delayed_clr,~delayed_clr,~delayed_clr,~delayed_clr,~delayed_clr,~delayed_clr,~delayed_clr,~delayed_clr};
@@ -100,7 +119,7 @@ module PE #(parameter WCOUNT = 4 )
 
 
   //TODO: make it generic in respect to WCOUNT
-  assign sum_m = PE_reg + {6'd0,mul[0]} + {6'd0,mul[1]} + {6'd0,mul_reg_reg_reg[2]} + {6'd0,mul_reg_reg_reg[3]};
+  assign sum_m = PE_reg + {6'd0,mul_reg[0]} + {6'd0,mul_reg[1]} + {6'd0,mul_reg_reg[2]} + {6'd0,mul_reg_reg[3]};
 
 
 
@@ -121,10 +140,6 @@ module PE #(parameter WCOUNT = 4 )
       mul_reg_reg[1] <= 8'd0;
       mul_reg_reg[2] <= 8'd0;
       mul_reg_reg[3] <= 8'd0;
-      mul_reg_reg_reg[0] <= 8'd0;
-      mul_reg_reg_reg[1] <= 8'd0;
-      mul_reg_reg_reg[2] <= 8'd0;
-      mul_reg_reg_reg[3] <= 8'd0;
     end
     else
     begin
@@ -140,10 +155,6 @@ module PE #(parameter WCOUNT = 4 )
         mul_reg_reg[1] <= mul_reg[1];
         mul_reg_reg[2] <= mul_reg[2];
         mul_reg_reg[3] <= mul_reg[3];
-        mul_reg_reg_reg[0] <= mul_reg_reg[0];
-        mul_reg_reg_reg[1] <= mul_reg_reg[1];
-        mul_reg_reg_reg[2] <= mul_reg_reg[2];
-        mul_reg_reg_reg[3] <= mul_reg_reg[3];
       end
     end
   end

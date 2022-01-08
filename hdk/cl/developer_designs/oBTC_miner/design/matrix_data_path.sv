@@ -62,7 +62,7 @@ module matrix_data_path #(parameter WCOUNT = 4 )
     for (i = 0 ; i < 64 ; i++ )
     begin
 
-      if(i < 32)
+      if(i < 45)
       begin
         xilinx_single_port_ram_block
           #(
